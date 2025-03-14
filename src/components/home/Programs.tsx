@@ -88,16 +88,20 @@ const Programs = () => {
     <section 
       id="programs" 
       ref={sectionRef} 
-      className="section-container relative"
+      className="section-container relative py-24 overflow-hidden"
       style={{
-        background: "linear-gradient(to bottom, rgba(30,32,44,0.95) 0%, rgba(30,32,44,0.9) 100%)",
-        backgroundImage: "url('/lovable-uploads/4c7af23b-7105-44f3-8635-b19d0fb84c79.png')",
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundBlendMode: 'overlay',
-        color: 'white'
+        background: "linear-gradient(to bottom right, rgba(30,32,44,0.98), rgba(30,32,44,0.95))",
       }}
     >
+      {/* Decorative elements inspired by the image */}
+      <div className="absolute inset-0 z-0 opacity-5">
+        <div className="absolute top-0 left-0 w-full h-full geometric-pattern"></div>
+      </div>
+      
+      {/* Colored blurred circles */}
+      <div className="absolute top-20 -left-32 w-64 h-64 rounded-full bg-vinta-pink/20 blur-3xl opacity-20"></div>
+      <div className="absolute bottom-20 -right-32 w-64 h-64 rounded-full bg-rotaract-blue/20 blur-3xl opacity-20"></div>
+      
       {/* Decorative Vintas at the bottom */}
       <div className="absolute bottom-0 left-0 w-full overflow-hidden" style={{ height: '40px' }}>
         <div className="absolute -bottom-5 left-10 w-16 h-20 bg-vinta-pink/70 rotate-12" style={{ clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)' }}></div>
