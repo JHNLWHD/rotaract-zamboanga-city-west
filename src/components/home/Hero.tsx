@@ -32,14 +32,7 @@ const Hero = () => {
   return (
     <div 
       ref={heroRef}
-      className="relative min-h-screen flex items-center justify-center overflow-hidden"
-      style={{
-        background: 'linear-gradient(to bottom, rgba(30,32,44,0.9) 0%, rgba(30,32,44,0.7) 100%)',
-        backgroundImage: "url('/lovable-uploads/4c7af23b-7105-44f3-8635-b19d0fb84c79.png')",
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundBlendMode: 'overlay'
-      }}
+      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-b from-rotaract-navy via-rotaract-navy to-rotaract-blue/90 geometric-pattern"
     >
       {/* Vinta-inspired decorative elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -60,17 +53,9 @@ const Hero = () => {
         <div className="absolute bottom-14 left-80 w-28 h-36 bg-vinta-red/80 rotate-[-8deg] animate-sail" style={{ clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)', animationDelay: '1.2s' }}></div>
       </div>
 
-      <div className="absolute top-0 left-0 right-0 mt-24 md:mt-16 px-6 flex items-center justify-between">
-        <div className="max-w-7xl mx-auto w-full flex flex-col md:flex-row items-center justify-between">
-          <div className="flex items-center mb-4 md:mb-0">
-            <img 
-              src="/lovable-uploads/4c7af23b-7105-44f3-8635-b19d0fb84c79.png" 
-              alt="Rotaract Club of Zamboanga City West" 
-              className="w-56 md:w-64 object-contain"
-            />
-          </div>
-        </div>
-      </div>
+      {/* Circular element inspired by the image */}
+      <div className="absolute top-1/3 left-1/4 w-64 h-64 bg-rotaract-pink/10 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-vinta-yellow/10 rounded-full blur-3xl"></div>
 
       <div className="container px-6 z-10 text-center mt-16">
         <div className="max-w-4xl mx-auto space-y-8">

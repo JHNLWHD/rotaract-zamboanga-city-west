@@ -7,14 +7,7 @@ const Footer = () => {
 
   return (
     <footer 
-      className="text-white relative"
-      style={{
-        background: "linear-gradient(to bottom, rgba(21,66,143,0.95) 0%, rgba(16,50,108,0.95) 100%)",
-        backgroundImage: "url('/lovable-uploads/4c7af23b-7105-44f3-8635-b19d0fb84c79.png')",
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundBlendMode: 'overlay'
-      }}
+      className="text-white relative bg-gradient-to-b from-rotaract-navy to-rotaract-blue wave-bg"
     >
       {/* Decorative wave pattern */}
       <div className="absolute top-0 left-0 w-full overflow-hidden h-10">
@@ -26,6 +19,10 @@ const Footer = () => {
           ></path>
         </svg>
       </div>
+
+      {/* Colored circles to mimic the design style */}
+      <div className="absolute bottom-40 left-10 w-32 h-32 bg-rotaract-pink/10 rounded-full blur-3xl"></div>
+      <div className="absolute top-20 right-10 w-40 h-40 bg-vinta-yellow/10 rounded-full blur-3xl"></div>
 
       <div className="max-w-7xl mx-auto py-12 px-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
