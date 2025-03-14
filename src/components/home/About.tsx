@@ -35,12 +35,12 @@ const About = () => {
 
   const valueCards = [
     {
-      icon: <Users className="h-8 w-8 text-vinta-blue" />,
+      icon: <Users className="h-8 w-8 text-rotaract-blue" />,
       title: "Fellowship",
       description: "Building lasting friendships and connections among diverse young leaders."
     },
     {
-      icon: <Globe className="h-8 w-8 text-vinta-red" />,
+      icon: <Globe className="h-8 w-8 text-rotaract-pink" />,
       title: "Service",
       description: "Addressing community needs through impactful humanitarian projects."
     },
@@ -52,18 +52,27 @@ const About = () => {
   ];
 
   return (
-    <section id="about" ref={sectionRef} className="section-container">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-        <div className="order-2 lg:order-1">
+    <section 
+      id="about" 
+      ref={sectionRef} 
+      className="section-container"
+      style={{
+        background: "linear-gradient(to bottom, rgba(245,247,250,1) 0%, rgba(240,242,245,1) 100%)"
+      }}
+    >
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative">
+        <div className="absolute inset-0 opacity-5 vinta-wave-pattern pointer-events-none"></div>
+        
+        <div className="order-2 lg:order-1 relative z-10">
           <div className="space-y-6">
             <div className="reveal-on-scroll">
-              <span className="inline-block px-3 py-1 text-sm font-medium rounded-full bg-rotaract-blue/10 text-rotaract-blue">
+              <span className="inline-block px-3 py-1 text-sm font-medium rounded-full bg-rotaract-pink/10 text-rotaract-pink">
                 About Us
               </span>
             </div>
             
             <h2 className="text-3xl md:text-4xl font-bold reveal-on-scroll">
-              The Spirit of Rotaract and <span className="text-vinta-red">Vinta</span>
+              The Spirit of Rotaract and <span className="text-rotaract-pink">Vinta</span>
             </h2>
             
             <p className="text-foreground/80 reveal-on-scroll">
@@ -76,9 +85,9 @@ const About = () => {
 
             <div className="pt-4 reveal-on-scroll">
               <div className="flex items-center space-x-4">
-                <div className="w-16 h-1 bg-vinta-red"></div>
+                <div className="w-16 h-1 bg-vinta-pink"></div>
+                <div className="w-16 h-1 bg-vinta-orange"></div>
                 <div className="w-16 h-1 bg-vinta-yellow"></div>
-                <div className="w-16 h-1 bg-vinta-blue"></div>
               </div>
             </div>
           </div>
@@ -86,7 +95,7 @@ const About = () => {
         
         <div className="order-1 lg:order-2 flex justify-center reveal-on-scroll">
           <div className="relative">
-            <div className="w-64 h-64 md:w-80 md:h-80 rounded-full bg-vinta-blue/10 absolute top-0 right-0 z-0 animate-pulse" style={{ animationDuration: '6s' }}></div>
+            <div className="w-64 h-64 md:w-80 md:h-80 rounded-full bg-rotaract-blue/10 absolute top-0 right-0 z-0 animate-pulse" style={{ animationDuration: '6s' }}></div>
             <div className="relative z-10 rounded-2xl overflow-hidden shadow-xl">
               <img 
                 src="https://images.unsplash.com/photo-1605810230434-7631ac76ec81" 
@@ -99,7 +108,7 @@ const About = () => {
         </div>
       </div>
 
-      <div className="mt-24">
+      <div className="mt-24 relative z-10">
         <h3 className="text-2xl font-bold text-center mb-12 reveal-on-scroll">Our Core Values</h3>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

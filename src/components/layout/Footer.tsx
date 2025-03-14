@@ -6,13 +6,33 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-rotaract-navy text-white">
+    <footer 
+      className="text-white relative"
+      style={{
+        background: "linear-gradient(to bottom, rgba(21,66,143,0.95) 0%, rgba(16,50,108,0.95) 100%)",
+        backgroundImage: "url('/lovable-uploads/4c7af23b-7105-44f3-8635-b19d0fb84c79.png')",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundBlendMode: 'overlay'
+      }}
+    >
+      {/* Decorative wave pattern */}
+      <div className="absolute top-0 left-0 w-full overflow-hidden h-10">
+        <svg preserveAspectRatio="none" viewBox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg" style={{ width: '100%', height: 50, transform: 'rotate(180deg)' }}>
+          <path 
+            d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z" 
+            fill="#FFFFFF" 
+            opacity="0.1"
+          ></path>
+        </svg>
+      </div>
+
       <div className="max-w-7xl mx-auto py-12 px-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
               <div className="h-10 w-10 rounded-full bg-white flex items-center justify-center">
-                <span className="text-rotaract-blue font-display font-bold text-lg">R</span>
+                <span className="text-rotaract-pink font-display font-bold text-lg">R</span>
               </div>
               <h3 className="font-display font-bold text-lg">Rotaract Club</h3>
             </div>

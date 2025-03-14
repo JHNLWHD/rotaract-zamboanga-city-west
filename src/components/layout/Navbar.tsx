@@ -34,14 +34,14 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <div className="flex items-center">
           <a href="#" className="flex items-center space-x-2">
-            <div className="h-10 w-10 rounded-full bg-rotaract-blue flex items-center justify-center">
+            <div className="h-10 w-10 rounded-full bg-rotaract-pink flex items-center justify-center">
               <span className="text-white font-display font-bold text-lg">R</span>
             </div>
             <div className="hidden md:block">
               <h1 className="font-display font-bold text-lg leading-tight">
-                <span className="text-rotaract-blue">Rotaract Club</span>
+                <span className={`${isScrolled ? 'text-rotaract-pink' : 'text-white'}`}>Rotaract Club</span>
                 <br />
-                <span className="text-sm">Zamboanga City West</span>
+                <span className={`text-sm ${isScrolled ? 'text-gray-600' : 'text-white/90'}`}>Zamboanga City West</span>
               </h1>
             </div>
           </a>
@@ -49,16 +49,41 @@ const Navbar = () => {
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center space-x-1">
-          <a href="#" className="nav-link active-nav-link">Home</a>
-          <a href="#about" className="nav-link">About</a>
-          <a href="#programs" className="nav-link">Programs</a>
-          <a href="#join" className="nav-link">Join Us</a>
-          <a href="#contact" className="nav-link">Contact</a>
+          <a 
+            href="#" 
+            className={`nav-link ${isScrolled ? 'text-foreground/80' : 'text-white/90'} active-nav-link`}
+          >
+            Home
+          </a>
+          <a 
+            href="#about" 
+            className={`nav-link ${isScrolled ? 'text-foreground/80' : 'text-white/90'}`}
+          >
+            About
+          </a>
+          <a 
+            href="#programs" 
+            className={`nav-link ${isScrolled ? 'text-foreground/80' : 'text-white/90'}`}
+          >
+            Programs
+          </a>
+          <a 
+            href="#join" 
+            className={`nav-link ${isScrolled ? 'text-foreground/80' : 'text-white/90'}`}
+          >
+            Join Us
+          </a>
+          <a 
+            href="#contact" 
+            className={`nav-link ${isScrolled ? 'text-foreground/80' : 'text-white/90'}`}
+          >
+            Contact
+          </a>
         </nav>
 
         {/* Mobile Navigation Toggle */}
         <button
-          className="md:hidden text-foreground"
+          className={`md:hidden ${isScrolled ? 'text-foreground' : 'text-white'}`}
           onClick={toggleMobileMenu}
           aria-label="Toggle menu"
         >

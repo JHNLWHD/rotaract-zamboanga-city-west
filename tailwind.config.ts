@@ -63,20 +63,26 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				// Rotaract & Vinta custom colors
+				// Updated Rotaract & Vinta colors based on the image
 				rotaract: {
-					blue: '#0050A2',
-					gold: '#F7A81B',
+					pink: '#E43A85',
+					blue: '#0088CD',
 					navy: '#17458F',
 					light: '#F9F9F9'
 				},
 				vinta: {
 					red: '#D91A32',
 					yellow: '#FFC845',
-					blue: '#2F95DD',
-					green: '#2CA35B',
+					pink: '#E43A85',
 					orange: '#FF8024',
+					green: '#47C97D',
+					teal: '#17BCBE',
 					purple: '#8867C7'
+				},
+				// Adding dark overlay for backgrounds
+				overlay: {
+					dark: 'rgba(20, 20, 30, 0.75)',
+					light: 'rgba(255, 255, 255, 0.1)'
 				}
 			},
 			borderRadius: {
@@ -102,8 +108,18 @@ export default {
 					'50%': { transform: 'translateY(-10px) rotate(2deg)' }
 				},
 				'wave': {
-					'0%, 100%': { transform: 'translateY(0)' },
-					'50%': { transform: 'translateY(-5px)' }
+					'0%': { transform: 'translateY(0)' },
+					'25%': { transform: 'translateY(-10px)' },
+					'50%': { transform: 'translateY(0)' },
+					'75%': { transform: 'translateY(5px)' },
+					'100%': { transform: 'translateY(0)' }
+				},
+				'wave-horizontal': {
+					'0%': { transform: 'translateX(0)' },
+					'25%': { transform: 'translateX(-5px)' },
+					'50%': { transform: 'translateX(0)' },
+					'75%': { transform: 'translateX(5px)' },
+					'100%': { transform: 'translateX(0)' }
 				},
 				'fade-in-up': {
 					'0%': { opacity: '0', transform: 'translateY(20px)' },
@@ -122,10 +138,15 @@ export default {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
 				'sail': 'sail 6s ease-in-out infinite',
-				'wave': 'wave 3s ease-in-out infinite',
+				'wave': 'wave 6s ease-in-out infinite',
+				'wave-horizontal': 'wave-horizontal 8s ease-in-out infinite',
 				'fade-in-up': 'fade-in-up 0.6s ease-out',
 				'fade-in': 'fade-in 0.4s ease-out',
 				'slide-in': 'slide-in 0.5s ease-out'
+			},
+			backgroundImage: {
+				'wave-pattern': "url('/lovable-uploads/4c7af23b-7105-44f3-8635-b19d0fb84c79.png')",
+				'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
 			}
 		}
 	},
