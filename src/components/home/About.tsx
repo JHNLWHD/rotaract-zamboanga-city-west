@@ -45,7 +45,7 @@ const About = () => {
       description: "Addressing community needs through impactful humanitarian projects."
     },
     {
-      icon: <Handshake className="h-8 w-8 text-vinta-yellow" />,
+      icon: <Handshake className="h-8 w-8 text-rotaract-blue" />,
       title: "Leadership",
       description: "Developing professional skills and ethical leadership qualities."
     }
@@ -61,7 +61,7 @@ const About = () => {
       }}
     >
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative">
-        <div className="absolute inset-0 opacity-5 vinta-wave-pattern pointer-events-none"></div>
+        <div className="absolute inset-0 opacity-5 wave-bg pointer-events-none"></div>
         
         <div className="order-2 lg:order-1 relative z-10">
           <div className="space-y-6">
@@ -72,22 +72,22 @@ const About = () => {
             </div>
             
             <h2 className="text-3xl md:text-4xl font-bold reveal-on-scroll">
-              The Spirit of Rotaract and <span className="text-rotaract-pink">Vinta</span>
+              The Spirit of <span className="text-rotaract-pink">Rotaract</span>
             </h2>
             
             <p className="text-foreground/80 reveal-on-scroll">
-              The Rotaract Club of Zamboanga City West brings together the global mission of Rotaract with the vibrant local culture of Zamboanga City, symbolized by the colorful Vinta sailboats.
+              The Rotaract Club of Zamboanga City West embodies the global mission of Rotaract while celebrating the vibrant local culture of Zamboanga City.
             </p>
             
             <p className="text-foreground/80 reveal-on-scroll">
-              Just as the Vinta navigates waters with its distinctive colorful sails, our club navigates through community challenges with the diverse talents and perspectives of our members.
+              Our club navigates through community challenges with the diverse talents and perspectives of our members, all united in service and fellowship.
             </p>
 
             <div className="pt-4 reveal-on-scroll">
               <div className="flex items-center space-x-4">
-                <div className="w-16 h-1 bg-vinta-pink"></div>
-                <div className="w-16 h-1 bg-vinta-orange"></div>
-                <div className="w-16 h-1 bg-vinta-yellow"></div>
+                <div className="w-16 h-1 bg-rotaract-pink"></div>
+                <div className="w-16 h-1 bg-rotaract-blue"></div>
+                <div className="w-16 h-1 bg-rotaract-navy"></div>
               </div>
             </div>
           </div>
