@@ -98,8 +98,8 @@ const About = () => {
             <div className="w-64 h-64 md:w-80 md:h-80 rounded-full bg-rotaract-blue/10 absolute top-0 right-0 z-0 animate-pulse" style={{ animationDuration: '6s' }}></div>
             <div className="relative z-10 rounded-2xl overflow-hidden shadow-xl">
               <img 
-                src="https://images.unsplash.com/photo-1605810230434-7631ac76ec81" 
-                alt="Rotaract members in action" 
+                src="/lovable-uploads/77e591d9-27b0-4497-b290-8fa95806ace4.png" 
+                alt="Rotaract Club of Zamboanga City West members" 
                 className="w-full h-auto"
                 loading="lazy"
               />
