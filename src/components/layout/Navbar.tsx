@@ -34,9 +34,11 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <div className="flex items-center">
           <a href="#" className="flex items-center space-x-2">
-            <div className="h-10 w-10 rounded-full bg-rotaract-pink flex items-center justify-center">
-              <span className="text-white font-display font-bold text-lg">R</span>
-            </div>
+            <img 
+              src="/lovable-uploads/e48a4b78-bd32-41b7-b192-969232e8378f.png" 
+              alt="Rotaract Club of Zamboanga City West" 
+              className="h-10 w-auto"
+            />
             <div className="hidden md:block">
               <h1 className="font-display font-bold text-lg leading-tight">
                 <span className={`${isScrolled ? 'text-rotaract-pink' : 'text-white'}`}>Rotaract Club</span>
@@ -98,6 +100,13 @@ const Navbar = () => {
           mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
         )}
       >
+        <div className="flex justify-center my-6">
+          <img 
+            src="/lovable-uploads/e48a4b78-bd32-41b7-b192-969232e8378f.png" 
+            alt="Rotaract Club of Zamboanga City West" 
+            className="h-16 w-auto"
+          />
+        </div>
         <nav className="flex flex-col items-center space-y-6 p-8">
           <a href="#" className="text-xl font-medium" onClick={toggleMobileMenu}>Home</a>
           <a href="#about" className="text-xl font-medium" onClick={toggleMobileMenu}>About</a>
