@@ -35,17 +35,17 @@ const About = () => {
 
   const valueCards = [
     {
-      icon: <Users className="h-8 w-8 text-rotaract-blue" />,
+      icon: <Users className="h-8 w-8 text-rotaract-blue" aria-hidden="true" />,
       title: "Fellowship",
       description: "Building lasting friendships and connections among diverse young leaders."
     },
     {
-      icon: <Globe className="h-8 w-8 text-rotaract-pink" />,
+      icon: <Globe className="h-8 w-8 text-rotaract-pink" aria-hidden="true" />,
       title: "Service",
       description: "Addressing community needs through impactful humanitarian projects."
     },
     {
-      icon: <Handshake className="h-8 w-8 text-rotaract-blue" />,
+      icon: <Handshake className="h-8 w-8 text-rotaract-blue" aria-hidden="true" />,
       title: "Leadership",
       description: "Developing professional skills and ethical leadership qualities."
     }
@@ -55,10 +55,11 @@ const About = () => {
     <section 
       id="about" 
       ref={sectionRef} 
-      className="section-container"
+      className="section-container py-16 md:py-24"
       style={{
         background: "linear-gradient(to bottom, rgba(245,247,250,1) 0%, rgba(240,242,245,1) 100%)"
       }}
+      aria-labelledby="about-heading"
     >
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative">
         <div className="absolute inset-0 opacity-5 wave-bg pointer-events-none"></div>
@@ -71,7 +72,7 @@ const About = () => {
               </span>
             </div>
             
-            <h2 className="text-3xl md:text-4xl font-bold reveal-on-scroll">
+            <h2 id="about-heading" className="text-3xl md:text-4xl font-bold reveal-on-scroll">
               The Spirit of <span className="text-rotaract-pink">Rotaract</span>
             </h2>
             
@@ -84,7 +85,7 @@ const About = () => {
             </p>
 
             <div className="pt-4 reveal-on-scroll">
-              <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-4" aria-hidden="true">
                 <div className="w-16 h-1 bg-rotaract-pink"></div>
                 <div className="w-16 h-1 bg-rotaract-blue"></div>
                 <div className="w-16 h-1 bg-rotaract-navy"></div>
@@ -95,13 +96,15 @@ const About = () => {
         
         <div className="order-1 lg:order-2 flex justify-center reveal-on-scroll">
           <div className="relative">
-            <div className="w-64 h-64 md:w-80 md:h-80 rounded-full bg-rotaract-blue/10 absolute top-0 right-0 z-0 animate-pulse" style={{ animationDuration: '6s' }}></div>
+            <div className="w-64 h-64 md:w-80 md:h-80 rounded-full bg-rotaract-blue/10 absolute top-0 right-0 z-0 animate-pulse" style={{ animationDuration: '6s' }} aria-hidden="true"></div>
             <div className="relative z-10 rounded-2xl overflow-hidden shadow-xl">
               <img 
                 src="/lovable-uploads/77e591d9-27b0-4497-b290-8fa95806ace4.png" 
-                alt="Rotaract Club of Zamboanga City West members" 
+                alt="Rotaract Club of Zamboanga City West members gathered for a community event" 
                 className="w-full h-auto"
                 loading="lazy"
+                width="400"
+                height="300"
               />
             </div>
           </div>
@@ -109,20 +112,20 @@ const About = () => {
       </div>
 
       <div className="mt-24 relative z-10">
-        <h3 className="text-2xl font-bold text-center mb-12 reveal-on-scroll">Our Core Values</h3>
+        <h3 id="values-heading" className="text-2xl font-bold text-center mb-12 reveal-on-scroll">Our Core Values</h3>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {valueCards.map((card, index) => (
-            <div 
+            <article 
               key={index}
               className="glass-card p-8 text-center hover-lift reveal-on-scroll"
             >
-              <div className="rounded-full bg-white/50 w-16 h-16 flex items-center justify-center mx-auto mb-6">
+              <div className="rounded-full bg-white/50 w-16 h-16 flex items-center justify-center mx-auto mb-6" aria-hidden="true">
                 {card.icon}
               </div>
               <h4 className="text-xl font-bold mb-3">{card.title}</h4>
               <p className="text-foreground/80">{card.description}</p>
-            </div>
+            </article>
           ))}
         </div>
       </div>

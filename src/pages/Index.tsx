@@ -1,5 +1,6 @@
 
 import React, { useEffect } from 'react';
+import { Helmet } from 'react-helmet';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import Hero from '../components/home/Hero';
@@ -32,16 +33,22 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
-      <main>
-        <Hero />
-        <About />
-        <Programs />
-        <Join />
-      </main>
-      <Footer />
-    </div>
+    <>
+      <Helmet>
+        <title>Rotaract Club of Zamboanga City West - Service, Fellowship & Leadership</title>
+        <meta name="description" content="Join the Rotaract Club of Zamboanga City West - empowering young leaders through fellowship, community service, and professional development since 2005." />
+      </Helmet>
+      <div className="min-h-screen flex flex-col">
+        <Navbar />
+        <main id="main-content">
+          <Hero />
+          <About />
+          <Programs />
+          <Join />
+        </main>
+        <Footer />
+      </div>
+    </>
   );
 };
 
