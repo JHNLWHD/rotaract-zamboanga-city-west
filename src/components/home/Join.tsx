@@ -94,7 +94,7 @@ const Join = () => {
               <div className="space-y-6">
                 <div className="glass-card p-4">
                   <h4 className="font-semibold text-rotaract-blue">Age</h4>
-                  <p className="text-sm text-foreground/70 mt-1">Between 18 and 30 years old</p>
+                  <p className="text-sm text-foreground/70 mt-1">Between 18 and 35 years old</p>
                 </div>
                 
                 <div className="glass-card p-4">
