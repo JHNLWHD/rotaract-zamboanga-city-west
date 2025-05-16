@@ -73,7 +73,8 @@ const Join = () => {
 
             <div className="pt-4 reveal-on-scroll">
               <a 
-                href="#"
+                href="https://forms.gle/Q2JUyN6QeeqQkdFv5"
+                target="_blank"
                 className="inline-flex items-center px-6 py-3 rounded-full bg-rotaract-blue text-white font-medium hover:bg-rotaract-blue/90 transition-all duration-300 shadow-md hover:shadow-xl hover:scale-105 transform"
               >
                 Apply for Membership

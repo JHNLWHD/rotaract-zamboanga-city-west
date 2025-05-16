@@ -57,17 +57,17 @@ const Footer = () => {
               </div>
               <div className="flex items-center space-x-3">
                 <Mail size={18} className="text-vinta-yellow" />
-                <span className="text-white/80">rotaract.zcw@gmail.com</span>
+                <a href="mailto:raczambowest1@gmail.com"><span className="text-white/80">raczambowest1@gmail.com</span></a>
               </div>
               <div className="flex items-center space-x-3">
                 <Phone size={18} className="text-vinta-yellow" />
-                <span className="text-white/80">+63 XXX XXX XXXX</span>
+                <a href="tel:+63 967 365 4339"><span className="text-white/80">+63 967 365 4339</span></a>
               </div>
               <div className="flex space-x-4 mt-4">
-                <a href="#" className="text-white/80 hover:text-white transition-colors">
+                <a href="https://www.facebook.com/RotaractClubZamboWest" target="_blank" className="text-white/80 hover:text-white transition-colors">
                   <Facebook size={20} />
                 </a>
-                <a href="#" className="text-white/80 hover:text-white transition-colors">
+                <a href="https://www.instagram.com/raczambowest1" target="_blank" className="text-white/80 hover:text-white transition-colors">
                   <Instagram size={20} />
                 </a>
               </div>

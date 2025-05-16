@@ -143,7 +143,8 @@ const Programs = () => {
 
       <div className="mt-16 text-center reveal-on-scroll relative z-10">
         <a 
-          href="#contact" 
+          href="https://www.facebook.com/RotaractClubZamboWest"
+          target="_blank"
           className="inline-flex items-center px-6 py-3 rounded-full bg-vinta-yellow text-gray-800 font-medium hover:bg-vinta-yellow/90 transition-colors shadow-md hover:shadow-lg"
         >
           Partner with Us
