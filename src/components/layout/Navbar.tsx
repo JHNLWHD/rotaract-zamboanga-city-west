@@ -2,12 +2,10 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useIsMobile } from '@/hooks/use-mobile';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const isMobile = useIsMobile();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -18,52 +16,12 @@ const Navbar = () => {
       }
     };
 
-    // Handle scroll events
     window.addEventListener('scroll', handleScroll);
-    
-    // Handle hash change events to close mobile menu when navigation occurs
-    const handleHashChange = () => {
-      if (mobileMenuOpen) {
-        setMobileMenuOpen(false);
-      }
-    };
-    window.addEventListener('hashchange', handleHashChange);
-    
-    // Initial scroll check
-    handleScroll();
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('hashchange', handleHashChange);
-    };
-  }, [mobileMenuOpen]);
-
-  // Effect to handle body scroll locking when mobile menu is open
-  useEffect(() => {
-    if (isMobile) {
-      if (mobileMenuOpen) {
-        document.body.style.overflow = 'hidden'; // Prevent scrolling when menu is open
-      } else {
-        document.body.style.overflow = ''; // Re-enable scrolling
-      }
-    }
-    
-    return () => {
-      document.body.style.overflow = ''; // Always restore on unmount
-    };
-  }, [mobileMenuOpen, isMobile]);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
-  };
-
-  const handleNavLinkClick = () => {
-    if (isMobile && mobileMenuOpen) {
-      // Add a small delay to ensure smooth transition
-      setTimeout(() => {
-        setMobileMenuOpen(false);
-      }, 150);
-    }
   };
 
   return (
@@ -135,11 +93,11 @@ const Navbar = () => {
         </button>
       </div>
 
-      {/* Mobile Menu with improved transition */}
+      {/* Mobile Menu */}
       <div
         className={cn(
-          'fixed inset-0 z-40 bg-rotaract-navy/95 transform transition-all duration-300 ease-in-out pt-20',
-          mobileMenuOpen ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-full pointer-events-none'
+          'fixed inset-0 z-40 bg-rotaract-navy/95 transform transition-transform duration-300 ease-in-out pt-20',
+          mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
         )}
       >
         <div className="flex justify-center my-6">
@@ -150,41 +108,11 @@ const Navbar = () => {
           />
         </div>
         <nav className="flex flex-col items-center space-y-6 p-8">
-          <a 
-            href="#" 
-            className="text-lg uppercase tracking-wide text-white font-medium hover:text-rotaract-pink transition-colors" 
-            onClick={handleNavLinkClick}
-          >
-            Home
-          </a>
-          <a 
-            href="#about" 
-            className="text-lg uppercase tracking-wide text-white font-medium hover:text-rotaract-pink transition-colors" 
-            onClick={handleNavLinkClick}
-          >
-            About
-          </a>
-          <a 
-            href="#programs" 
-            className="text-lg uppercase tracking-wide text-white font-medium hover:text-rotaract-pink transition-colors" 
-            onClick={handleNavLinkClick}
-          >
-            Programs
-          </a>
-          <a 
-            href="#join" 
-            className="text-lg uppercase tracking-wide text-white font-medium hover:text-rotaract-pink transition-colors" 
-            onClick={handleNavLinkClick}
-          >
-            Join Us
-          </a>
-          <a 
-            href="#contact" 
-            className="text-lg uppercase tracking-wide text-white font-medium hover:text-rotaract-pink transition-colors" 
-            onClick={handleNavLinkClick}
-          >
-            Contact
-          </a>
+          <a href="#" className="text-lg uppercase tracking-wide text-white font-medium" onClick={toggleMobileMenu}>Home</a>
+          <a href="#about" className="text-lg uppercase tracking-wide text-white font-medium" onClick={toggleMobileMenu}>About</a>
+          <a href="#programs" className="text-lg uppercase tracking-wide text-white font-medium" onClick={toggleMobileMenu}>Programs</a>
+          <a href="#join" className="text-lg uppercase tracking-wide text-white font-medium" onClick={toggleMobileMenu}>Join Us</a>
+          <a href="#contact" className="text-lg uppercase tracking-wide text-white font-medium" onClick={toggleMobileMenu}>Contact</a>
         </nav>
       </div>
     </header>
