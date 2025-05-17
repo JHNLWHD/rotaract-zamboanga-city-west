@@ -1,6 +1,6 @@
 
 import React, { useEffect, useRef } from 'react';
-import { CheckCircle, FileText, Users, Handshake, Award, ArrowRight } from 'lucide-react';
+import { CheckCircle, FileText, Users, Handshake, Award, CalendarDays, Briefcase, Link } from 'lucide-react';
 import { Helmet } from 'react-helmet';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -37,13 +37,22 @@ const Join = () => {
   }, []);
 
   const benefits = [
-    "Develop leadership skills through hands-on project management",
-    "Build a network of passionate young professionals",
-    "Make a positive impact in your local community",
-    "Connect with Rotaract and Rotary clubs worldwide",
-    "Access professional development and mentorship opportunities",
-    "Participate in local and international conferences",
-    "Develop cross-cultural understanding and global perspective"
+    {
+      icon: <Briefcase className="h-5 w-5 text-vinta-green" />,
+      text: "Lead meaningful projects"
+    },
+    {
+      icon: <Users className="h-5 w-5 text-vinta-green" />,
+      text: "Connect with passionate changemakers"
+    },
+    {
+      icon: <Handshake className="h-5 w-5 text-vinta-green" />,
+      text: "Build lifelong friendships"
+    },
+    {
+      icon: <CalendarDays className="h-5 w-5 text-vinta-green" />,
+      text: "Join trainings, events, and unforgettable experiences"
+    }
   ];
 
   const membershipLevels = [
@@ -107,11 +116,11 @@ const Join = () => {
             Join Our Community
           </span>
           <h2 className="text-3xl md:text-4xl font-bold">
-            Become Part of Our <span className="text-rotaract-blue">Journey</span>
+            Step Into Something <span className="text-rotaract-blue">Greater</span> — Join the Great West!
           </h2>
           <p className="text-foreground/80 max-w-2xl mx-auto mt-4">
-            Joining the Rotaract Club of Zamboanga City West opens doors to personal growth, 
-            professional development, and meaningful community impact.
+            Looking to make a difference, meet inspiring people, and grow as a leader? 
+            The Rotaract Club of Zamboanga City West is more than just a club — we're a family driven by purpose, service, and fun!
           </p>
         </div>
 
@@ -119,21 +128,21 @@ const Join = () => {
           <div className="order-2 lg:order-1">
             <div className="max-w-lg space-y-6">              
               <div className="space-y-3 pt-2 reveal-on-scroll">
-                <h3 className="text-xl font-bold mb-4">Member Benefits</h3>
+                <h3 className="text-xl font-bold mb-4">As a member, you'll get the chance to:</h3>
                 {benefits.map((benefit, index) => (
                   <div key={index} className="flex items-start space-x-3 bg-white/50 p-3 rounded-lg shadow-sm">
-                    <CheckCircle className="h-5 w-5 text-vinta-green mt-0.5 flex-shrink-0" />
-                    <span>{benefit}</span>
+                    {benefit.icon}
+                    <span>{benefit.text}</span>
                   </div>
                 ))}
               </div>
 
               {/* Prominent CTA Card */}
               <div className="reveal-on-scroll mt-8">
-                <Card className="border-2 border-rotaract-blue shadow-lg">
+                <Card className="border-2 border-rotaract-blue shadow-lg bg-gradient-to-br from-white to-blue-50">
                   <CardContent className="p-6">
-                    <h3 className="text-xl font-bold mb-2">Ready to Join Us?</h3>
-                    <p className="mb-4">Take the first step toward making a difference in your community and developing valuable leadership skills.</p>
+                    <h3 className="text-xl font-bold mb-2">This is your sign to be part of something impactful.</h3>
+                    <p className="mb-4">Ready to grow, serve, and lead with us?</p>
                     <Button 
                       asChild
                       className="w-full py-6 text-lg bg-rotaract-blue hover:bg-rotaract-blue/90 transition-all duration-300 group"
@@ -144,8 +153,8 @@ const Join = () => {
                         rel="noopener noreferrer"
                         aria-label="Apply for Rotaract Club Membership"
                       >
-                        Apply for Membership
-                        <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                        Sign up now and be one of the greats at Great West!
+                        <Link className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                       </a>
                     </Button>
                   </CardContent>
