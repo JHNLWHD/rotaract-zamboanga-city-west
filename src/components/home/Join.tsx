@@ -1,8 +1,8 @@
 
 import React, { useEffect, useRef } from 'react';
-import { CheckCircle, FileText, Users, Handshake, Award, CalendarDays, Briefcase, Link } from 'lucide-react';
+import { FileText, Users, Handshake, Award, CalendarDays, Briefcase, Link } from 'lucide-react';
 import { Helmet } from 'react-helmet';
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
 const Join = () => {
@@ -52,6 +52,25 @@ const Join = () => {
     {
       icon: <CalendarDays className="h-5 w-5 text-vinta-green" />,
       text: "Join trainings, events, and unforgettable experiences"
+    }
+  ];
+
+  const membershipRequirements = [
+    {
+      title: "Age",
+      description: "Between 18 and 35 years old"
+    },
+    {
+      title: "Commitment",
+      description: "Dedication to attend club meetings and participate in service projects"
+    },
+    {
+      title: "Values",
+      description: "Uphold the ideals of Rotary: Service, Fellowship, Diversity, Integrity, and Leadership"
+    },
+    {
+      title: "Application Process",
+      description: "Complete an application form, interview with club officers, and attend orientation"
     }
   ];
 
@@ -111,6 +130,7 @@ const Join = () => {
       </Helmet>
       
       <section id="join" ref={sectionRef} className="section-container py-16">
+        {/* Top Section - 1 Column */}
         <div className="text-center mb-12 reveal-on-scroll">
           <span className="inline-block px-3 py-1 text-sm font-medium rounded-full bg-vinta-blue/10 text-vinta-blue mb-3">
             Join Our Community
@@ -124,111 +144,102 @@ const Join = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-          <div className="order-2 lg:order-1">
-            <div className="max-w-lg space-y-6">              
-              <div className="space-y-3 pt-2 reveal-on-scroll">
-                <h3 className="text-xl font-bold mb-4">As a member, you'll get the chance to:</h3>
+        {/* Main Content - 2 Columns */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+          {/* Left Column - Benefits */}
+          <div className="reveal-on-scroll">
+            <Card className="h-full glass-card hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <CardTitle className="text-xl font-bold text-rotaract-blue">
+                  As a member, you'll get the chance to:
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
                 {benefits.map((benefit, index) => (
-                  <div key={index} className="flex items-start space-x-3 bg-white/50 p-3 rounded-lg shadow-sm">
-                    {benefit.icon}
-                    <span>{benefit.text}</span>
+                  <div key={index} className="flex items-start space-x-3 bg-white/60 p-3 rounded-lg">
+                    <div className="p-2 bg-rotaract-blue/10 rounded-full">
+                      {benefit.icon}
+                    </div>
+                    <span className="my-auto">{benefit.text}</span>
                   </div>
                 ))}
-              </div>
-
-              {/* Prominent CTA Card */}
-              <div className="reveal-on-scroll mt-8">
-                <Card className="border-2 border-rotaract-blue shadow-lg bg-gradient-to-br from-white to-blue-50">
-                  <CardContent className="p-6">
-                    <h3 className="text-xl font-bold mb-2">This is your sign to be part of something impactful.</h3>
-                    <p className="mb-4">Ready to grow, serve, and lead with us?</p>
-                    <Button 
-                      asChild
-                      className="w-full py-6 text-lg bg-rotaract-blue hover:bg-rotaract-blue/90 transition-all duration-300 group"
-                    >
-                      <a 
-                        href="https://forms.gle/Q2JUyN6QeeqQkdFv5"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label="Apply for Rotaract Club Membership"
-                      >
-                        Sign up now and be one of the greats at Great West!
-                        <Link className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                      </a>
-                    </Button>
-                  </CardContent>
-                </Card>
-              </div>
-            </div>
+              </CardContent>
+            </Card>
           </div>
           
-          <div className="order-1 lg:order-2 reveal-on-scroll">
-            <div className="relative mb-12">
-              <div className="absolute -top-6 -left-6 w-64 h-64 rounded-full bg-vinta-yellow/20 z-0"></div>
-              <div className="absolute -bottom-6 -right-6 w-64 h-64 rounded-full bg-vinta-red/20 z-0"></div>
-              
-              <div className="relative z-10 glass-card p-8 backdrop-blur-md">
-                <h3 className="text-xl font-bold mb-6">Membership Requirements</h3>
-                
-                <div className="space-y-4">
-                  <div className="glass-card p-4 hover:shadow-md transition-shadow">
-                    <h4 className="font-semibold text-rotaract-blue">Age</h4>
-                    <p className="text-sm text-foreground/70 mt-1">Between 18 and 35 years old</p>
+          {/* Right Column - Membership Requirements */}
+          <div className="reveal-on-scroll">
+            <Card className="h-full glass-card hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <CardTitle className="text-xl font-bold text-rotaract-blue">
+                  Membership Requirements
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {membershipRequirements.map((req, index) => (
+                  <div key={index} className="glass-card p-4 hover:shadow-md transition-shadow">
+                    <h4 className="font-semibold text-rotaract-blue">{req.title}</h4>
+                    <p className="text-sm text-foreground/70 mt-1">{req.description}</p>
                   </div>
-                  
-                  <div className="glass-card p-4 hover:shadow-md transition-shadow">
-                    <h4 className="font-semibold text-rotaract-blue">Commitment</h4>
-                    <p className="text-sm text-foreground/70 mt-1">Dedication to attend club meetings and participate in service projects</p>
-                  </div>
-                  
-                  <div className="glass-card p-4 hover:shadow-md transition-shadow">
-                    <h4 className="font-semibold text-rotaract-blue">Values</h4>
-                    <p className="text-sm text-foreground/70 mt-1">Uphold the ideals of Rotary: Service, Fellowship, Diversity, Integrity, and Leadership</p>
-                  </div>
-                  
-                  <div className="glass-card p-4 hover:shadow-md transition-shadow">
-                    <h4 className="font-semibold text-rotaract-blue">Application Process</h4>
-                    <p className="text-sm text-foreground/70 mt-1">Complete an application form, interview with club officers, and attend orientation</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Membership Levels Section */}
-            <div className="reveal-on-scroll">
-              <div className="relative mb-4">
-                <h3 className="text-xl font-bold">
-                  WANT TO BE PART OF THE <span className="text-vinta-yellow">GREATER WEST?</span>
-                </h3>
-                <div className="flex items-center mt-2 mb-6">
-                  <FileText className="h-5 w-5 mr-2 text-rotaract-blue" />
-                  <span className="text-lg">
-                    <span className="font-bold">APPLICATION</span> - Express your desire and purpose of joining the Greater West
-                  </span>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {membershipLevels.map((level, index) => (
-                  <Card key={index} className="relative overflow-hidden bg-gradient-to-br from-rotaract-pink to-rotaract-blue text-white hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                    <div className="absolute top-0 left-0 w-full h-full bg-black/30 z-0"></div>
-                    <CardContent className="relative z-10 p-5">
-                      <div className="flex flex-col items-center text-center space-y-2">
-                        <div className="p-3 bg-rotaract-blue/50 rounded-full mb-2">
-                          {level.icon}
-                        </div>
-                        <h4 className="font-bold text-lg">{level.title}</h4>
-                        <p className="text-white/80 text-sm">{level.duration}</p>
-                        <div className="w-12 h-1 bg-white/50 my-2"></div>
-                        <p className="text-sm">{level.description}</p>
-                      </div>
-                    </CardContent>
-                  </Card>
                 ))}
-              </div>
-            </div>
+              </CardContent>
+            </Card>
           </div>
+        </div>
+        
+        {/* Application Process - 1 Column */}
+        <div className="mb-16 reveal-on-scroll">
+          <div className="text-center mb-8">
+            <h3 className="text-2xl font-bold">
+              <span className="text-vinta-yellow">APPLICATION</span> PROCESS
+            </h3>
+            <p className="text-foreground/80 max-w-xl mx-auto mt-2">
+              Express your desire and purpose of joining the Greater West
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {membershipLevels.map((level, index) => (
+              <Card key={index} className="relative overflow-hidden bg-gradient-to-br from-rotaract-pink to-rotaract-blue text-white hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <div className="absolute top-0 left-0 w-full h-full bg-black/30 z-0"></div>
+                <CardContent className="relative z-10 p-5">
+                  <div className="flex flex-col items-center text-center space-y-2">
+                    <div className="p-3 bg-rotaract-blue/50 rounded-full mb-2">
+                      {level.icon}
+                    </div>
+                    <h4 className="font-bold text-lg">{level.title}</h4>
+                    <p className="text-white/80 text-sm">{level.duration}</p>
+                    <div className="w-12 h-1 bg-white/50 my-2"></div>
+                    <p className="text-sm">{level.description}</p>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+        
+        {/* CTA - 1 Column Center */}
+        <div className="max-w-2xl mx-auto reveal-on-scroll">
+          <Card className="border-2 border-rotaract-blue shadow-xl bg-gradient-to-br from-white to-blue-50">
+            <CardContent className="p-8 text-center">
+              <h3 className="text-2xl font-bold mb-3">This is your sign to be part of something impactful.</h3>
+              <p className="mb-6 text-lg">Ready to grow, serve, and lead with us?</p>
+              <Button 
+                asChild
+                className="py-6 px-8 text-lg bg-rotaract-blue hover:bg-rotaract-blue/90 transition-all duration-300 group"
+              >
+                <a 
+                  href="https://forms.gle/Q2JUyN6QeeqQkdFv5"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Apply for Rotaract Club Membership"
+                >
+                  Sign up now and be one of the greats at Great West!
+                  <Link className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                </a>
+              </Button>
+            </CardContent>
+          </Card>
         </div>
       </section>
     </>
