@@ -1,7 +1,8 @@
 
 import React, { useEffect, useRef } from 'react';
-import { CheckCircle } from 'lucide-react';
+import { CheckCircle, FileText, Users, Handshake, Award } from 'lucide-react';
 import { Helmet } from 'react-helmet';
+import { Card, CardContent } from "@/components/ui/card";
 
 const Join = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -44,6 +45,27 @@ const Join = () => {
     "Develop cross-cultural understanding and global perspective"
   ];
 
+  const membershipLevels = [
+    {
+      title: "VOLUNTEER MEMBER LEVEL",
+      icon: <Users className="h-8 w-8 text-white" />,
+      duration: "Duration: 1-6 months",
+      description: "New members will engage in volunteer activities"
+    },
+    {
+      title: "ADVOCATE MEMBER LEVEL",
+      icon: <Handshake className="h-8 w-8 text-white" />,
+      duration: "Duration: 6-12 months",
+      description: "Deeper involvement through advocacy and continued commitment"
+    },
+    {
+      title: "GREAT WEST MEMBER LEVEL",
+      icon: <Award className="h-8 w-8 text-white" />,
+      duration: "Official Member (Inducted)",
+      description: "Reward for significant contributions and embodying organizational values"
+    }
+  ];
+
   // JSON-LD structured data for organization
   const structuredData = {
     "@context": "https://schema.org",
@@ -79,7 +101,7 @@ const Join = () => {
       </Helmet>
       
       <section id="join" ref={sectionRef} className="section-container">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
           <div className="order-2 lg:order-1">
             <div className="max-w-lg space-y-6">
               <div className="reveal-on-scroll">
@@ -113,6 +135,7 @@ const Join = () => {
                   className="inline-flex items-center px-6 py-3 rounded-full bg-rotaract-blue text-white font-medium hover:bg-rotaract-blue/90 transition-all duration-300 shadow-md hover:shadow-xl hover:scale-105 transform"
                   aria-label="Apply for Rotaract Club Membership"
                 >
+                  <FileText className="mr-2 h-5 w-5" />
                   Apply for Membership
                 </a>
               </div>
@@ -120,7 +143,7 @@ const Join = () => {
           </div>
           
           <div className="order-1 lg:order-2 reveal-on-scroll">
-            <div className="relative">
+            <div className="relative mb-12">
               <div className="absolute -top-6 -left-6 w-64 h-64 rounded-full bg-vinta-yellow/20 z-0"></div>
               <div className="absolute -bottom-6 -right-6 w-64 h-64 rounded-full bg-vinta-red/20 z-0"></div>
               
@@ -148,6 +171,40 @@ const Join = () => {
                     <p className="text-sm text-foreground/70 mt-1">Complete an application form, interview with club officers, and attend orientation</p>
                   </div>
                 </div>
+              </div>
+            </div>
+
+            {/* Membership Levels Section - Based on the uploaded image */}
+            <div className="reveal-on-scroll">
+              <div className="relative mb-4">
+                <h3 className="text-xl font-bold">
+                  WANT TO BE PART OF THE <span className="text-vinta-yellow">GREATER WEST?</span>
+                </h3>
+                <div className="flex items-center mt-2 mb-6">
+                  <FileText className="h-5 w-5 mr-2 text-rotaract-blue" />
+                  <span className="text-lg">
+                    <span className="font-bold">APPLICATION</span> - Express your desire and purpose of joining the Greater West
+                  </span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {membershipLevels.map((level, index) => (
+                  <Card key={index} className="relative overflow-hidden bg-gradient-to-br from-rotaract-pink to-rotaract-blue text-white">
+                    <div className="absolute top-0 left-0 w-full h-full bg-black/30 z-0"></div>
+                    <CardContent className="relative z-10 p-5">
+                      <div className="flex flex-col items-center text-center space-y-2">
+                        <div className="p-3 bg-rotaract-blue/50 rounded-full mb-2">
+                          {level.icon}
+                        </div>
+                        <h4 className="font-bold text-lg">{level.title}</h4>
+                        <p className="text-white/80 text-sm">{level.duration}</p>
+                        <div className="w-12 h-1 bg-white/50 my-2"></div>
+                        <p className="text-sm">{level.description}</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
               </div>
             </div>
           </div>
