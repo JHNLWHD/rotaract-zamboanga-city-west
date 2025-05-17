@@ -225,7 +225,7 @@ const Join = () => {
               <p className="mb-6 text-lg">Ready to grow, serve, and lead with us?</p>
               <Button 
                 asChild
-                className="py-3 px-6 text-base bg-rotaract-blue hover:bg-rotaract-blue/90 transition-all duration-300 group max-w-full"
+                className="py-2 px-6 text-base bg-rotaract-blue hover:bg-rotaract-blue/90 transition-all duration-300 group max-w-full rounded-full"
               >
                 <a 
                   href="https://forms.gle/Q2JUyN6QeeqQkdFv5"
