@@ -1,3 +1,4 @@
+
 import React, { useEffect, useRef } from 'react';
 import { FileText, Users, Handshake, Award, CalendarDays, Briefcase, Link } from 'lucide-react';
 import { Helmet } from 'react-helmet';
@@ -6,6 +7,7 @@ import { Button } from "@/components/ui/button";
 
 const Join = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const processRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -27,10 +29,17 @@ const Join = () => {
     if (sectionRef.current) {
       observer.observe(sectionRef.current);
     }
+    
+    if (processRef.current) {
+      observer.observe(processRef.current);
+    }
 
     return () => {
       if (sectionRef.current) {
         observer.unobserve(sectionRef.current);
+      }
+      if (processRef.current) {
+        observer.unobserve(processRef.current);
       }
     };
   }, []);
@@ -186,34 +195,71 @@ const Join = () => {
           </div>
         </div>
         
-        {/* Application Process - 1 Column */}
-        <div className="mb-16 reveal-on-scroll">
-          <div className="text-center mb-8">
-            <h3 className="text-2xl font-bold">
-              <span className="text-vinta-yellow">APPLICATION</span> PROCESS
-            </h3>
-            <p className="text-foreground/80 max-w-xl mx-auto mt-2">
-              Express your desire and purpose of joining the Greater West
-            </p>
-          </div>
+        {/* Application Process - Enhanced with better visual hierarchy and animations */}
+        <div id="application-process" ref={processRef} className="mb-16 reveal-on-scroll relative overflow-hidden">
+          {/* Decorative background element */}
+          <div className="absolute inset-0 bg-wave-pattern opacity-10 z-0"></div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {membershipLevels.map((level, index) => (
-              <Card key={index} className="relative overflow-hidden bg-gradient-to-br from-rotaract-pink to-rotaract-blue text-white hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                <div className="absolute top-0 left-0 w-full h-full bg-black/30 z-0"></div>
-                <CardContent className="relative z-10 p-5">
-                  <div className="flex flex-col items-center text-center space-y-2">
-                    <div className="p-3 bg-rotaract-blue/50 rounded-full mb-2">
-                      {level.icon}
-                    </div>
-                    <h4 className="font-bold text-lg">{level.title}</h4>
-                    <p className="text-white/80 text-sm">{level.duration}</p>
-                    <div className="w-12 h-1 bg-white/50 my-2"></div>
-                    <p className="text-sm">{level.description}</p>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+          <div className="relative z-10">
+            <div className="text-center mb-12">
+              <div className="inline-block px-5 py-1 bg-gradient-to-r from-rotaract-pink/20 via-vinta-yellow/20 to-rotaract-blue/20 rounded-full mb-4">
+                <h3 className="text-2xl font-bold tracking-wide">
+                  <span className="bg-gradient-to-r from-vinta-yellow to-rotaract-pink bg-clip-text text-transparent">APPLICATION</span>
+                  <span className="text-rotaract-blue"> PROCESS</span>
+                </h3>
+              </div>
+              <p className="text-foreground/80 max-w-xl mx-auto">
+                Express your desire and purpose of joining the Greater West
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+              {membershipLevels.map((level, index) => (
+                <div 
+                  key={index} 
+                  className="reveal-on-scroll" 
+                  style={{ transitionDelay: `${index * 100}ms` }}
+                >
+                  <Card 
+                    className="relative overflow-hidden rounded-xl h-full transform hover:-translate-y-2 transition-all duration-300 hover:shadow-xl"
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-br from-rotaract-pink to-rotaract-blue opacity-90 z-0"></div>
+                    <div className="absolute top-0 right-0 w-20 h-20 bg-white/10 rounded-full -mr-10 -mt-10"></div>
+                    <div className="absolute bottom-0 left-0 w-16 h-16 bg-white/10 rounded-full -ml-8 -mb-8"></div>
+                    
+                    <CardContent className="relative z-10 p-6 text-white h-full flex flex-col items-center text-center">
+                      <div className="p-3 bg-white/20 backdrop-blur-sm rounded-full mb-4 shadow-inner">
+                        {level.icon}
+                      </div>
+                      
+                      <h4 className="font-bold text-lg mb-2">{level.title}</h4>
+                      <p className="text-white/80 text-sm font-medium mb-3">{level.duration}</p>
+                      
+                      <div className="w-12 h-1 bg-white/30 rounded-full my-3"></div>
+                      
+                      <p className="text-white/90 mt-2">{level.description}</p>
+                      
+                      <div className="mt-auto pt-4">
+                        <span className="inline-block px-3 py-1 text-xs font-semibold bg-white/20 backdrop-blur-sm rounded-full">
+                          {`Level ${index + 1}`}
+                        </span>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              ))}
+            </div>
+            
+            <div className="flex justify-center mt-8">
+              <div className="flex space-x-2">
+                {[0, 1, 2].map((dot) => (
+                  <div 
+                    key={dot} 
+                    className="w-2 h-2 rounded-full bg-rotaract-blue/50"
+                  ></div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
         
@@ -225,16 +271,16 @@ const Join = () => {
               <p className="mb-6 text-lg">Ready to grow, serve, and lead with us?</p>
               <Button 
                 asChild
-                className="py-2 px-6 text-base bg-rotaract-blue hover:bg-rotaract-blue/90 transition-all duration-300 group max-w-full rounded-full"
+                className="py-2 px-6 bg-rotaract-blue hover:bg-rotaract-blue/90 transition-all duration-300 group rounded-full"
               >
                 <a 
                   href="https://forms.gle/Q2JUyN6QeeqQkdFv5"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Apply for Rotaract Club Membership"
-                  className="flex items-center justify-center flex-wrap gap-2"
+                  className="flex items-center justify-center gap-2"
                 >
-                  <span>Join Great West</span>
+                  <span>Join Now</span>
                   <Link className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </a>
               </Button>
