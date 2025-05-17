@@ -232,7 +232,7 @@ const Join = () => {
           <Card className="border border-rotaract-blue/20 shadow-sm">
             <CardContent className="p-6 sm:p-8 text-center">
               <h3 className="text-xl font-bold mb-3">Ready to join us?</h3>
-              <p className="mb-4 text-foreground/70">Be part of something impactful</p>
+              <p className="mb-4 text-foreground/70">Be part of the greats at Great West</p>
               <Button 
                 asChild
                 className="py-2 px-6 bg-rotaract-blue hover:bg-rotaract-blue/90 transition-all"
