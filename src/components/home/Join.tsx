@@ -85,19 +85,19 @@ const Join = () => {
   const membershipLevels = [
     {
       title: "VOLUNTEER MEMBER LEVEL",
-      icon: <Users className="h-8 w-8 text-white" />,
+      icon: <Users className="h-8 w-8 text-rotaract-blue" />,
       duration: "Duration: 1-6 months",
       description: "New members will engage in volunteer activities"
     },
     {
       title: "ADVOCATE MEMBER LEVEL",
-      icon: <Handshake className="h-8 w-8 text-white" />,
+      icon: <Handshake className="h-8 w-8 text-rotaract-blue" />,
       duration: "Duration: 6-12 months",
       description: "Deeper involvement through advocacy and continued commitment"
     },
     {
       title: "GREAT WEST MEMBER LEVEL",
-      icon: <Award className="h-8 w-8 text-white" />,
+      icon: <Award className="h-8 w-8 text-rotaract-blue" />,
       duration: "Official Member (Inducted)",
       description: "Reward for significant contributions and embodying organizational values"
     }
@@ -195,83 +195,47 @@ const Join = () => {
           </div>
         </div>
         
-        {/* Application Process - Enhanced with better visual hierarchy and animations */}
-        <div id="application-process" ref={processRef} className="mb-16 reveal-on-scroll relative overflow-hidden">
-          {/* Decorative background element */}
-          <div className="absolute inset-0 bg-wave-pattern opacity-10 z-0"></div>
+        {/* Application Process - Minimalist version */}
+        <div id="application-process" ref={processRef} className="mb-16">
+          <div className="text-center mb-10">
+            <h3 className="text-2xl font-bold mb-2">
+              <span className="text-rotaract-blue">APPLICATION</span> PROCESS
+            </h3>
+            <p className="text-foreground/70 max-w-xl mx-auto">
+              Membership levels in your journey with us
+            </p>
+          </div>
           
-          <div className="relative z-10">
-            <div className="text-center mb-12">
-              <div className="inline-block px-5 py-1 bg-gradient-to-r from-rotaract-pink/20 via-vinta-yellow/20 to-rotaract-blue/20 rounded-full mb-4">
-                <h3 className="text-2xl font-bold tracking-wide">
-                  <span className="bg-gradient-to-r from-vinta-yellow to-rotaract-pink bg-clip-text text-transparent">APPLICATION</span>
-                  <span className="text-rotaract-blue"> PROCESS</span>
-                </h3>
-              </div>
-              <p className="text-foreground/80 max-w-xl mx-auto">
-                Express your desire and purpose of joining the Greater West
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-              {membershipLevels.map((level, index) => (
-                <div 
-                  key={index} 
-                  className="reveal-on-scroll" 
-                  style={{ transitionDelay: `${index * 100}ms` }}
-                >
-                  <Card 
-                    className="relative overflow-hidden rounded-xl h-full transform hover:-translate-y-2 transition-all duration-300 hover:shadow-xl"
-                  >
-                    <div className="absolute inset-0 bg-gradient-to-br from-rotaract-pink to-rotaract-blue opacity-90 z-0"></div>
-                    <div className="absolute top-0 right-0 w-20 h-20 bg-white/10 rounded-full -mr-10 -mt-10"></div>
-                    <div className="absolute bottom-0 left-0 w-16 h-16 bg-white/10 rounded-full -ml-8 -mb-8"></div>
-                    
-                    <CardContent className="relative z-10 p-6 text-white h-full flex flex-col items-center text-center">
-                      <div className="p-3 bg-white/20 backdrop-blur-sm rounded-full mb-4 shadow-inner">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            {membershipLevels.map((level, index) => (
+              <div key={index} className="reveal-on-scroll" style={{ transitionDelay: `${index * 100}ms` }}>
+                <Card className="h-full hover:shadow-md transition-all duration-300">
+                  <CardContent className="pt-6">
+                    <div className="flex flex-col items-center text-center">
+                      <div className="p-3 bg-rotaract-blue/10 rounded-full mb-4">
                         {level.icon}
                       </div>
-                      
-                      <h4 className="font-bold text-lg mb-2">{level.title}</h4>
-                      <p className="text-white/80 text-sm font-medium mb-3">{level.duration}</p>
-                      
-                      <div className="w-12 h-1 bg-white/30 rounded-full my-3"></div>
-                      
-                      <p className="text-white/90 mt-2">{level.description}</p>
-                      
-                      <div className="mt-auto pt-4">
-                        <span className="inline-block px-3 py-1 text-xs font-semibold bg-white/20 backdrop-blur-sm rounded-full">
-                          {`Level ${index + 1}`}
-                        </span>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
-              ))}
-            </div>
-            
-            <div className="flex justify-center mt-8">
-              <div className="flex space-x-2">
-                {[0, 1, 2].map((dot) => (
-                  <div 
-                    key={dot} 
-                    className="w-2 h-2 rounded-full bg-rotaract-blue/50"
-                  ></div>
-                ))}
+                      <h4 className="font-semibold mb-1">{level.title}</h4>
+                      <p className="text-sm text-foreground/70 mb-3">{level.duration}</p>
+                      <div className="w-12 h-0.5 bg-rotaract-blue/30 rounded-full my-3"></div>
+                      <p className="text-sm">{level.description}</p>
+                    </div>
+                  </CardContent>
+                </Card>
               </div>
-            </div>
+            ))}
           </div>
         </div>
         
-        {/* CTA - 1 Column Center - Fixed for mobile */}
+        {/* CTA - 1 Column Center */}
         <div className="max-w-2xl mx-auto reveal-on-scroll">
-          <Card className="border-2 border-rotaract-blue shadow-xl bg-gradient-to-br from-white to-blue-50">
-            <CardContent className="p-8 text-center">
-              <h3 className="text-2xl font-bold mb-3">This is your sign to be part of something impactful.</h3>
-              <p className="mb-6 text-lg">Ready to grow, serve, and lead with us?</p>
+          <Card className="border border-rotaract-blue/20 shadow-sm">
+            <CardContent className="p-6 sm:p-8 text-center">
+              <h3 className="text-xl font-bold mb-3">Ready to join us?</h3>
+              <p className="mb-4 text-foreground/70">Be part of something impactful</p>
               <Button 
                 asChild
-                className="py-2 px-6 bg-rotaract-blue hover:bg-rotaract-blue/90 transition-all duration-300 group rounded-full"
+                className="py-2 px-6 bg-rotaract-blue hover:bg-rotaract-blue/90 transition-all"
               >
                 <a 
                   href="https://forms.gle/Q2JUyN6QeeqQkdFv5"
@@ -280,8 +244,8 @@ const Join = () => {
                   aria-label="Apply for Rotaract Club Membership"
                   className="flex items-center justify-center gap-2"
                 >
-                  <span>Join Now</span>
-                  <Link className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  <span>Apply Now</span>
+                  <Link className="h-4 w-4" />
                 </a>
               </Button>
             </CardContent>
