@@ -36,7 +36,7 @@ const Index = () => {
     <>
       <Helmet>
         <title>Rotaract Club of Zamboanga City West - Service, Fellowship & Leadership</title>
-        <meta name="description" content="Join the Rotaract Club of Zamboanga City West - empowering young leaders through fellowship, community service, and professional development since 2005." />
+        <meta name="description" content="Join the Rotaract Club of Zamboanga City West - empowering young leaders through fellowship, community service, and professional development since 2010." />
       </Helmet>
       <div className="min-h-screen flex flex-col">
         <Navbar />
