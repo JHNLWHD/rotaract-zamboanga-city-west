@@ -1,69 +1,56 @@
-# Welcome to your Lovable project
+# Rotaract Zamboanga City West
 
-## Project info
+Welcome to the official repository for the Rotaract Zamboanga City West website!
 
-**URL**: https://lovable.dev/projects/d9fe9c0e-3a5f-4752-8319-dc034772da81
+## Project Info
 
-## How can I edit this code?
+- **Production Site:** [https://rotaract-zambo-city-west.netlify.app/](https://rotaract-zambo-city-west.netlify.app/)
 
-There are several ways of editing your application.
+## Tech Stack
 
-**Use Lovable**
+This project is built with:
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/d9fe9c0e-3a5f-4752-8319-dc034772da81) and start prompting.
+- [Bun](https://bun.sh/) – Fast all-in-one JavaScript runtime
+- [Vite](https://vitejs.dev/) – Next Generation Frontend Tooling
+- [TypeScript](https://www.typescriptlang.org/) – Typed JavaScript at Any Scale
+- [React](https://react.dev/) – A JavaScript library for building user interfaces
+- [shadcn/ui](https://ui.shadcn.com/) – Beautifully designed UI components
+- [Tailwind CSS](https://tailwindcss.com/) – Utility-first CSS framework
+- [PostHog](https://posthog.com/) – Product analytics suite
 
-Changes made via Lovable will be committed automatically to this repo.
+## Getting Started
 
-**Use your preferred IDE**
+Follow these steps to set up and run the project locally:
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Prerequisites
+- [Bun](https://bun.sh/) (Install via `curl -fsSL https://bun.sh/install | bash`)
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### Installation & Development
 
-Follow these steps:
+1. **Clone the repository:**
+   ```sh
+   git clone <YOUR_GIT_URL>
+   cd <YOUR_PROJECT_NAME>
+   ```
+2. **Install dependencies:**
+   ```sh
+   bun install
+   ```
+3. **Start the development server:**
+   ```sh
+   bun run dev
+   ```
+   The app will be available at [http://localhost:8080](http://localhost:5173) by default.
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+## Deployment
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+- Deploy to [Netlify](https://www.netlify.com/) or your preferred static hosting provider.
+- For custom domains, see [Netlify custom domains guide](https://docs.netlify.com/domains-https/custom-domains/).
 
-# Step 3: Install the necessary dependencies.
-npm i
+## Contributing
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+Pull requests are welcome! For major changes, please open an issue first to discuss what you would like to change.
 
-**Edit a file directly in GitHub**
+## License
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with .
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/d9fe9c0e-3a5f-4752-8319-dc034772da81) and click on Share -> Publish.
-
-## I want to use a custom domain - is that possible?
-
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+This project is licensed under the MIT License.
