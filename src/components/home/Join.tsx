@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef } from 'react';
 import { FileText, Users, Handshake, Award, CalendarDays, Briefcase, Link } from 'lucide-react';
 import { Helmet } from 'react-helmet';
@@ -218,7 +217,7 @@ const Join = () => {
           </div>
         </div>
         
-        {/* CTA - 1 Column Center */}
+        {/* CTA - 1 Column Center - Fixed for mobile */}
         <div className="max-w-2xl mx-auto reveal-on-scroll">
           <Card className="border-2 border-rotaract-blue shadow-xl bg-gradient-to-br from-white to-blue-50">
             <CardContent className="p-8 text-center">
@@ -226,16 +225,17 @@ const Join = () => {
               <p className="mb-6 text-lg">Ready to grow, serve, and lead with us?</p>
               <Button 
                 asChild
-                className="py-6 px-8 text-lg bg-rotaract-blue hover:bg-rotaract-blue/90 transition-all duration-300 group"
+                className="py-3 px-6 text-base bg-rotaract-blue hover:bg-rotaract-blue/90 transition-all duration-300 group max-w-full"
               >
                 <a 
                   href="https://forms.gle/Q2JUyN6QeeqQkdFv5"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Apply for Rotaract Club Membership"
+                  className="flex items-center justify-center flex-wrap gap-2"
                 >
-                  Sign up now and be one of the greats at Great West!
-                  <Link className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                  <span>Join Great West</span>
+                  <Link className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </a>
               </Button>
             </CardContent>
