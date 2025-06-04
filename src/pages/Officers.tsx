@@ -299,37 +299,39 @@ const Officers = () => {
               <div className="flex items-center justify-center mb-8">
                 <Calendar className="w-6 h-6 text-vinta-yellow mr-2" />
                 <h2 className="text-2xl font-bold text-rotaract-navy">
-                  Club Advisor
+                  Club Advisors
                 </h2>
               </div>
-              <div className="flex justify-center">
-                <div className="w-full max-w-md">
-                  {advisors.map((officer, index) => (
-                    <Card key={index} className="hover:shadow-lg transition-all duration-300 border-l-4 border-l-vinta-yellow">
-                      <CardHeader>
-                        <div className="text-center">
-                          <div className="w-16 h-16 mx-auto mb-4 bg-vinta-yellow/10 rounded-full flex items-center justify-center">
-                            {getIcon(officer.category)}
-                          </div>
-                          <CardTitle className="text-lg text-rotaract-navy mb-1">{officer.name}</CardTitle>
-                          <p className="text-sm font-medium text-gray-700 mb-2">{officer.position}</p>
-                          <Badge className={getCategoryColor(officer.category)}>
-                            {officer.category}
-                          </Badge>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 justify-center">
+                {advisors.map((officer, index) => (
+                  <Card key={index} className="hover:shadow-lg transition-all duration-300 border-l-4 border-l-vinta-yellow">
+                    <CardHeader>
+                      <div className="text-center">
+                        <div className="w-16 h-16 mx-auto mb-4 bg-vinta-yellow/10 rounded-full flex items-center justify-center">
+                          {getIcon('Advisor')}
                         </div>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="space-y-3 text-sm">
-                          <p className="text-gray-600">{officer.responsibilities}</p>
-                          <div className="flex items-center text-gray-500">
-                            <Calendar className="w-4 h-4 mr-2" />
-                            <span className="text-xs">{officer.term}</span>
-                          </div>
+                        <CardTitle className="text-lg text-rotaract-navy mb-1">
+                          {officer.name}
+                        </CardTitle>
+                        <p className="text-sm font-medium text-gray-700 mb-2">
+                          {officer.position}
+                        </p>
+                        <Badge className={getCategoryColor('Advisor')}>
+                          Advisor
+                        </Badge>
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-3 text-sm">
+                        <p className="text-gray-600">{officer.responsibilities}</p>
+                        <div className="flex items-center text-gray-500">
+                          <Calendar className="w-4 h-4 mr-2" />
+                          <span className="text-xs">{officer.term}</span>
                         </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
               </div>
             </div>
 
