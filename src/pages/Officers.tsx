@@ -13,7 +13,6 @@ const Officers = () => {
       position: "President",
       term: "2025-2026",
       responsibilities: "Overall leadership and strategic direction of the club",
-      contact: "president@raczambowest.org",
       category: "Executive"
     },
     {
@@ -21,7 +20,6 @@ const Officers = () => {
       position: "President-Elect / Vice President",
       term: "2025-2026",
       responsibilities: "Assists president and prepares for next term leadership",
-      contact: "pevp@raczambowest.org",
       category: "Executive"
     },
     {
@@ -29,7 +27,6 @@ const Officers = () => {
       position: "Secretary",
       term: "2025-2026",
       responsibilities: "Meeting minutes, correspondence, and club documentation",
-      contact: "secretary@raczambowest.org",
       category: "Executive"
     },
     {
@@ -37,7 +34,6 @@ const Officers = () => {
       position: "Assistant Secretary",
       term: "2025-2026",
       responsibilities: "Assists the Secretary in documentation and correspondence",
-      contact: "assec@raczambowest.org",
       category: "Executive"
     },
     {
@@ -45,7 +41,6 @@ const Officers = () => {
       position: "Finance Director",
       term: "2025-2026",
       responsibilities: "Financial management, budgeting, and fiscal oversight",
-      contact: "finance@raczambowest.org",
       category: "Executive"
     },
     {
@@ -53,7 +48,6 @@ const Officers = () => {
       position: "Assistant Finance Director",
       term: "2025-2026",
       responsibilities: "Assists the Finance Director in financial matters",
-      contact: "asstfinance@raczambowest.org",
       category: "Executive"
     }
   ];
@@ -64,7 +58,6 @@ const Officers = () => {
       position: "Membership Chair",
       term: "2025-2026",
       responsibilities: "Recruitment, retention, and new member orientation",
-      contact: "membership@raczambowest.org",
       category: "Director"
     },
     {
@@ -72,7 +65,6 @@ const Officers = () => {
       position: "Assistant Membership Chair",
       term: "2025-2026",
       responsibilities: "Assists the Membership Chair in recruitment and retention",
-      contact: "asstmembership@raczambowest.org",
       category: "Director"
     },
     {
@@ -80,7 +72,6 @@ const Officers = () => {
       position: "Community Service Director",
       term: "2025-2026",
       responsibilities: "Coordinates community service projects and volunteer activities",
-      contact: "service@raczambowest.org",
       category: "Director"
     },
     {
@@ -88,7 +79,6 @@ const Officers = () => {
       position: "Assistant Community Service Director",
       term: "2025-2026",
       responsibilities: "Assists the Community Service Director in projects",
-      contact: "asstservice@raczambowest.org",
       category: "Director"
     },
     {
@@ -96,7 +86,6 @@ const Officers = () => {
       position: "Assistant Community Service Director",
       term: "2025-2026",
       responsibilities: "Assists the Community Service Director in projects",
-      contact: "asstservice2@raczambowest.org",
       category: "Director"
     },
     {
@@ -104,7 +93,6 @@ const Officers = () => {
       position: "Public Image Director",
       term: "2025-2026",
       responsibilities: "Marketing, communications, and social media management",
-      contact: "pr@raczambowest.org",
       category: "Director"
     },
     {
@@ -112,7 +100,6 @@ const Officers = () => {
       position: "Club Service Director",
       term: "2025-2026",
       responsibilities: "Internal club activities and member engagement",
-      contact: "clubservice@raczambowest.org",
       category: "Director"
     },
     {
@@ -120,7 +107,6 @@ const Officers = () => {
       position: "Assistant Club Service Director",
       term: "2025-2026",
       responsibilities: "Assists the Club Service Director in member engagement",
-      contact: "asstclubservice@raczambowest.org",
       category: "Director"
     },
     {
@@ -128,7 +114,6 @@ const Officers = () => {
       position: "Professional Service Director",
       term: "2025-2026",
       responsibilities: "Organizes career development and skill-building activities",
-      contact: "profservice@raczambowest.org",
       category: "Director"
     },
     {
@@ -136,7 +121,6 @@ const Officers = () => {
       position: "Assistant Professional Service Director",
       term: "2025-2026",
       responsibilities: "Assists the Professional Service Director in activities",
-      contact: "asstprofservice@raczambowest.org",
       category: "Director"
     },
     {
@@ -144,7 +128,6 @@ const Officers = () => {
       position: "International Service Director",
       term: "2025-2026",
       responsibilities: "Global projects and international partnerships",
-      contact: "intlservice@raczambowest.org",
       category: "Director"
     },
     {
@@ -152,7 +135,6 @@ const Officers = () => {
       position: "Assistant International Service Director",
       term: "2025-2026",
       responsibilities: "Assists the International Service Director in global projects",
-      contact: "asstintlservice@raczambowest.org",
       category: "Director"
     },
     {
@@ -160,7 +142,6 @@ const Officers = () => {
       position: "TRF Director",
       term: "2025-2026",
       responsibilities: "Leads The Rotary Foundation initiatives",
-      contact: "trf@raczambowest.org",
       category: "Director"
     },
     {
@@ -168,7 +149,6 @@ const Officers = () => {
       position: "Assistant TRF Director",
       term: "2025-2026",
       responsibilities: "Assists the TRF Director in foundation initiatives",
-      contact: "assttrf@raczambowest.org",
       category: "Director"
     }
   ];
@@ -179,7 +159,6 @@ const Officers = () => {
       position: "Rotaract Club Adviser",
       term: "2025-2026",
       responsibilities: "Provides guidance and mentorship to the club",
-      contact: "advisor@raczambowest.org",
       category: "Advisor"
     },
     {
@@ -187,7 +166,6 @@ const Officers = () => {
       position: "Rotaract Learning Facilitator",
       term: "2025-2026",
       responsibilities: "Facilitates learning and development for club members",
-      contact: "learning@raczambowest.org",
       category: "Advisor"
     }
   ];
@@ -269,10 +247,6 @@ const Officers = () => {
                       <div className="space-y-3 text-sm">
                         <p className="text-gray-600">{officer.responsibilities}</p>
                         <div className="flex items-center text-gray-500">
-                          <Mail className="w-4 h-4 mr-2 flex-shrink-0" />
-                          <span className="text-xs break-all">{officer.contact}</span>
-                        </div>
-                        <div className="flex items-center text-gray-500">
                           <Calendar className="w-4 h-4 mr-2" />
                           <span className="text-xs">{officer.term}</span>
                         </div>
@@ -309,10 +283,6 @@ const Officers = () => {
                     <CardContent>
                       <div className="space-y-3 text-sm">
                         <p className="text-gray-600">{officer.responsibilities}</p>
-                        <div className="flex items-center text-gray-500">
-                          <Mail className="w-4 h-4 mr-2 flex-shrink-0" />
-                          <span className="text-xs break-all">{officer.contact}</span>
-                        </div>
                         <div className="flex items-center text-gray-500">
                           <Calendar className="w-4 h-4 mr-2" />
                           <span className="text-xs">{officer.term}</span>
@@ -351,10 +321,6 @@ const Officers = () => {
                       <CardContent>
                         <div className="space-y-3 text-sm">
                           <p className="text-gray-600">{officer.responsibilities}</p>
-                          <div className="flex items-center text-gray-500">
-                            <Mail className="w-4 h-4 mr-2 flex-shrink-0" />
-                            <span className="text-xs break-all">{officer.contact}</span>
-                          </div>
                           <div className="flex items-center text-gray-500">
                             <Calendar className="w-4 h-4 mr-2" />
                             <span className="text-xs">{officer.term}</span>
