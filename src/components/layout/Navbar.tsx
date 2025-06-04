@@ -1,10 +1,13 @@
+
 import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Link, useLocation } from 'react-router-dom';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -23,6 +26,24 @@ const Navbar = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
 
+  const isActiveRoute = (path: string) => {
+    if (path === '/' && location.pathname === '/') return true;
+    if (path !== '/' && location.pathname.startsWith(path)) return true;
+    return false;
+  };
+
+  const navItems = [
+    { label: 'Home', path: '/' },
+    { label: 'About', path: '/#about' },
+    { label: 'Projects', path: '/projects' },
+    { label: 'Officers', path: '/officers' },
+    { label: 'Events', path: '/events' },
+    { label: 'Gallery', path: '/gallery' },
+    { label: 'Programs', path: '/#programs' },
+    { label: 'Join Us', path: '/#join' },
+    { label: 'Contact', path: '/#contact' }
+  ];
+
   return (
       <header
           className={cn(
@@ -32,7 +53,7 @@ const Navbar = () => {
       >
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center">
-            <a href="#" className="flex items-center space-x-3">
+            <Link to="/" className="flex items-center space-x-3">
               <img
                   src="/lovable-uploads/e48a4b78-bd32-41b7-b192-969232e8378f.png"
                   alt="Rotaract Club of Zamboanga City West"
@@ -45,46 +66,39 @@ const Navbar = () => {
                   <span className={`text-xs tracking-wide ${isScrolled ? 'text-rotaract-pink' : 'text-white/90'}`}>Zamboanga City West</span>
                 </h1>
               </div>
-            </a>
+            </Link>
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-6">
-            <a
-                href="#"
-                className={`nav-link text-sm uppercase tracking-wide font-medium ${isScrolled ? 'text-foreground/80' : 'text-white/90'} active-nav-link`}
-            >
-              Home
-            </a>
-            <a
-                href="#about"
-                className={`nav-link text-sm uppercase tracking-wide font-medium ${isScrolled ? 'text-foreground/80' : 'text-white/90'}`}
-            >
-              About
-            </a>
-            <a
-                href="#programs"
-                className={`nav-link text-sm uppercase tracking-wide font-medium ${isScrolled ? 'text-foreground/80' : 'text-white/90'}`}
-            >
-              Programs
-            </a>
-            <a
-                href="#join"
-                className={`nav-link text-sm uppercase tracking-wide font-medium ${isScrolled ? 'text-foreground/80' : 'text-white/90'}`}
-            >
-              Join Us
-            </a>
-            <a
-                href="#contact"
-                className={`nav-link text-sm uppercase tracking-wide font-medium ${isScrolled ? 'text-foreground/80' : 'text-white/90'}`}
-            >
-              Contact
-            </a>
+          <nav className="hidden lg:flex items-center space-x-6">
+            {navItems.map((item) => (
+              item.path.startsWith('/#') ? (
+                <a
+                  key={item.label}
+                  href={item.path}
+                  className={`nav-link text-sm uppercase tracking-wide font-medium ${
+                    isScrolled ? 'text-foreground/80' : 'text-white/90'
+                  } ${isActiveRoute(item.path) ? 'active-nav-link' : ''}`}
+                >
+                  {item.label}
+                </a>
+              ) : (
+                <Link
+                  key={item.label}
+                  to={item.path}
+                  className={`nav-link text-sm uppercase tracking-wide font-medium ${
+                    isScrolled ? 'text-foreground/80' : 'text-white/90'
+                  } ${isActiveRoute(item.path) ? 'active-nav-link' : ''}`}
+                >
+                  {item.label}
+                </Link>
+              )
+            ))}
           </nav>
 
           {/* Mobile Navigation Toggle */}
           <button
-              className={`md:hidden ${isScrolled ? 'text-foreground' : 'text-white'}`}
+              className={`lg:hidden ${isScrolled ? 'text-foreground' : 'text-white'}`}
               onClick={toggleMobileMenu}
               aria-label="Toggle menu"
           >
@@ -106,7 +120,7 @@ const Navbar = () => {
           >
             <X size={24} />
           </button>
-          <div className="flex justify-center mt-12 mb-6"> {/* Adjusted margin-top */}
+          <div className="flex justify-center mt-12 mb-6">
             <img
                 src="/lovable-uploads/e48a4b78-bd32-41b7-b192-969232e8378f.png"
                 alt="Rotaract Club of Zamboanga City West"
@@ -114,11 +128,27 @@ const Navbar = () => {
             />
           </div>
           <nav className="flex flex-col items-center space-y-6 p-8">
-            <a href="#" className="text-lg uppercase tracking-wide text-white font-medium" onClick={toggleMobileMenu}>Home</a>
-            <a href="#about" className="text-lg uppercase tracking-wide text-white font-medium" onClick={toggleMobileMenu}>About</a>
-            <a href="#programs" className="text-lg uppercase tracking-wide text-white font-medium" onClick={toggleMobileMenu}>Programs</a>
-            <a href="#join" className="text-lg uppercase tracking-wide text-white font-medium" onClick={toggleMobileMenu}>Join Us</a>
-            <a href="#contact" className="text-lg uppercase tracking-wide text-white font-medium" onClick={toggleMobileMenu}>Contact</a>
+            {navItems.map((item) => (
+              item.path.startsWith('/#') ? (
+                <a 
+                  key={item.label}
+                  href={item.path} 
+                  className="text-lg uppercase tracking-wide text-white font-medium" 
+                  onClick={toggleMobileMenu}
+                >
+                  {item.label}
+                </a>
+              ) : (
+                <Link 
+                  key={item.label}
+                  to={item.path} 
+                  className="text-lg uppercase tracking-wide text-white font-medium" 
+                  onClick={toggleMobileMenu}
+                >
+                  {item.label}
+                </Link>
+              )
+            ))}
           </nav>
         </div>
       </header>
