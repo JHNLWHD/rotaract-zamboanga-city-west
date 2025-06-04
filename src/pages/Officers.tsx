@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import Navbar from '../components/layout/Navbar';
@@ -10,7 +9,7 @@ import { Mail, Phone, Calendar, Users, Award } from 'lucide-react';
 const Officers = () => {
   const boardOfDirectors = [
     {
-      name: "RTR. Maria Santos",
+      name: "Pres. Hash Ibrahim",
       position: "President",
       term: "2025-2026",
       responsibilities: "Overall leadership and strategic direction of the club",
@@ -18,23 +17,15 @@ const Officers = () => {
       category: "Executive"
     },
     {
-      name: "RTR. John Cruz",
-      position: "President-Elect",
+      name: "PE Darylle Sanghanan",
+      position: "President-Elect / Vice President",
       term: "2025-2026",
       responsibilities: "Assists president and prepares for next term leadership",
-      contact: "presidentelect@raczambowest.org",
+      contact: "pevp@raczambowest.org",
       category: "Executive"
     },
     {
-      name: "RTR. Anna Reyes",
-      position: "Vice President",
-      term: "2025-2026",
-      responsibilities: "Supports president and leads special initiatives",
-      contact: "vp@raczambowest.org",
-      category: "Executive"
-    },
-    {
-      name: "RTR. Carlos Mendoza",
+      name: "Cris Barredo",
       position: "Secretary",
       term: "2025-2026",
       responsibilities: "Meeting minutes, correspondence, and club documentation",
@@ -42,18 +33,50 @@ const Officers = () => {
       category: "Executive"
     },
     {
-      name: "RTR. Lisa Garcia",
-      position: "Treasurer",
+      name: "Yves Abduhasad",
+      position: "Assistant Secretary",
+      term: "2025-2026",
+      responsibilities: "Assists the Secretary in documentation and correspondence",
+      contact: "assec@raczambowest.org",
+      category: "Executive"
+    },
+    {
+      name: "Angelica Simbajon",
+      position: "Finance Director",
       term: "2025-2026",
       responsibilities: "Financial management, budgeting, and fiscal oversight",
-      contact: "treasurer@raczambowest.org",
+      contact: "finance@raczambowest.org",
+      category: "Executive"
+    },
+    {
+      name: "Jessa Dello",
+      position: "Assistant Finance Director",
+      term: "2025-2026",
+      responsibilities: "Assists the Finance Director in financial matters",
+      contact: "asstfinance@raczambowest.org",
       category: "Executive"
     }
   ];
 
   const directors = [
     {
-      name: "RTR. Miguel Torres",
+      name: "PDRR Remo Varquez",
+      position: "Membership Chair",
+      term: "2025-2026",
+      responsibilities: "Recruitment, retention, and new member orientation",
+      contact: "membership@raczambowest.org",
+      category: "Director"
+    },
+    {
+      name: "Al-Jhoenil Wahid",
+      position: "Assistant Membership Chair",
+      term: "2025-2026",
+      responsibilities: "Assists the Membership Chair in recruitment and retention",
+      contact: "asstmembership@raczambowest.org",
+      category: "Director"
+    },
+    {
+      name: "Precious Carrillo",
       position: "Community Service Director",
       term: "2025-2026",
       responsibilities: "Coordinates community service projects and volunteer activities",
@@ -61,15 +84,31 @@ const Officers = () => {
       category: "Director"
     },
     {
-      name: "RTR. Sarah Kim",
-      position: "Professional Development Director",
+      name: "Xander Depositario",
+      position: "Assistant Community Service Director",
       term: "2025-2026",
-      responsibilities: "Organizes career development and skill-building activities",
-      contact: "profdev@raczambowest.org",
+      responsibilities: "Assists the Community Service Director in projects",
+      contact: "asstservice@raczambowest.org",
       category: "Director"
     },
     {
-      name: "RTR. David Lopez",
+      name: "Aldwin",
+      position: "Assistant Community Service Director",
+      term: "2025-2026",
+      responsibilities: "Assists the Community Service Director in projects",
+      contact: "asstservice2@raczambowest.org",
+      category: "Director"
+    },
+    {
+      name: "Lanelle Bañez",
+      position: "Public Image Director",
+      term: "2025-2026",
+      responsibilities: "Marketing, communications, and social media management",
+      contact: "pr@raczambowest.org",
+      category: "Director"
+    },
+    {
+      name: "Remo Varques",
       position: "Club Service Director",
       term: "2025-2026",
       responsibilities: "Internal club activities and member engagement",
@@ -77,38 +116,78 @@ const Officers = () => {
       category: "Director"
     },
     {
-      name: "RTR. Jennifer Wang",
+      name: "Sarah Saavedra",
+      position: "Assistant Club Service Director",
+      term: "2025-2026",
+      responsibilities: "Assists the Club Service Director in member engagement",
+      contact: "asstclubservice@raczambowest.org",
+      category: "Director"
+    },
+    {
+      name: "Francis Roble",
+      position: "Professional Service Director",
+      term: "2025-2026",
+      responsibilities: "Organizes career development and skill-building activities",
+      contact: "profservice@raczambowest.org",
+      category: "Director"
+    },
+    {
+      name: "Benzar Kasan",
+      position: "Assistant Professional Service Director",
+      term: "2025-2026",
+      responsibilities: "Assists the Professional Service Director in activities",
+      contact: "asstprofservice@raczambowest.org",
+      category: "Director"
+    },
+    {
+      name: "IPP Mark Item",
       position: "International Service Director",
       term: "2025-2026",
       responsibilities: "Global projects and international partnerships",
-      contact: "international@raczambowest.org",
+      contact: "intlservice@raczambowest.org",
       category: "Director"
     },
     {
-      name: "RTR. Mark Johnson",
-      position: "Public Relations Director",
+      name: "PP April Sultan",
+      position: "Assistant International Service Director",
       term: "2025-2026",
-      responsibilities: "Marketing, communications, and social media management",
-      contact: "pr@raczambowest.org",
+      responsibilities: "Assists the International Service Director in global projects",
+      contact: "asstintlservice@raczambowest.org",
       category: "Director"
     },
     {
-      name: "RTR. Elena Rodriguez",
-      position: "Membership Director",
+      name: "Catherine Lojera",
+      position: "TRF Director",
       term: "2025-2026",
-      responsibilities: "Recruitment, retention, and new member orientation",
-      contact: "membership@raczambowest.org",
+      responsibilities: "Leads The Rotary Foundation initiatives",
+      contact: "trf@raczambowest.org",
+      category: "Director"
+    },
+    {
+      name: "Jason Justin Lim",
+      position: "Assistant TRF Director",
+      term: "2025-2026",
+      responsibilities: "Assists the TRF Director in foundation initiatives",
+      contact: "assttrf@raczambowest.org",
       category: "Director"
     }
   ];
 
   const advisors = [
     {
-      name: "ROT. Robert Smith",
-      position: "Club Advisor",
+      name: "Arwald Candido",
+      position: "Rotaract Club Adviser",
       term: "2025-2026",
       responsibilities: "Provides guidance and mentorship to the club",
       contact: "advisor@raczambowest.org",
+      category: "Advisor"
+    },
+    {
+      name: "PDRR Nick Paira",
+      position: "Rotaract Learning Facilitator",
+      term: "2025-2026",
+      responsibilities: "Facilitates learning and development for club members",
+      contact: "learning@raczambowest.org",
       category: "Advisor"
     }
   ];
