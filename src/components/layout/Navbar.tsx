@@ -34,21 +34,17 @@ const Navbar = () => {
 
   const navItems = [
     { label: 'Home', path: '/' },
-    { label: 'About', path: '/#about' },
     { label: 'Projects', path: '/projects' },
     { label: 'Officers', path: '/officers' },
     { label: 'Events', path: '/events' },
-    { label: 'Gallery', path: '/gallery' },
-    { label: 'Programs', path: '/#programs' },
-    { label: 'Join Us', path: '/#join' },
-    { label: 'Contact', path: '/#contact' }
+    { label: 'Gallery', path: '/gallery' }
   ];
 
   return (
       <header
           className={cn(
               'fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-3 px-4 md:px-6',
-              isScrolled ? 'bg-white/95 backdrop-blur-md shadow-sm' : 'bg-transparent'
+              isScrolled ? 'bg-white/95 backdrop-blur-md shadow-sm' : 'bg-rotaract-navy/90 backdrop-blur-sm'
           )}
       >
         <div className="max-w-7xl mx-auto flex items-center justify-between">
@@ -63,42 +59,32 @@ const Navbar = () => {
                 <h1 className="font-display font-bold text-base leading-tight uppercase tracking-wider">
                   <span className={`${isScrolled ? 'text-rotaract-navy' : 'text-white'}`}>Rotaract Club</span>
                   <br />
-                  <span className={`text-xs tracking-wide ${isScrolled ? 'text-rotaract-pink' : 'text-white/90'}`}>Zamboanga City West</span>
+                  <span className={`text-xs tracking-wide ${isScrolled ? 'text-rotaract-pink' : 'text-white'}`}>Zamboanga City West</span>
                 </h1>
               </div>
             </Link>
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center space-x-6">
+          <nav className="hidden lg:flex items-center space-x-8">
             {navItems.map((item) => (
-              item.path.startsWith('/#') ? (
-                <a
-                  key={item.label}
-                  href={item.path}
-                  className={`nav-link text-sm uppercase tracking-wide font-medium ${
-                    isScrolled ? 'text-foreground/80' : 'text-white/90'
-                  } ${isActiveRoute(item.path) ? 'active-nav-link' : ''}`}
-                >
-                  {item.label}
-                </a>
-              ) : (
-                <Link
-                  key={item.label}
-                  to={item.path}
-                  className={`nav-link text-sm uppercase tracking-wide font-medium ${
-                    isScrolled ? 'text-foreground/80' : 'text-white/90'
-                  } ${isActiveRoute(item.path) ? 'active-nav-link' : ''}`}
-                >
-                  {item.label}
-                </Link>
-              )
+              <Link
+                key={item.label}
+                to={item.path}
+                className={`nav-link text-sm uppercase tracking-wide font-medium transition-colors ${
+                  isScrolled 
+                    ? 'text-rotaract-navy hover:text-rotaract-pink' 
+                    : 'text-white hover:text-rotaract-pink'
+                } ${isActiveRoute(item.path) ? (isScrolled ? 'text-rotaract-pink' : 'text-rotaract-pink') : ''}`}
+              >
+                {item.label}
+              </Link>
             ))}
           </nav>
 
           {/* Mobile Navigation Toggle */}
           <button
-              className={`lg:hidden ${isScrolled ? 'text-foreground' : 'text-white'}`}
+              className={`lg:hidden transition-colors ${isScrolled ? 'text-rotaract-navy' : 'text-white'}`}
               onClick={toggleMobileMenu}
               aria-label="Toggle menu"
           >
@@ -109,7 +95,7 @@ const Navbar = () => {
         {/* Mobile Menu */}
         <div
             className={cn(
-                'fixed top-0 left-0 right-0 bottom-0 z-100 bg-rotaract-navy/95 transform transition-transform duration-300 ease-in-out w-screen h-screen overflow-y-auto',
+                'fixed top-0 left-0 right-0 bottom-0 z-100 bg-rotaract-navy/95 backdrop-blur-md transform transition-transform duration-300 ease-in-out w-screen h-screen overflow-y-auto',
                 mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
             )}
         >
@@ -129,25 +115,14 @@ const Navbar = () => {
           </div>
           <nav className="flex flex-col items-center space-y-6 p-8">
             {navItems.map((item) => (
-              item.path.startsWith('/#') ? (
-                <a 
-                  key={item.label}
-                  href={item.path} 
-                  className="text-lg uppercase tracking-wide text-white font-medium" 
-                  onClick={toggleMobileMenu}
-                >
-                  {item.label}
-                </a>
-              ) : (
-                <Link 
-                  key={item.label}
-                  to={item.path} 
-                  className="text-lg uppercase tracking-wide text-white font-medium" 
-                  onClick={toggleMobileMenu}
-                >
-                  {item.label}
-                </Link>
-              )
+              <Link 
+                key={item.label}
+                to={item.path} 
+                className="text-lg uppercase tracking-wide text-white font-medium hover:text-rotaract-pink transition-colors" 
+                onClick={toggleMobileMenu}
+              >
+                {item.label}
+              </Link>
             ))}
           </nav>
         </div>
