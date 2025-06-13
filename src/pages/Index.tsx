@@ -37,6 +37,9 @@ const Index = () => {
       <Helmet>
         <title>Rotaract Club of Zamboanga City West - Service, Fellowship & Leadership</title>
         <meta name="description" content="Join the Rotaract Club of Zamboanga City West - empowering young leaders through fellowship, community service, and professional development since 2010." />
+
+        <script src="https://cdn.botpress.cloud/webchat/v3.0/inject.js"></script>
+        <script src="https://files.bpcontent.cloud/2025/06/13/13/20250613130544-A8JNWUH4.js"></script>
       </Helmet>
       <div className="min-h-screen flex flex-col">
         <Navbar />
