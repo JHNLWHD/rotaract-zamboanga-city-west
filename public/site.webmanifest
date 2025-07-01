@@ -1,21 +1,46 @@
 {
-  "name": "RACWEST",
-  "short_name": "RACWEST",
+  "name": "Rotaract Club of Zamboanga City West",
+  "short_name": "RAC ZC West",
+  "description": "Empowering young leaders through fellowship, community service, and professional development since 2010.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#dc2626",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "en",
   "icons": [
     {
-      "src": "/web-app-manifest-192x192.png",
+      "src": "/android-chrome-192x192.png",
       "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "maskable"
+      "type": "image/png"
     },
     {
-      "src": "/web-app-manifest-512x512.png",
+      "src": "/android-chrome-512x512.png",
       "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
+      "type": "image/png"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
     }
   ],
-  "theme_color": "#ffffff",
-  "background_color": "#ffffff",
-  "display": "standalone"
+  "categories": ["community", "nonprofit", "volunteer"],
+  "shortcuts": [
+    {
+      "name": "Our Projects",
+      "short_name": "Projects",
+      "description": "View our community impact projects",
+      "url": "/projects",
+      "icons": [{ "src": "/favicon-32x32.png", "sizes": "32x32" }]
+    },
+    {
+      "name": "Leadership Team",
+      "short_name": "Officers",
+      "description": "Meet our club officers and leaders",
+      "url": "/officers",
+      "icons": [{ "src": "/favicon-32x32.png", "sizes": "32x32" }]
+    }
+  ]
 }

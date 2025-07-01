@@ -1,12 +1,11 @@
-
 import React, { useEffect, useRef } from 'react';
-import { ArrowDown } from 'lucide-react';
+import { ArrowDown, Sparkles, Users, Target } from 'lucide-react';
 
 const Hero = () => {
   const heroRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const loadVintaAnimation = () => {
+    const loadModernAnimation = () => {
       if (heroRef.current) {
         const elements = heroRef.current.querySelectorAll('.animate-on-load');
         
@@ -14,12 +13,12 @@ const Hero = () => {
           setTimeout(() => {
             (el as HTMLElement).classList.add('animate-fade-in-up');
             (el as HTMLElement).style.opacity = '1';
-          }, 300 * index);
+          }, 200 * index);
         });
       }
     };
 
-    loadVintaAnimation();
+    loadModernAnimation();
   }, []);
 
   const scrollToAbout = () => {
@@ -30,64 +29,110 @@ const Hero = () => {
   };
 
   return (
-    <div 
+    <section 
       ref={heroRef}
-      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-b from-rotaract-navy via-rotaract-navy to-rotaract-blue/90 geometric-pattern"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      aria-label="Hero section"
     >
-      {/* Vinta-inspired decorative elements */}
+      {/* Hero background image */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: 'url(/zamboanga-city-hall.jpg)' }}
+        role="img"
+        aria-label="Zamboanga City Hall background"
+      ></div>
+      
+      {/* Dark overlay for better text readability */}
+      <div className="absolute inset-0 bg-slate-900/75"></div>
+      
+      {/* Modern geometric overlay */}
+      <div className="absolute inset-0 geometric-bg opacity-20"></div>
+      
+      {/* Floating modern elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -bottom-10 left-0 w-full h-40">
-          <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-full">
-            <path 
-              d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V0C0,0,0,0,321.39,56.44z" 
-              fill="#FF8024" 
-              fillOpacity="0.2"
-            ></path>
-          </svg>
-        </div>
+        {/* Modern floating shapes */}
+        <div className="absolute top-20 left-10 w-32 h-32 bg-cranberry-500/20 rounded-full blur-xl floating-element" style={{ animationDelay: '0s' }}></div>
+        <div className="absolute top-40 right-20 w-24 h-24 bg-cranberry-400/30 rounded-lg blur-lg floating-element rotate-45" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute bottom-40 left-1/4 w-16 h-16 bg-cranberry-300/25 rounded-full blur-md floating-element" style={{ animationDelay: '2s' }}></div>
+        <div className="absolute bottom-20 right-1/3 w-20 h-20 bg-cranberry-600/20 rounded-lg blur-lg floating-element -rotate-12" style={{ animationDelay: '1.5s' }}></div>
         
-        {/* Vinta sails in the background */}
-        <div className="absolute bottom-10 left-10 w-24 h-32 bg-vinta-pink/80 rotate-12 animate-sail" style={{ clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)', animationDelay: '1s' }}></div>
-        <div className="absolute bottom-16 left-32 w-20 h-24 bg-vinta-orange/80 -rotate-6 animate-sail" style={{ clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)', animationDelay: '1.7s' }}></div>
-        <div className="absolute bottom-6 left-56 w-16 h-20 bg-vinta-yellow/80 rotate-3 animate-sail" style={{ clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)', animationDelay: '0.5s' }}></div>
-        <div className="absolute bottom-14 left-80 w-28 h-36 bg-vinta-red/80 rotate-[-8deg] animate-sail" style={{ clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)', animationDelay: '1.2s' }}></div>
+        {/* Modern decorative icons */}
+        <div className="absolute top-1/3 left-20 text-cranberry-400/30 floating-element" style={{ animationDelay: '0.5s' }}>
+          <Sparkles size={32} />
+        </div>
+        <div className="absolute bottom-1/3 right-16 text-cranberry-300/30 floating-element" style={{ animationDelay: '1.8s' }}>
+          <Users size={28} />
+        </div>
+        <div className="absolute top-2/3 right-1/4 text-cranberry-500/30 floating-element" style={{ animationDelay: '2.2s' }}>
+          <Target size={24} />
+        </div>
       </div>
 
-      {/* Circular element inspired by the image */}
-      <div className="absolute top-1/3 left-1/4 w-64 h-64 bg-rotaract-pink/10 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-vinta-yellow/10 rounded-full blur-3xl"></div>
-
+      {/* Main content */}
       <div className="container px-6 z-10 text-center mt-16">
-        <div className="max-w-4xl mx-auto space-y-8">
-          <h1 className="text-4xl md:text-6xl font-display font-bold text-white opacity-0 animate-on-load">
-            <span className="block mb-2">ROTARACT CLUB OF</span>
-            <span className="block">ZAMBOANGA CITY WEST</span>
-            <span className="block mt-4 text-xl md:text-2xl font-normal text-white/80">SPONSORED BY ROTARY CLUB OF ZAMBOANGA CITY WEST</span>
+        <div className="max-w-5xl mx-auto space-y-8">
+          {/* Modern badge */}
+          <div className="opacity-0 animate-on-load">
+            <span className="inline-flex items-center px-4 py-2 rounded-full bg-cranberry-500/10 backdrop-blur-sm border border-cranberry-300/20 text-cranberry-200 text-sm font-medium">
+              <Sparkles className="w-4 h-4 mr-2" />
+              Empowering Young Leaders Since 2010
+            </span>
+          </div>
+
+          {/* Hero title with modern typography */}
+          <h1 className="text-hero text-white opacity-0 animate-on-load leading-none">
+            <span className="block mb-4">
+              <span className="text-gradient font-extrabold">ROTARACT CLUB</span>
+            </span>
+            <span className="block text-white/90 font-bold">
+              ZAMBOANGA CITY WEST
+            </span>
           </h1>
 
-          <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto opacity-0 animate-on-load">
-            Empowering young leaders through friendship, service, and professional development, while celebrating the vibrant culture of Zamboanga City.
+          {/* Subtitle with modern styling */}
+          <p className="text-xl md:text-2xl text-white/80 max-w-3xl mx-auto opacity-0 animate-on-load leading-relaxed">
+            Where <span className="text-cranberry-300 font-semibold">fellowship</span>, 
+            <span className="text-cranberry-300 font-semibold"> service</span>, and 
+            <span className="text-cranberry-300 font-semibold"> leadership</span> unite to create 
+            lasting impact in our community.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 opacity-0 animate-on-load">
-            <a href="#join" className="px-6 py-3 rounded-full bg-rotaract-pink text-white font-medium hover:bg-rotaract-pink/90 transition-colors shadow-lg hover:shadow-xl hover:scale-105 transform transition-transform">
-              Join Our Club
+          {/* Modern CTA buttons */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-6 opacity-0 animate-on-load">
+            <a 
+              href="#join" 
+              className="primary-button group"
+            >
+              <span>Join Our Movement</span>
+              <ArrowDown className="w-4 h-4 ml-2 group-hover:translate-y-1 transition-transform" />
             </a>
-            <a href="#programs" className="px-6 py-3 rounded-full bg-white text-rotaract-pink font-medium hover:bg-white/90 transition-colors shadow hover:shadow-md hover:scale-105 transform transition-transform">
-              Our Programs
+            <a 
+              href="#programs" 
+              className="secondary-button group"
+            >
+              <span>Explore Programs</span>
+              <Users className="w-4 h-4 ml-2 group-hover:scale-110 transition-transform" />
             </a>
           </div>
-        </div>
 
-        <button 
-          onClick={scrollToAbout}
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 rounded-full p-3 bg-white/80 backdrop-blur shadow-md animate-bounce hover:bg-white transition-colors"
-          aria-label="Scroll down"
-        >
-          <ArrowDown size={20} className="text-rotaract-pink" />
-        </button>
+          {/* Stats section */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-2xl mx-auto mt-16 opacity-0 animate-on-load py-4">
+            <div className="bg-slate-900/90 backdrop-blur-xl border border-cranberry-400/30 rounded-2xl p-6 text-center shadow-xl">
+              <div className="text-3xl font-bold text-cranberry-400 mb-2">14+</div>
+              <div className="text-white/90 text-sm font-medium">Years of Service</div>
+            </div>
+            <div className="bg-slate-900/90 backdrop-blur-xl border border-cranberry-400/30 rounded-2xl p-6 text-center shadow-xl">
+              <div className="text-3xl font-bold text-cranberry-400 mb-2">50+</div>
+              <div className="text-white/90 text-sm font-medium">Active Members</div>
+            </div>
+            <div className="bg-slate-900/90 backdrop-blur-xl border border-cranberry-400/30 rounded-2xl p-6 text-center shadow-xl">
+              <div className="text-3xl font-bold text-cranberry-400 mb-2">100+</div>
+              <div className="text-white/90 text-sm font-medium">Community Projects</div>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
   );
 };
 

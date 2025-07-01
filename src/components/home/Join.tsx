@@ -1,13 +1,24 @@
-
 import React, { useEffect, useRef } from 'react';
-import { FileText, Users, Handshake, Award, CalendarDays, Briefcase, Link } from 'lucide-react';
-import { Helmet } from 'react-helmet';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { 
+  User, 
+  Heart, 
+  Users, 
+  Calendar, 
+  ArrowRight, 
+  Sparkles,
+  CheckCircle,
+  Star,
+  Clock,
+  Trophy
+} from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
 
 const Join = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const processRef = useRef<HTMLDivElement>(null);
+
+  // Google Form URL for membership application
+  const MEMBERSHIP_APPLICATION_FORM = "https://forms.gle/Q2JUyN6QeeqQkdFv5";
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -18,7 +29,7 @@ const Join = () => {
             elements.forEach((el, i) => {
               setTimeout(() => {
                 el.classList.add('revealed');
-              }, 150 * i);
+              }, 100 * i);
             });
           }
         });
@@ -29,7 +40,6 @@ const Join = () => {
     if (sectionRef.current) {
       observer.observe(sectionRef.current);
     }
-    
     if (processRef.current) {
       observer.observe(processRef.current);
     }
@@ -44,215 +54,210 @@ const Join = () => {
     };
   }, []);
 
-  const benefits = [
-    {
-      icon: <Briefcase className="h-5 w-5 text-vinta-green" />,
-      text: "Lead meaningful projects"
-    },
-    {
-      icon: <Users className="h-5 w-5 text-vinta-green" />,
-      text: "Connect with passionate changemakers"
-    },
-    {
-      icon: <Handshake className="h-5 w-5 text-vinta-green" />,
-      text: "Build lifelong friendships"
-    },
-    {
-      icon: <CalendarDays className="h-5 w-5 text-vinta-green" />,
-      text: "Join trainings, events, and unforgettable experiences"
-    }
-  ];
-
-  const membershipRequirements = [
-    {
-      title: "Age",
-      description: "Between 18 and 35 years old"
-    },
-    {
-      title: "Commitment",
-      description: "Dedication to attend club meetings and participate in service projects"
-    },
-    {
-      title: "Values",
-      description: "Uphold the ideals of Rotary: Service, Fellowship, Diversity, Integrity, and Leadership"
-    },
-    {
-      title: "Application Process",
-      description: "Complete an application form, interview with club officers, and attend orientation"
-    }
-  ];
-
   const membershipLevels = [
     {
-      title: "VOLUNTEER MEMBER LEVEL",
-      icon: <Users className="h-8 w-8 text-rotaract-blue" />,
-      duration: "Duration: 1-6 months",
+      icon: <User className="h-6 w-6 text-cranberry-600" />,
+      title: "Volunteer Member Level",
+      duration: "1-6 months",
       description: "New members will engage in volunteer activities"
     },
     {
-      title: "ADVOCATE MEMBER LEVEL",
-      icon: <Handshake className="h-8 w-8 text-rotaract-blue" />,
-      duration: "Duration: 6-12 months",
+      icon: <Heart className="h-6 w-6 text-cranberry-600" />,
+      title: "Advocate Member Level",
+      duration: "6-12 months",
       description: "Deeper involvement through advocacy and continued commitment"
     },
     {
-      title: "GREAT WEST MEMBER LEVEL",
-      icon: <Award className="h-8 w-8 text-rotaract-blue" />,
+      icon: <Star className="h-6 w-6 text-cranberry-600" />,
+      title: "Great West Member Level",
       duration: "Official Member (Inducted)",
       description: "Reward for significant contributions and embodying organizational values"
     }
   ];
 
-  // JSON-LD structured data for organization
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "Rotaract Club of Zamboanga City West",
-    "description": "Empowering young leaders through fellowship, community service, and professional development in Zamboanga City.",
-    "url": "https://rotaract-zambo-city-west.netlify.app/",
-    "logo": "https://rotaract-zambo-city-west.netlify.app/lovable-uploads/e48a4b78-bd32-41b7-b192-969232e8378f.png",
-    "sameAs": [
-      "https://www.facebook.com/RotaractClubZamboWest",
-      "https://www.instagram.com/raczambowest1"
-    ],
-    "address": {
-      "@type": "PostalAddress",
-      "addressLocality": "Zamboanga City",
-      "addressRegion": "Zamboanga Peninsula",
-      "addressCountry": "PH"
+  const benefits = [
+    {
+      icon: <Trophy className="h-5 w-5" />,
+      title: "Leadership Development",
+      description: "Build essential leadership skills through hands-on experience"
     },
-    "contactPoint": {
-      "@type": "ContactPoint",
-      "telephone": "+63-967-365-4339",
-      "contactType": "Customer Service",
-      "email": "raczambowest1@gmail.com"
+    {
+      icon: <Users className="h-5 w-5" />,
+      title: "Global Network",
+      description: "Connect with 200,000+ Rotaractors worldwide"
+    },
+    {
+      icon: <Heart className="h-5 w-5" />,
+      title: "Community Impact",
+      description: "Make a meaningful difference in local communities"
+    },
+    {
+      icon: <Clock className="h-5 w-5" />,
+      title: "Professional Growth",
+      description: "Enhance your career through skills and networking"
     }
-  };
+  ];
+
+  const requirements = [
+    "Age 18-30 years old",
+    "Passion for community service",
+    "Commitment to fellowship and leadership",
+    "Ability to participate in monthly meetings",
+    "Willingness to contribute to projects"
+  ];
 
   return (
-    <>
-      <Helmet>
-        <script type="application/ld+json">
-          {JSON.stringify(structuredData)}
-        </script>
-      </Helmet>
-      
-      <section id="join" ref={sectionRef} className="section-container py-16">
-        {/* Top Section - 1 Column */}
-        <div className="text-center mb-12 reveal-on-scroll">
-          <span className="inline-block px-3 py-1 text-sm font-medium rounded-full bg-vinta-blue/10 text-vinta-blue mb-3">
-            Join Our Community
-          </span>
-          <h2 className="text-3xl md:text-4xl font-bold">
-            Step Into Something <span className="text-rotaract-blue">Greater</span> — Join the Great West!
+    <section 
+      id="join" 
+      ref={sectionRef} 
+      className="section-container relative overflow-hidden bg-gradient-to-br from-cranberry-50 via-white to-pink-50"
+    >
+      {/* Modern background elements */}
+      <div className="absolute inset-0 opacity-30">
+        <div className="absolute top-20 -left-32 w-96 h-96 bg-cranberry-200/20 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-20 -right-32 w-80 h-80 bg-pink-200/20 rounded-full blur-3xl"></div>
+      </div>
+
+      <div className="relative z-10">
+        {/* Section header */}
+        <div className="text-center mb-20">
+          <div className="reveal-on-scroll mb-6">
+            <span className="inline-flex items-center px-4 py-2 rounded-full bg-cranberry-100 text-cranberry-700 text-sm font-semibold">
+              <Sparkles className="w-4 h-4 mr-2" />
+              Join Our Community
+            </span>
+          </div>
+          
+          <h2 className="text-section-title text-slate-900 reveal-on-scroll mb-6">
+            Start Your <span className="text-gradient">Leadership</span>
+            <br />Journey Today
           </h2>
-          <p className="text-foreground/80 max-w-2xl mx-auto mt-4">
-            Looking to make a difference, meet inspiring people, and grow as a leader? 
-            The Rotaract Club of Zamboanga City West is more than just a club — we're a family driven by purpose, service, and fun!
+          
+          <p className="text-xl text-slate-600 max-w-3xl mx-auto reveal-on-scroll leading-relaxed">
+            Become part of a dynamic community of young leaders committed to making a positive 
+            impact in Zamboanga City and beyond.
           </p>
         </div>
 
-        {/* Main Content - 2 Columns */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
-          {/* Left Column - Benefits */}
-          <div className="reveal-on-scroll">
-            <Card className="h-full glass-card hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <CardTitle className="text-xl font-bold text-rotaract-blue">
-                  As a member, you'll get the chance to:
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {benefits.map((benefit, index) => (
-                  <div key={index} className="flex items-start space-x-3 bg-white/60 p-3 rounded-lg">
-                    <div className="p-2 bg-rotaract-blue/10 rounded-full">
-                      {benefit.icon}
-                    </div>
-                    <span className="my-auto">{benefit.text}</span>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-          </div>
-          
-          {/* Right Column - Membership Requirements */}
-          <div className="reveal-on-scroll">
-            <Card className="h-full glass-card hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <CardTitle className="text-xl font-bold text-rotaract-blue">
-                  Membership Requirements
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {membershipRequirements.map((req, index) => (
-                  <div key={index} className="glass-card p-4 hover:shadow-md transition-shadow">
-                    <h4 className="font-semibold text-rotaract-blue">{req.title}</h4>
-                    <p className="text-sm text-foreground/70 mt-1">{req.description}</p>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-        
-        {/* Application Process - Minimalist version */}
-        <div id="application-process" ref={processRef} className="mb-16">
-          <div className="text-center mb-10">
-            <h3 className="text-2xl font-bold mb-2">
-              <span className="text-rotaract-blue">APPLICATION</span> PROCESS
-            </h3>
-            <p className="text-foreground/70 max-w-xl mx-auto">
-              Membership levels in your journey with us
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            {membershipLevels.map((level, index) => (
-              <div key={index} className="reveal-on-scroll" style={{ transitionDelay: `${index * 100}ms` }}>
-                <Card className="h-full hover:shadow-md transition-all duration-300">
-                  <CardContent className="pt-6">
-                    <div className="flex flex-col items-center text-center">
-                      <div className="p-3 bg-rotaract-blue/10 rounded-full mb-4">
-                        {level.icon}
-                      </div>
-                      <h4 className="font-semibold mb-1">{level.title}</h4>
-                      <p className="text-sm text-foreground/70 mb-3">{level.duration}</p>
-                      <div className="w-12 h-0.5 bg-rotaract-blue/30 rounded-full my-3"></div>
-                      <p className="text-sm">{level.description}</p>
-                    </div>
-                  </CardContent>
-                </Card>
+        {/* Benefits grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
+          {benefits.map((benefit, index) => (
+            <div 
+              key={index}
+              className="modern-card p-6 text-center hover-lift reveal-on-scroll group"
+              style={{ transitionDelay: `${index * 100}ms` }}
+            >
+              <div className="p-3 bg-cranberry-100 rounded-xl text-cranberry-600 w-fit mx-auto mb-4 group-hover:bg-cranberry-600 group-hover:text-white transition-colors">
+                {benefit.icon}
               </div>
-            ))}
-          </div>
+              <h3 className="font-semibold text-slate-900 mb-2">{benefit.title}</h3>
+              <p className="text-sm text-slate-600">{benefit.description}</p>
+            </div>
+          ))}
         </div>
-        
-        {/* CTA - 1 Column Center */}
-        <div className="max-w-2xl mx-auto reveal-on-scroll">
-          <Card className="border border-rotaract-blue/20 shadow-sm">
-            <CardContent className="p-6 sm:p-8 text-center">
-              <h3 className="text-xl font-bold mb-3">Ready to join us?</h3>
-              <p className="mb-4 text-foreground/70">Be part of the greats at Great West</p>
-              <Button 
-                asChild
-                className="py-2 px-6 bg-rotaract-blue hover:bg-rotaract-blue/90 transition-all"
-              >
+
+        {/* Main content grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start mb-20">
+          {/* Left side - Requirements */}
+          <div className="reveal-on-scroll">
+            <div className="modern-card p-8">
+              <div className="flex items-center mb-6">
+                <div className="p-3 bg-cranberry-100 rounded-xl text-cranberry-600 mr-4">
+                  <CheckCircle className="h-6 w-6" />
+                </div>
+                <h3 className="text-2xl font-bold text-slate-900">Membership Requirements</h3>
+              </div>
+              
+              <div className="space-y-4">
+                {requirements.map((requirement, index) => (
+                  <div key={index} className="flex items-start space-x-3">
+                    <CheckCircle className="h-5 w-5 text-cranberry-500 mt-0.5 flex-shrink-0" />
+                    <span className="text-slate-600">{requirement}</span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-8 p-6 bg-cranberry-50 rounded-2xl border border-cranberry-100">
+                <h4 className="font-semibold text-cranberry-800 mb-2">Ready to Apply?</h4>
+                <p className="text-cranberry-700 text-sm mb-4">
+                  Take the first step towards becoming a Rotaractor and making a difference in your community.
+                </p>
                 <a 
-                  href="https://forms.gle/Q2JUyN6QeeqQkdFv5"
+                  href={MEMBERSHIP_APPLICATION_FORM}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="Apply for Rotaract Club Membership"
-                  className="flex items-center justify-center gap-2"
+                  className="primary-button group w-full inline-flex items-center justify-center"
                 >
-                  <span>Apply Now</span>
-                  <Link className="h-4 w-4" />
+                  <span>Start Application</span>
+                  <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                 </a>
-              </Button>
-            </CardContent>
-          </Card>
+              </div>
+            </div>
+          </div>
+
+          {/* Right side - Process */}
+          <div className="reveal-on-scroll">
+            <h3 className="text-2xl font-bold text-slate-900 mb-8">
+              Your Journey to <span className="text-cranberry-600">Membership</span>
+            </h3>
+            
+            <div className="space-y-6">
+              {membershipLevels.map((level, index) => (
+                <div key={index} className="flex items-start space-x-4">
+                  <div className="flex-shrink-0">
+                    <div className="w-12 h-12 bg-cranberry-100 rounded-xl flex items-center justify-center">
+                      {level.icon}
+                    </div>
+                    {index < membershipLevels.length - 1 && (
+                      <div className="w-0.5 h-12 bg-cranberry-200 mx-auto mt-4"></div>
+                    )}
+                  </div>
+                  <div className="flex-1 pb-8">
+                    <div className="flex items-center space-x-3 mb-2">
+                      <h4 className="font-semibold text-slate-900">{level.title}</h4>
+                      <span className="px-2 py-1 bg-cranberry-100 text-cranberry-700 text-xs rounded-full">
+                        {level.duration}
+                      </span>
+                    </div>
+                    <p className="text-slate-600 text-sm">{level.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
-      </section>
-    </>
+
+        {/* Call to action */}
+        <div className="text-center reveal-on-scroll">
+          <div className="modern-card p-12 bg-gradient-to-r from-cranberry-600 to-cranberry-500 text-white">
+            <h3 className="text-3xl font-bold mb-6">Ready to Make an Impact?</h3>
+            <p className="text-cranberry-100 text-lg mb-8 max-w-2xl mx-auto">
+              Join fellow young leaders who are passionate about creating positive change 
+              in our community and around the world.
+            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <a 
+                href={MEMBERSHIP_APPLICATION_FORM}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-white text-cranberry-600 px-8 py-4 rounded-full font-semibold hover:bg-gray-50 transition-colors shadow-lg hover:shadow-xl inline-flex items-center"
+              >
+                <span>Apply Now</span>
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </a>
+              <a 
+                href="https://www.facebook.com/RotaractClubZamboWest" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="border-2 border-white text-white px-8 py-4 rounded-full font-semibold hover:bg-white hover:text-cranberry-600 transition-colors"
+              >
+                Learn More
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 };
 

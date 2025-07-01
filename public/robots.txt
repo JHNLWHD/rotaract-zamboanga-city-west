@@ -1,6 +1,32 @@
-
 User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://rotaract-zambo-city-west.netlify.app/sitemap.xml
+Sitemap: https://rotaract.rotaryzcwest.org/sitemap.xml
+
+# Crawl-delay for all bots
+Crawl-delay: 1
+
+# Allow specific search engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+# Block access to admin areas (if any)
+User-agent: *
+Disallow: /admin/
+Disallow: /*.json$
+Disallow: /api/
+
+# Allow access to CSS and JS files for better indexing
+User-agent: *
+Allow: /css/
+Allow: /js/
+Allow: /images/
+Allow: /*.css$
+Allow: /*.js$

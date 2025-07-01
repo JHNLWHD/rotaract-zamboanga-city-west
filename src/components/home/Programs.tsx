@@ -1,6 +1,5 @@
-
 import React, { useEffect, useRef } from 'react';
-import { Heart, Globe, BookOpen, Cpu, Users, Leaf } from 'lucide-react';
+import { Heart, Globe, BookOpen, Cpu, Users, Leaf, ArrowRight, Sparkles } from 'lucide-react';
 
 const Programs = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -14,7 +13,7 @@ const Programs = () => {
             elements.forEach((el, i) => {
               setTimeout(() => {
                 el.classList.add('revealed');
-              }, 150 * i);
+              }, 100 * i);
             });
           }
         });
@@ -35,120 +34,213 @@ const Programs = () => {
 
   const programCards = [
     {
-      icon: <Heart className="h-6 w-6 text-vinta-pink" />,
+      icon: <Heart className="h-7 w-7" />,
       title: "Community Service",
       description: "Humanitarian projects addressing local needs in health, education, and poverty alleviation.",
-      color: "bg-vinta-pink/10",
-      borderColor: "border-vinta-pink/30",
-      iconBg: "bg-vinta-pink/20"
+      color: "cranberry",
+      highlights: ["Healthcare Initiatives", "Educational Support", "Disaster Relief"]
     },
     {
-      icon: <Globe className="h-6 w-6 text-rotaract-blue" />,
+      icon: <Globe className="h-7 w-7" />,
       title: "International Service",
       description: "Collaborations with global Rotaract clubs to address international humanitarian issues.",
-      color: "bg-rotaract-blue/10",
-      borderColor: "border-rotaract-blue/30",
-      iconBg: "bg-rotaract-blue/20"
+      color: "blue",
+      highlights: ["Global Partnerships", "Cross-cultural Exchange", "International Projects"]
     },
     {
-      icon: <BookOpen className="h-6 w-6 text-vinta-yellow" />,
-      title: "Professional Development",
+      icon: <BookOpen className="h-7 w-7" />,
+      title: "Professional Development", 
       description: "Workshops, mentorship, and networking opportunities to enhance career skills.",
-      color: "bg-vinta-yellow/10",
-      borderColor: "border-vinta-yellow/30",
-      iconBg: "bg-vinta-yellow/20"
+      color: "purple",
+      highlights: ["Skills Training", "Mentorship Programs", "Career Networking"]
     },
     {
-      icon: <Cpu className="h-6 w-6 text-vinta-green" />,
+      icon: <Cpu className="h-7 w-7" />,
       title: "Digital Literacy",
       description: "Training programs to bridge the digital divide in underserved communities.",
-      color: "bg-vinta-green/10",
-      borderColor: "border-vinta-green/30",
-      iconBg: "bg-vinta-green/20"
+      color: "teal",
+      highlights: ["Tech Training", "Digital Access", "Innovation Labs"]
     },
     {
-      icon: <Users className="h-6 w-6 text-vinta-teal" />,
+      icon: <Users className="h-7 w-7" />,
       title: "Youth Empowerment",
       description: "Initiatives to develop leadership and entrepreneurial skills among local youth.",
-      color: "bg-vinta-teal/10",
-      borderColor: "border-vinta-teal/30",
-      iconBg: "bg-vinta-teal/20"
+      color: "orange",
+      highlights: ["Leadership Training", "Entrepreneurship", "Youth Development"]
     },
     {
-      icon: <Leaf className="h-6 w-6 text-vinta-green" />,
+      icon: <Leaf className="h-7 w-7" />,
       title: "Environmental Action",
       description: "Projects promoting sustainability, conservation, and climate awareness.",
-      color: "bg-vinta-green/10",
-      borderColor: "border-vinta-green/30",
-      iconBg: "bg-vinta-green/20"
+      color: "green",
+      highlights: ["Sustainability Projects", "Climate Action", "Conservation Efforts"]
     }
   ];
+
+  const getColorClasses = (color: string) => {
+    const colors = {
+      cranberry: {
+        bg: "bg-cranberry-50",
+        border: "border-cranberry-200/50",
+        icon: "text-cranberry-600",
+        iconBg: "bg-cranberry-100",
+        accent: "text-cranberry-700",
+        hover: "hover:border-cranberry-300"
+      },
+      blue: {
+        bg: "bg-blue-50",
+        border: "border-blue-200/50", 
+        icon: "text-blue-600",
+        iconBg: "bg-blue-100",
+        accent: "text-blue-700",
+        hover: "hover:border-blue-300"
+      },
+      purple: {
+        bg: "bg-purple-50",
+        border: "border-purple-200/50",
+        icon: "text-purple-600", 
+        iconBg: "bg-purple-100",
+        accent: "text-purple-700",
+        hover: "hover:border-purple-300"
+      },
+      teal: {
+        bg: "bg-teal-50",
+        border: "border-teal-200/50",
+        icon: "text-teal-600",
+        iconBg: "bg-teal-100", 
+        accent: "text-teal-700",
+        hover: "hover:border-teal-300"
+      },
+      orange: {
+        bg: "bg-orange-50",
+        border: "border-orange-200/50",
+        icon: "text-orange-600",
+        iconBg: "bg-orange-100",
+        accent: "text-orange-700", 
+        hover: "hover:border-orange-300"
+      },
+      green: {
+        bg: "bg-green-50",
+        border: "border-green-200/50",
+        icon: "text-green-600",
+        iconBg: "bg-green-100",
+        accent: "text-green-700",
+        hover: "hover:border-green-300"
+      }
+    };
+    return colors[color as keyof typeof colors] || colors.cranberry;
+  };
 
   return (
     <section 
       id="programs" 
       ref={sectionRef} 
-      className="section-container relative py-24 overflow-hidden"
-      style={{
-        background: "linear-gradient(to bottom right, rgba(30,32,44,0.98), rgba(30,32,44,0.95))",
-      }}
+      className="section-container relative overflow-hidden bg-gradient-to-br from-gray-50 via-white to-cranberry-50/30"
     >
-      {/* Decorative elements inspired by the image */}
-      <div className="absolute inset-0 z-0 opacity-5">
-        <div className="absolute top-0 left-0 w-full h-full geometric-pattern"></div>
+      {/* Modern background elements */}
+      <div className="absolute inset-0">
+        <div className="absolute top-20 -left-32 w-96 h-96 bg-cranberry-500/10 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-20 -right-32 w-80 h-80 bg-cranberry-400/10 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full geometric-bg opacity-10"></div>
       </div>
       
-      {/* Colored blurred circles */}
-      <div className="absolute top-20 -left-32 w-64 h-64 rounded-full bg-vinta-pink/20 blur-3xl opacity-20"></div>
-      <div className="absolute bottom-20 -right-32 w-64 h-64 rounded-full bg-rotaract-blue/20 blur-3xl opacity-20"></div>
-      
-      {/* Decorative Vintas at the bottom */}
-      <div className="absolute bottom-0 left-0 w-full overflow-hidden" style={{ height: '40px' }}>
-        <div className="absolute -bottom-5 left-10 w-16 h-20 bg-vinta-pink/70 rotate-12" style={{ clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)' }}></div>
-        <div className="absolute -bottom-3 left-32 w-12 h-16 bg-vinta-orange/70 -rotate-6" style={{ clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)' }}></div>
-        <div className="absolute -bottom-6 left-48 w-14 h-18 bg-vinta-yellow/70 rotate-3" style={{ clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)' }}></div>
-        <div className="absolute -bottom-4 left-72 w-20 h-24 bg-vinta-green/70 rotate-[-8deg]" style={{ clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)' }}></div>
-      </div>
-
-      <div className="text-center max-w-3xl mx-auto mb-16 relative z-10">
-        <div className="reveal-on-scroll">
-          <span className="inline-block px-3 py-1 text-sm font-medium rounded-full bg-vinta-yellow/20 text-vinta-yellow">
-            Our Initiatives
-          </span>
-        </div>
-        
-        <h2 className="text-3xl md:text-4xl font-bold mt-4 reveal-on-scroll text-white">
-          Programs That Make a Difference
-        </h2>
-        
-        <p className="text-white/80 mt-4 reveal-on-scroll">
-          Like the colorful sails of a Vinta navigating toward new horizons, our programs are designed to create meaningful impact across different aspects of community life.
-        </p>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 relative z-10">
-        {programCards.map((program, index) => (
-          <div 
-            key={index} 
-            className="dark-glass-card p-6 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 reveal-on-scroll"
-          >
-            <div className={`w-12 h-12 rounded-full ${program.iconBg} flex items-center justify-center mb-4`}>
-              {program.icon}
-            </div>
-            <h3 className="text-xl font-bold mb-2">{program.title}</h3>
-            <p className="text-white/70">{program.description}</p>
+      <div className="relative z-10">
+        {/* Section header */}
+        <div className="text-center mb-20">
+          <div className="reveal-on-scroll mb-6">
+            <span className="inline-flex items-center px-4 py-2 rounded-full bg-cranberry-100 text-cranberry-700 text-sm font-semibold">
+              <Sparkles className="w-4 h-4 mr-2" />
+              Our Impact Areas
+            </span>
           </div>
-        ))}
-      </div>
+          
+          <h2 className="text-section-title text-slate-900 reveal-on-scroll mb-6">
+            Programs That <span className="text-gradient">Transform</span>
+            <br />Communities
+          </h2>
+          
+          <p className="text-xl text-slate-600 max-w-3xl mx-auto reveal-on-scroll leading-relaxed">
+            Discover our comprehensive range of initiatives designed to create lasting positive change 
+            across multiple sectors of society.
+          </p>
+        </div>
 
-      <div className="mt-16 text-center reveal-on-scroll relative z-10">
-        <a 
-          href="https://www.facebook.com/RotaractClubZamboWest"
-          target="_blank"
-          className="inline-flex items-center px-6 py-3 rounded-full bg-vinta-yellow text-gray-800 font-medium hover:bg-vinta-yellow/90 transition-colors shadow-md hover:shadow-lg"
-        >
-          Partner with Us
-        </a>
+        {/* Programs grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+          {programCards.map((program, index) => {
+            const colorClasses = getColorClasses(program.color);
+            return (
+              <article 
+                key={index}
+                className={`modern-card group cursor-pointer hover-lift reveal-on-scroll ${colorClasses.bg} border-2 ${colorClasses.border} ${colorClasses.hover}`}
+                style={{ transitionDelay: `${index * 100}ms` }}
+              >
+                <div className="p-8">
+                  {/* Icon and header */}
+                  <div className="flex items-start justify-between mb-6">
+                    <div className={`p-4 ${colorClasses.iconBg} rounded-2xl ${colorClasses.icon} group-hover:scale-110 transition-transform duration-300`}>
+                      {program.icon}
+                    </div>
+                    <ArrowRight className="h-5 w-5 text-gray-400 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300" />
+                  </div>
+
+                  {/* Content */}
+                  <div className="space-y-4">
+                    <h3 className={`text-card-title ${colorClasses.accent} group-hover:text-slate-900 transition-colors`}>
+                      {program.title}
+                    </h3>
+                    
+                    <p className="text-slate-600 leading-relaxed group-hover:text-slate-700 transition-colors">
+                      {program.description}
+                    </p>
+
+                    {/* Highlights */}
+                    <div className="space-y-2">
+                      {program.highlights.map((highlight, idx) => (
+                        <div key={idx} className="flex items-center space-x-2">
+                          <div className={`w-1.5 h-1.5 ${colorClasses.iconBg} rounded-full`}></div>
+                          <span className="text-sm text-slate-500 group-hover:text-slate-600 transition-colors">
+                            {highlight}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Bottom accent */}
+                  <div className={`mt-6 h-1 ${colorClasses.iconBg} rounded-full opacity-50 group-hover:opacity-100 transition-opacity`}></div>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+
+        {/* Call to action */}
+        <div className="text-center mt-20 reveal-on-scroll">
+          <div className="modern-card p-12 max-w-4xl mx-auto bg-gradient-to-r from-cranberry-600 to-cranberry-500 text-white rounded-3xl">
+            <h3 className="text-3xl font-bold text-white mb-6">
+              Ready to Make a <span className="text-cranberry-100">Difference</span>?
+            </h3>
+            <p className="text-cranberry-100 text-lg mb-8 max-w-2xl mx-auto">
+              Join us in our mission to create positive change. Whether you're interested in 
+              community service, professional development, or global citizenship, there's a place for you.
+            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <a href="#join" className="bg-white text-cranberry-600 px-8 py-4 rounded-full font-semibold hover:bg-gray-50 transition-colors shadow-lg hover:shadow-xl">
+                <span>Get Involved</span>
+                <ArrowRight className="w-4 h-4 ml-2 inline-block" />
+              </a>
+              <a 
+                href="https://www.facebook.com/RotaractClubZamboWest" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="border-2 border-white text-white px-8 py-4 rounded-full font-semibold hover:bg-white hover:text-cranberry-600 transition-colors"
+              >
+                Learn More
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );

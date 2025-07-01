@@ -1,82 +1,154 @@
-
 import React from 'react';
-import { Facebook, Instagram, Mail, MapPin, Phone } from 'lucide-react';
+import { Facebook, Instagram, Mail, MapPin, Phone, Heart, ExternalLink } from 'lucide-react';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
+  const quickLinks = [
+    { label: 'About Us', href: '/#about' },
+    { label: 'Our Programs', href: '/#programs' },
+    { label: 'Join Us', href: '/#join' },
+    { label: 'Contact', href: '/#contact' }
+  ];
+
+  const contactInfo = [
+    {
+      icon: <MapPin className="h-5 w-5" />,
+      title: "Location",
+      content: "Zamboanga City"
+    },
+    {
+      icon: <Mail className="h-5 w-5" />,
+      title: "Email",
+      content: "rotaractzcwest@gmail.com"
+    }
+  ];
+
+  const socialLinks = [
+    {
+      icon: <Facebook className="h-5 w-5" />,
+      label: "Facebook",
+      href: "https://www.facebook.com/RotaractClubZamboWest",
+      color: "hover:text-blue-500"
+    },
+    {
+      icon: <Instagram className="h-5 w-5" />,
+      label: "Instagram", 
+      href: "https://www.instagram.com/rotaractzcwest",
+      color: "hover:text-pink-500"
+    },
+    {
+      icon: <Mail className="h-5 w-5" />,
+      label: "Email",
+      href: "mailto:rotaractzcwest@gmail.com",
+      color: "hover:text-cranberry-500"
+    }
+  ];
+
   return (
-    <footer 
-      className="text-white relative bg-gradient-to-b from-rotaract-navy to-rotaract-blue wave-bg"
-    >
-      {/* Decorative wave pattern */}
-      <div className="absolute top-0 left-0 w-full overflow-hidden h-10">
-        <svg preserveAspectRatio="none" viewBox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg" style={{ width: '100%', height: 50, transform: 'rotate(180deg)' }}>
-          <path 
-            d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z" 
-            fill="#FFFFFF" 
-            opacity="0.1"
-          ></path>
-        </svg>
+    <footer className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white overflow-hidden">
+      {/* Modern background elements */}
+      <div className="absolute inset-0">
+        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-cranberry-500/50 to-transparent"></div>
+        <div className="absolute top-20 -left-32 w-96 h-96 bg-cranberry-500/10 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-20 -right-32 w-80 h-80 bg-cranberry-400/10 rounded-full blur-3xl"></div>
       </div>
 
-      {/* Colored circles to mimic the design style */}
-      <div className="absolute bottom-40 left-10 w-32 h-32 bg-rotaract-pink/10 rounded-full blur-3xl"></div>
-      <div className="absolute top-20 right-10 w-40 h-40 bg-vinta-yellow/10 rounded-full blur-3xl"></div>
-
-      <div className="max-w-7xl mx-auto py-12 px-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="space-y-4">
-            <div className="flex items-center space-x-2">
-              <div className="h-10 w-10 rounded-full bg-white flex items-center justify-center">
-                <span className="text-rotaract-pink font-display font-bold text-lg">R</span>
+      <div className="relative z-10">
+        {/* Main footer content */}
+        <div className="max-w-7xl mx-auto py-16 px-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+            {/* Brand section */}
+            <div className="lg:col-span-2 space-y-6">
+              <div className="flex items-center space-x-4">
+                <div className="relative">
+                  <img
+                    src="/lovable-uploads/e48a4b78-bd32-41b7-b192-969232e8378f.png"
+                    alt="Rotaract Club of Zamboanga City West"
+                    className="h-12 w-auto"
+                  />
+                  <div className="absolute inset-0 bg-cranberry-500/20 rounded-full blur-xl"></div>
+                </div>
+                <div>
+                  <h3 className="font-display font-bold text-xl text-white">
+                    Rotaract Club
+                  </h3>
+                  <p className="text-cranberry-300 text-sm font-medium">
+                    Zamboanga City West
+                  </p>
+                </div>
               </div>
-              <h3 className="font-display font-bold text-lg">Rotaract Club</h3>
+              
+              <p className="text-gray-300 max-w-md leading-relaxed">
+                Empowering young leaders through fellowship, service, and professional development 
+                while celebrating the vibrant culture of Zamboanga City since 2010.
+              </p>
+
+              {/* Social links */}
+              <div className="flex items-center space-x-4">
+                {socialLinks.map((social, index) => (
+                  <a
+                    key={index}
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`p-3 bg-white/10 rounded-xl text-white transition-all duration-300 hover:bg-white/20 hover:scale-110 ${social.color}`}
+                    aria-label={social.label}
+                  >
+                    {social.icon}
+                  </a>
+                ))}
+              </div>
             </div>
-            <p className="text-white/80 max-w-xs">
-              Zamboanga City West chapter of Rotaract, empowering young professionals through community service and leadership.
-            </p>
-          </div>
 
-          <div>
-            <h3 className="font-display font-semibold text-lg mb-4">Quick Links</h3>
-            <nav className="flex flex-col space-y-2">
-              <a href="#about" className="text-white/80 hover:text-white transition-colors">About Us</a>
-              <a href="#programs" className="text-white/80 hover:text-white transition-colors">Programs</a>
-              <a href="#join" className="text-white/80 hover:text-white transition-colors">Join Us</a>
-              <a href="#contact" className="text-white/80 hover:text-white transition-colors">Contact</a>
-            </nav>
-          </div>
+            {/* Quick links */}
+            <div className="space-y-6">
+              <h4 className="font-semibold text-lg text-white">Quick Links</h4>
+              <nav className="grid grid-cols-1 gap-3">
+                {quickLinks.map((link, index) => (
+                  <a 
+                    key={index}
+                    href={link.href} 
+                    className="text-gray-300 hover:text-cranberry-300 transition-colors duration-300 text-sm flex items-center group"
+                  >
+                    <span>{link.label}</span>
+                    <ExternalLink className="h-3 w-3 ml-1 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </a>
+                ))}
+              </nav>
+            </div>
 
-          <div id="contact">
-            <h3 className="font-display font-semibold text-lg mb-4">Contact Us</h3>
-            <div className="space-y-3">
-              <div className="flex items-center space-x-3">
-                <MapPin size={18} className="text-vinta-yellow" />
-                <span className="text-white/80">Zamboanga City, Philippines</span>
-              </div>
-              <div className="flex items-center space-x-3">
-                <Mail size={18} className="text-vinta-yellow" />
-                <a href="mailto:raczambowest1@gmail.com"><span className="text-white/80">raczambowest1@gmail.com</span></a>
-              </div>
-              <div className="flex space-x-4 mt-4">
-                <a href="https://www.facebook.com/RotaractClubZamboWest" target="_blank" className="text-white/80 hover:text-white transition-colors">
-                  <Facebook size={20} />
-                </a>
-                <a href="https://www.instagram.com/raczambowest1" target="_blank" className="text-white/80 hover:text-white transition-colors">
-                  <Instagram size={20} />
-                </a>
+            {/* Contact info */}
+            <div className="space-y-6">
+              <h4 className="font-semibold text-lg text-white">Get in Touch</h4>
+              <div className="space-y-4">
+                {contactInfo.map((info, index) => (
+                  <div key={index} className="flex items-start space-x-3">
+                    <div className="p-2 bg-cranberry-500/20 rounded-lg text-cranberry-400 mt-0.5">
+                      {info.icon}
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-white">{info.title}</p>
+                      <p className="text-sm text-gray-300">{info.content}</p>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
         </div>
 
-        <div className="border-t border-white/10 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-white/60 text-sm">
-            © {currentYear} Rotaract Club of Zamboanga City West. All rights reserved.
-          </p>
-          <div className="flex items-center mt-4 md:mt-0">
-            <span className="text-white/60 text-sm">Part of Rotary International</span>
+        {/* Bottom section */}
+        <div className="border-t border-white/10">
+          <div className="max-w-7xl mx-auto py-8 px-6">
+            <div className="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0">
+              <div className="flex items-center space-x-2 text-sm text-gray-300">
+                <span>© {currentYear} Rotaract Club of Zamboanga City West.</span>
+                <span>Made with</span>
+                <Heart className="h-4 w-4 text-cranberry-400" />
+                <span>for our community.</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>

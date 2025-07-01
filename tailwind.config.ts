@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -63,21 +62,50 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				// Updated Rotaract & Vinta colors based on the image
+				// Modern Cranberry Color Palette
+				cranberry: {
+					50: '#fef2f7',
+					100: '#fde6f0',
+					200: '#fbd0e2',
+					300: '#f7abc9',
+					400: '#f178a6',
+					500: '#e8468a',
+					600: '#d41367',  // Main cranberry color
+					700: '#b91c5e',
+					800: '#981b51',
+					900: '#7e1b48',
+					950: '#4d0a26'
+				},
+				// Supporting modern colors
+				slate: {
+					50: '#f8fafc',
+					100: '#f1f5f9',
+					200: '#e2e8f0',
+					300: '#cbd5e1',
+					400: '#94a3b8',
+					500: '#64748b',
+					600: '#475569',
+					700: '#334155',
+					800: '#1e293b',
+					900: '#0f172a',
+					950: '#020617'
+				},
+				// Legacy Rotaract colors (updated to work with cranberry)
 				rotaract: {
-					pink: '#E43A85',
+					pink: '#d41367',     // Updated to cranberry
 					blue: '#0088CD',
 					navy: '#17458F',
 					light: '#F9F9F9'
 				},
+				// Updated Vinta colors to complement cranberry
 				vinta: {
-					red: '#D91A32',
-					yellow: '#FFC845',
-					pink: '#E43A85',
-					orange: '#FF8024',
-					green: '#47C97D',
-					teal: '#17BCBE',
-					purple: '#8867C7'
+					red: '#d41367',      // Main cranberry
+					pink: '#e8468a',     // Lighter cranberry variant
+					orange: '#f97316',   // Modern orange
+					yellow: '#fbbf24',   // Modern yellow
+					green: '#10b981',    // Modern green
+					teal: '#06b6d4',     // Modern teal
+					purple: '#8b5cf6'    // Modern purple
 				},
 				// Adding dark overlay for backgrounds
 				overlay: {
@@ -103,26 +131,17 @@ export default {
 					from: { height: 'var(--radix-accordion-content-height)' },
 					to: { height: '0' }
 				},
-				'sail': {
-					'0%, 100%': { transform: 'translateY(0) rotate(0deg)' },
-					'50%': { transform: 'translateY(-10px) rotate(2deg)' }
+				'float': {
+					'0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+					'33%': { transform: 'translateY(-10px) rotate(1deg)' },
+					'66%': { transform: 'translateY(-5px) rotate(-1deg)' }
 				},
-				'wave': {
-					'0%': { transform: 'translateY(0)' },
-					'25%': { transform: 'translateY(-10px)' },
-					'50%': { transform: 'translateY(0)' },
-					'75%': { transform: 'translateY(5px)' },
-					'100%': { transform: 'translateY(0)' }
-				},
-				'wave-horizontal': {
-					'0%': { transform: 'translateX(0)' },
-					'25%': { transform: 'translateX(-5px)' },
-					'50%': { transform: 'translateX(0)' },
-					'75%': { transform: 'translateX(5px)' },
-					'100%': { transform: 'translateX(0)' }
+				'pulse-slow': {
+					'0%, 100%': { opacity: '1' },
+					'50%': { opacity: '0.5' }
 				},
 				'fade-in-up': {
-					'0%': { opacity: '0', transform: 'translateY(20px)' },
+					'0%': { opacity: '0', transform: 'translateY(30px)' },
 					'100%': { opacity: '1', transform: 'translateY(0)' }
 				},
 				'fade-in': {
@@ -132,21 +151,32 @@ export default {
 				'slide-in': {
 					'0%': { transform: 'translateX(-100%)' },
 					'100%': { transform: 'translateX(0)' }
+				},
+				'scale-in': {
+					'0%': { transform: 'scale(0.9)', opacity: '0' },
+					'100%': { transform: 'scale(1)', opacity: '1' }
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
-				'sail': 'sail 6s ease-in-out infinite',
-				'wave': 'wave 6s ease-in-out infinite',
-				'wave-horizontal': 'wave-horizontal 8s ease-in-out infinite',
+				'float': 'float 6s ease-in-out infinite',
+				'pulse-slow': 'pulse-slow 4s ease-in-out infinite',
 				'fade-in-up': 'fade-in-up 0.6s ease-out',
 				'fade-in': 'fade-in 0.4s ease-out',
-				'slide-in': 'slide-in 0.5s ease-out'
+				'slide-in': 'slide-in 0.5s ease-out',
+				'scale-in': 'scale-in 0.3s ease-out'
 			},
 			backgroundImage: {
-				'wave-pattern': "url('/lovable-uploads/4c7af23b-7105-44f3-8635-b19d0fb84c79.png')",
 				'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+				'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+				'modern-gradient': 'linear-gradient(135deg, var(--tw-gradient-stops))',
+			},
+			boxShadow: {
+				'modern': '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+				'modern-lg': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+				'modern-xl': '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+				'glow': '0 0 20px rgba(212, 19, 103, 0.3)',
 			}
 		}
 	},

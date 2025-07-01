@@ -172,83 +172,134 @@ const Officers = () => {
 
   const allOfficers = [...boardOfDirectors, ...directors, ...advisors];
 
-  const getIcon = (category: string) => {
+  const getPositionIcon = (category: string) => {
     switch (category) {
       case 'Executive':
-        return <Award className="w-5 h-5 text-rotaract-pink" />;
+        return <Award className="w-5 h-5 text-cranberry-600" />;
       case 'Director':
-        return <Users className="w-5 h-5 text-rotaract-blue" />;
-      case 'Advisor':
-        return <Calendar className="w-5 h-5 text-vinta-yellow" />;
+        return <Users className="w-5 h-5 text-cranberry-500" />;
       default:
-        return <Users className="w-5 h-5 text-gray-500" />;
+        return <Users className="w-5 h-5 text-cranberry-400" />;
     }
   };
 
-  const getCategoryColor = (category: string) => {
+  const getPositionColor = (category: string) => {
     switch (category) {
       case 'Executive':
-        return 'bg-rotaract-pink/10 text-rotaract-pink border-rotaract-pink/20';
+        return 'bg-cranberry-100 text-cranberry-700 border-cranberry-200';
       case 'Director':
-        return 'bg-rotaract-blue/10 text-rotaract-blue border-rotaract-blue/20';
-      case 'Advisor':
-        return 'bg-vinta-yellow/10 text-vinta-yellow border-vinta-yellow/20';
+        return 'bg-cranberry-50 text-cranberry-600 border-cranberry-100';
       default:
-        return 'bg-gray-100 text-gray-600 border-gray-200';
+        return 'bg-gray-100 text-gray-700 border-gray-200';
     }
   };
+
+  const executiveBoard = allOfficers.filter(officer => officer.category === 'Executive');
+  const currentDirectors = allOfficers.filter(officer => officer.category === 'Director');
+  const advisorsList = allOfficers.filter(officer => officer.category === 'Advisor');
 
   return (
     <>
       <Helmet>
-        <title>Officers & Members - Rotaract Club of Zamboanga City West</title>
-        <meta name="description" content="Meet our dedicated officers and members leading the Rotaract Club of Zamboanga City West for Rotary Year 2025-2026." />
+        {/* Primary Meta Tags */}
+        <title>Leadership Team & Officers - Rotaract Club of Zamboanga City West</title>
+        <meta name="title" content="Leadership Team & Officers - Rotaract Club of Zamboanga City West" />
+        <meta name="description" content="Meet our dedicated leadership team and officers driving positive change in Zamboanga City. Learn about our Executive Board, Directors, and Advisors for 2025-2026." />
+        <meta name="keywords" content="Rotaract officers, leadership team, Zamboanga City West, president, directors, advisors, club leadership, Rotaract board members" />
+        <meta name="author" content="Rotaract Club of Zamboanga City West" />
+        <meta name="robots" content="index, follow" />
+        
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://rotaract.rotaryzcwest.org/officers" />
+        <meta property="og:title" content="Leadership Team & Officers - Rotaract Club of Zamboanga City West" />
+        <meta property="og:description" content="Meet our dedicated leadership team and officers driving positive change in Zamboanga City. Learn about our Executive Board, Directors, and Advisors for 2025-2026." />
+        <meta property="og:image" content="https://rotaract.rotaryzcwest.org/og-image.png" />
+        <meta property="og:site_name" content="Rotaract Club of Zamboanga City West" />
+        
+        {/* Twitter */}
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content="https://rotaract.rotaryzcwest.org/officers" />
+        <meta property="twitter:title" content="Leadership Team & Officers - Rotaract Club of Zamboanga City West" />
+        <meta property="twitter:description" content="Meet our dedicated leadership team and officers driving positive change in Zamboanga City. Learn about our Executive Board, Directors, and Advisors for 2025-2026." />
+        <meta property="twitter:image" content="https://rotaract.rotaryzcwest.org/og-image.png" />
+        
+        {/* Canonical URL */}
+        <link rel="canonical" href="https://rotaract.rotaryzcwest.org/officers" />
+        
+        {/* Structured Data for Officers */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": "Rotaract Club of Zamboanga City West",
+            "url": "https://rotaract.rotaryzcwest.org",
+            "employee": allOfficers.map(officer => ({
+              "@type": "Person",
+              "name": officer.name,
+              "jobTitle": officer.position,
+              "worksFor": {
+                "@type": "Organization",
+                "name": "Rotaract Club of Zamboanga City West"
+              }
+            }))
+          })}
+        </script>
       </Helmet>
       <div className="min-h-screen flex flex-col">
         <Navbar />
-        <main className="flex-1 pt-24 pb-12">
+        <main className="flex-1 bg-gradient-to-br from-cranberry-50 via-white to-pink-50 pt-32 pb-12">
           <div className="max-w-7xl mx-auto px-6">
             <div className="text-center mb-12">
-              <h1 className="text-4xl md:text-5xl font-bold text-rotaract-navy mb-4">
-                Officers & Members
+              <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">
+                Our <span className="text-gradient">Leadership</span>
               </h1>
-              <p className="text-lg text-gray-600 max-w-3xl mx-auto mb-2">
+              <p className="text-lg text-slate-600 max-w-3xl mx-auto mb-2">
                 Meet the dedicated leaders and members who make our club's mission possible.
               </p>
-              <Badge variant="outline" className="text-rotaract-navy border-rotaract-navy">
-                Rotary Year 2025-2026
+              <Badge variant="outline" className="text-slate-700 border-slate-300 mt-4">
+                Rotary Year {new Date().getFullYear()}-{new Date().getFullYear() + 1}
               </Badge>
             </div>
 
-            {/* Board of Directors */}
-            <div className="mb-12">
-              <div className="flex items-center justify-center mb-8">
-                <Award className="w-6 h-6 text-rotaract-pink mr-2" />
-                <h2 className="text-2xl font-bold text-rotaract-navy">
-                  Board of Directors
-                </h2>
+            {/* Executive Board */}
+            <div className="mb-16">
+              <div className="flex items-center justify-center mb-12">
+                <div className="flex items-center bg-gradient-to-r from-cranberry-100 to-pink-100 px-6 py-3 rounded-full border border-cranberry-200">
+                  <Award className="w-6 h-6 text-cranberry-600 mr-3" />
+                  <h2 className="text-2xl font-bold text-slate-900">
+                    Executive Board
+                  </h2>
+                </div>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {boardOfDirectors.map((officer, index) => (
-                  <Card key={index} className="hover:shadow-lg transition-all duration-300 border-l-4 border-l-rotaract-pink">
-                    <CardHeader>
-                      <div className="text-center">
-                        <div className="w-16 h-16 mx-auto mb-4 bg-rotaract-pink/10 rounded-full flex items-center justify-center">
-                          {getIcon(officer.category)}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {executiveBoard.map((officer, index) => (
+                  <Card key={index} className="group bg-white/80 backdrop-blur-sm border-0 shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-br from-cranberry-500/5 via-transparent to-pink-500/5"></div>
+                    <CardContent className="relative p-8 text-center">
+                      <div className="relative mb-6">
+                        <div className="w-20 h-20 mx-auto bg-gradient-to-br from-cranberry-500 to-cranberry-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                          <Award className="w-8 h-8 text-white" />
                         </div>
-                        <CardTitle className="text-lg text-rotaract-navy mb-1">{officer.name}</CardTitle>
-                        <p className="text-sm font-medium text-gray-700 mb-2">{officer.position}</p>
-                        <Badge className={getCategoryColor(officer.category)}>
-                          {officer.category}
-                        </Badge>
+                        <div className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-r from-amber-400 to-orange-500 rounded-full flex items-center justify-center">
+                          <span className="text-xs font-bold text-white">★</span>
+                        </div>
                       </div>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-3 text-sm">
-                        <p className="text-gray-600">{officer.responsibilities}</p>
-                        <div className="flex items-center text-gray-500">
-                          <Calendar className="w-4 h-4 mr-2" />
-                          <span className="text-xs">{officer.term}</span>
+                      <CardTitle className="text-xl font-bold text-slate-900 mb-2 group-hover:text-cranberry-700 transition-colors">
+                        {officer.name}
+                      </CardTitle>
+                      <p className="text-cranberry-600 font-semibold mb-4 text-sm uppercase tracking-wide">
+                        {officer.position}
+                      </p>
+                      <div className="bg-gradient-to-r from-cranberry-50 to-pink-50 rounded-xl p-4 border border-cranberry-100">
+                        <p className="text-slate-600 text-sm leading-relaxed mb-3">
+                          {officer.responsibilities}
+                        </p>
+                        <div className="flex items-center justify-center space-x-3 text-xs text-slate-500">
+                          <div className="flex items-center">
+                            <Calendar className="w-3 h-3 mr-1" />
+                            <span>{officer.term}</span>
+                          </div>
                         </div>
                       </div>
                     </CardContent>
@@ -257,35 +308,39 @@ const Officers = () => {
               </div>
             </div>
 
-            {/* Directors */}
-            <div className="mb-12">
-              <div className="flex items-center justify-center mb-8">
-                <Users className="w-6 h-6 text-rotaract-blue mr-2" />
-                <h2 className="text-2xl font-bold text-rotaract-navy">
-                  Directors
-                </h2>
+            {/* Board of Directors */}
+            <div className="mb-16">
+              <div className="flex items-center justify-center mb-12">
+                <div className="flex items-center bg-gradient-to-r from-cranberry-50 to-pink-50 px-6 py-3 rounded-full border border-cranberry-100">
+                  <Users className="w-6 h-6 text-cranberry-500 mr-3" />
+                  <h2 className="text-2xl font-bold text-slate-900">
+                    Board of Directors
+                  </h2>
+                </div>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {directors.map((officer, index) => (
-                  <Card key={index} className="hover:shadow-lg transition-all duration-300 border-l-4 border-l-rotaract-blue">
-                    <CardHeader>
-                      <div className="text-center">
-                        <div className="w-16 h-16 mx-auto mb-4 bg-rotaract-blue/10 rounded-full flex items-center justify-center">
-                          {getIcon(officer.category)}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {currentDirectors.map((officer, index) => (
+                  <Card key={index} className="group bg-white/70 backdrop-blur-sm border-0 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-br from-cranberry-400/3 via-transparent to-pink-400/3"></div>
+                    <CardContent className="relative p-6 text-center">
+                      <div className="relative mb-5">
+                        <div className="w-16 h-16 mx-auto bg-gradient-to-br from-cranberry-400 to-cranberry-500 rounded-xl flex items-center justify-center shadow-md group-hover:scale-105 transition-transform duration-300">
+                          <Users className="w-6 h-6 text-white" />
                         </div>
-                        <CardTitle className="text-lg text-rotaract-navy mb-1">{officer.name}</CardTitle>
-                        <p className="text-sm font-medium text-gray-700 mb-2">{officer.position}</p>
-                        <Badge className={getCategoryColor(officer.category)}>
-                          {officer.category}
-                        </Badge>
                       </div>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-3 text-sm">
-                        <p className="text-gray-600">{officer.responsibilities}</p>
-                        <div className="flex items-center text-gray-500">
-                          <Calendar className="w-4 h-4 mr-2" />
-                          <span className="text-xs">{officer.term}</span>
+                      <CardTitle className="text-lg font-bold text-slate-900 mb-2 group-hover:text-cranberry-600 transition-colors leading-tight">
+                        {officer.name}
+                      </CardTitle>
+                      <p className="text-cranberry-500 font-medium mb-3 text-xs uppercase tracking-wide">
+                        {officer.position}
+                      </p>
+                      <div className="bg-white/50 rounded-lg p-3 border border-gray-100">
+                        <p className="text-slate-600 text-xs leading-relaxed mb-2">
+                          {officer.responsibilities}
+                        </p>
+                        <div className="flex items-center justify-center text-xs text-slate-500">
+                          <Calendar className="w-3 h-3 mr-1" />
+                          <span>{officer.term}</span>
                         </div>
                       </div>
                     </CardContent>
@@ -295,38 +350,41 @@ const Officers = () => {
             </div>
 
             {/* Advisors */}
-            <div className="mb-12">
-              <div className="flex items-center justify-center mb-8">
-                <Calendar className="w-6 h-6 text-vinta-yellow mr-2" />
-                <h2 className="text-2xl font-bold text-rotaract-navy">
-                  Club Advisors
-                </h2>
+            <div className="mb-16">
+              <div className="text-center mb-12">
+                <div className="inline-flex items-center bg-gradient-to-r from-slate-100 to-gray-100 px-6 py-3 rounded-full border border-slate-200">
+                  <Users className="w-6 h-6 text-slate-600 mr-3" />
+                  <h2 className="text-2xl font-bold text-slate-900">
+                    Club Advisors
+                  </h2>
+                </div>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 justify-center">
-                {advisors.map((officer, index) => (
-                  <Card key={index} className="hover:shadow-lg transition-all duration-300 border-l-4 border-l-vinta-yellow">
-                    <CardHeader>
-                      <div className="text-center">
-                        <div className="w-16 h-16 mx-auto mb-4 bg-vinta-yellow/10 rounded-full flex items-center justify-center">
-                          {getIcon('Advisor')}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                {advisorsList.map((officer, index) => (
+                  <Card key={index} className="group bg-white/60 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-br from-slate-400/5 via-transparent to-gray-400/5"></div>
+                    <CardContent className="relative p-8 text-center">
+                      <div className="relative mb-6">
+                        <div className="w-18 h-18 mx-auto bg-gradient-to-br from-slate-500 to-gray-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                          <Users className="w-7 h-7 text-white" />
                         </div>
-                        <CardTitle className="text-lg text-rotaract-navy mb-1">
-                          {officer.name}
-                        </CardTitle>
-                        <p className="text-sm font-medium text-gray-700 mb-2">
-                          {officer.position}
-                        </p>
-                        <Badge className={getCategoryColor('Advisor')}>
-                          Advisor
-                        </Badge>
+                        <div className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-blue-400 to-indigo-500 rounded-full flex items-center justify-center">
+                          <span className="text-xs font-bold text-white">★</span>
+                        </div>
                       </div>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-3 text-sm">
-                        <p className="text-gray-600">{officer.responsibilities}</p>
-                        <div className="flex items-center text-gray-500">
-                          <Calendar className="w-4 h-4 mr-2" />
-                          <span className="text-xs">{officer.term}</span>
+                      <CardTitle className="text-xl font-bold text-slate-900 mb-2 group-hover:text-slate-700 transition-colors">
+                        {officer.name}
+                      </CardTitle>
+                      <p className="text-slate-600 font-semibold mb-4 text-sm uppercase tracking-wide">
+                        {officer.position}
+                      </p>
+                      <div className="bg-gradient-to-r from-slate-50 to-gray-50 rounded-xl p-4 border border-slate-100">
+                        <p className="text-slate-600 text-sm leading-relaxed mb-3">
+                          {officer.responsibilities}
+                        </p>
+                        <div className="flex items-center justify-center text-xs text-slate-500">
+                          <Calendar className="w-3 h-3 mr-1" />
+                          <span>{officer.term}</span>
                         </div>
                       </div>
                     </CardContent>
@@ -335,19 +393,108 @@ const Officers = () => {
               </div>
             </div>
 
-            <div className="text-center bg-gradient-to-r from-rotaract-blue/5 to-rotaract-pink/5 rounded-lg p-8 border border-rotaract-blue/10">
-              <h3 className="text-xl font-bold text-rotaract-navy mb-4">
-                Join Our Team
-              </h3>
-              <p className="text-gray-600 mb-6">
-                We're always looking for passionate individuals to join our club and make a difference in our community.
-              </p>
-              <a 
-                href="#join" 
-                className="inline-block bg-rotaract-pink text-white px-6 py-3 rounded-lg font-medium hover:bg-rotaract-pink/90 transition-colors"
-              >
-                Learn How to Join
-              </a>
+            {/* Great West Past Presidents */}
+            <div className="mb-12">
+              <div className="flex items-center justify-center mb-8">
+                <Award className="w-6 h-6 text-amber-600 mr-2" />
+                <h2 className="text-2xl font-bold text-slate-900">
+                  Great West Past Presidents
+                </h2>
+              </div>
+              <div className="bg-white rounded-xl shadow-lg border border-cranberry-100 p-8">
+                <div className="max-w-2xl mx-auto space-y-3">
+                  <div className="flex justify-between items-center py-3 px-4 rounded-lg hover:bg-cranberry-50 transition-colors border-b border-gray-100">
+                    <span className="font-medium text-slate-700">2009-2010</span>
+                    <span className="text-slate-900">Hermie Duterte</span>
+                  </div>
+                  <div className="flex justify-between items-center py-3 px-4 rounded-lg hover:bg-cranberry-50 transition-colors border-b border-gray-100">
+                    <span className="font-medium text-slate-700">2010-2011</span>
+                    <span className="text-slate-900">Wenceslao Medina</span>
+                  </div>
+                  <div className="flex justify-between items-center py-3 px-4 rounded-lg hover:bg-cranberry-50 transition-colors border-b border-gray-100">
+                    <span className="font-medium text-slate-700">2011-2012</span>
+                    <span className="text-slate-900">Aldimin Kalli</span>
+                  </div>
+                  <div className="flex justify-between items-center py-3 px-4 rounded-lg hover:bg-cranberry-50 transition-colors border-b border-gray-100">
+                    <span className="font-medium text-slate-700">2012-2013</span>
+                    <span className="text-slate-900">Bryan Callao</span>
+                  </div>
+                  <div className="flex justify-between items-center py-3 px-4 rounded-lg hover:bg-cranberry-50 transition-colors border-b border-gray-100">
+                    <span className="font-medium text-slate-700">2013-2014</span>
+                    <span className="text-slate-900">Deminic Bontia</span>
+                  </div>
+                  <div className="flex justify-between items-center py-3 px-4 rounded-lg hover:bg-cranberry-50 transition-colors border-b border-gray-100">
+                    <span className="font-medium text-slate-700">2014-2015</span>
+                    <span className="text-slate-900">Philip Vega</span>
+                  </div>
+                  <div className="flex justify-between items-center py-3 px-4 rounded-lg hover:bg-cranberry-50 transition-colors border-b border-gray-100">
+                    <span className="font-medium text-slate-700">2015-2016</span>
+                    <span className="text-slate-900">Edilwaleed Hairon</span>
+                  </div>
+                  <div className="flex justify-between items-center py-3 px-4 rounded-lg hover:bg-cranberry-50 transition-colors border-b border-gray-100">
+                    <span className="font-medium text-slate-700">2016-2017</span>
+                    <span className="text-slate-900">O'neil Nick Paira</span>
+                  </div>
+                  <div className="flex justify-between items-center py-3 px-4 rounded-lg hover:bg-cranberry-50 transition-colors border-b border-gray-100">
+                    <span className="font-medium text-slate-700">2017-2018</span>
+                    <span className="text-slate-900">Kevin Simbajon</span>
+                  </div>
+                  <div className="flex justify-between items-center py-3 px-4 rounded-lg hover:bg-cranberry-50 transition-colors border-b border-gray-100">
+                    <span className="font-medium text-slate-700">2018-2019</span>
+                    <span className="text-slate-900">Arwald Candido</span>
+                  </div>
+                  <div className="flex justify-between items-center py-3 px-4 rounded-lg hover:bg-cranberry-50 transition-colors border-b border-gray-100">
+                    <span className="font-medium text-slate-700">2019-2020</span>
+                    <span className="text-slate-900">April May Sultan</span>
+                  </div>
+                  <div className="flex justify-between items-center py-3 px-4 rounded-lg hover:bg-cranberry-50 transition-colors border-b border-gray-100">
+                    <span className="font-medium text-slate-700">2020-2021</span>
+                    <span className="text-slate-900">Kayenne Delos Reyes</span>
+                  </div>
+                  <div className="flex justify-between items-center py-3 px-4 rounded-lg hover:bg-cranberry-50 transition-colors border-b border-gray-100">
+                    <span className="font-medium text-slate-700">2021-2022</span>
+                    <span className="text-slate-900">Remo Japus Varquez</span>
+                  </div>
+                  <div className="flex justify-between items-center py-3 px-4 rounded-lg hover:bg-cranberry-50 transition-colors border-b border-gray-100">
+                    <span className="font-medium text-slate-700">2022-2023</span>
+                    <span className="text-slate-900">Ernan Natividad</span>
+                  </div>
+                  <div className="flex justify-between items-center py-3 px-4 rounded-lg hover:bg-cranberry-50 transition-colors border-b border-gray-100">
+                    <span className="font-medium text-slate-700">2023-2024</span>
+                    <span className="text-slate-900">Ma. Theresa Lanelle Bañez</span>
+                  </div>
+                  <div className="flex justify-between items-center py-3 px-4 rounded-lg hover:bg-cranberry-50 transition-colors border-b border-gray-100">
+                    <span className="font-medium text-slate-700">2024-2025</span>
+                    <span className="text-slate-900">Mark Vincent Faith Item</span>
+                  </div>
+                  <div className="flex justify-between items-center py-3 px-4 rounded-lg hover:bg-cranberry-50 transition-colors border-b border-gray-100">
+                    <span className="font-medium text-slate-700">2025-2026</span>
+                    <div className="text-right">
+                      <span className="text-slate-900 font-semibold">Hazra Ibrahim</span>
+                      <span className="block text-xs text-cranberry-600 mt-1">Current President</span>
+                    </div>
+                  </div>
+                  <div className="flex justify-between items-center py-3 px-4 rounded-lg hover:bg-cranberry-50 transition-colors border-b border-gray-100">
+                    <span className="font-medium text-slate-700">2026-2027</span>
+                    <div className="text-right">
+                      <span className="text-slate-900 font-semibold">Darylle Sanghanan</span>
+                      <span className="block text-xs text-blue-600 mt-1">President-Elect</span>
+                    </div>
+                  </div>
+                  <div className="flex justify-between items-center py-3 px-4 rounded-lg hover:bg-cranberry-50 transition-colors">
+                    <span className="font-medium text-slate-700">2027-2028</span>
+                    <div className="text-right">
+                      <span className="text-slate-900 font-semibold">Criseline Barredo</span>
+                      <span className="block text-xs text-green-600 mt-1">Future President</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-6 text-center">
+                  <p className="text-sm text-slate-600">
+                    Honoring the legacy of leadership that has shaped our club since 2009
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </main>
