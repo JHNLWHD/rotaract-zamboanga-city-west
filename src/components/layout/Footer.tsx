@@ -20,7 +20,7 @@ const Footer = () => {
     {
       icon: <Mail className="h-5 w-5" />,
       title: "Email",
-      content: "rotaractzcwest@gmail.com"
+      content: "raczambowest1@gmail.com"
     }
   ];
 
@@ -40,7 +40,7 @@ const Footer = () => {
     {
       icon: <Mail className="h-5 w-5" />,
       label: "Email",
-      href: "mailto:rotaractzcwest@gmail.com",
+      href: "mailto:raczambowest1@gmail.com",
       color: "hover:text-cranberry-500"
     }
   ];

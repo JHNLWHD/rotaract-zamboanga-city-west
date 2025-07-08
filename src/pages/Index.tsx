@@ -6,6 +6,7 @@ import Hero from '../components/home/Hero';
 import About from '../components/home/About';
 import Programs from '../components/home/Programs';
 import Join from '../components/home/Join';
+import Contact from '../components/home/Contact';
 
 const Index = () => {
   useEffect(() => {
@@ -90,9 +91,8 @@ const Index = () => {
             "logo": "https://rotaract.rotaryzcwest.org/lovable-uploads/e48a4b78-bd32-41b7-b192-969232e8378f.png",
             "contactPoint": {
               "@type": "ContactPoint",
-              "telephone": "+63-XXX-XXX-XXXX",
               "contactType": "General Inquiries",
-              "email": "rotaractzcwest@gmail.com"
+              "email": "raczambowest1@gmail.com"
             },
             "address": {
               "@type": "PostalAddress",
@@ -123,6 +123,7 @@ const Index = () => {
           <About />
           <Programs />
           <Join />
+          <Contact />
         </main>
         <Footer />
       </div>
