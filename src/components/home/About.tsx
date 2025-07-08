@@ -168,49 +168,6 @@ const About = () => {
             </div>
           </div>
         </div>
-
-        {/* Values section */}
-        <div>
-          <div className="text-center mb-16">
-            <h3 className="text-section-title text-slate-900 reveal-on-scroll mb-6">
-              Our Core <span className="text-gradient">Values</span>
-            </h3>
-            <p className="text-lg text-slate-600 max-w-2xl mx-auto reveal-on-scroll">
-              The principles that guide every action we take and every project we undertake.
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {valueCards.map((card, index) => (
-              <article 
-                key={index}
-                className={`modern-card p-8 text-center hover-lift reveal-on-scroll group bg-gradient-to-br ${card.gradient}`}
-                style={{ transitionDelay: `${index * 100}ms` }}
-              >
-                <div className="relative mb-6">
-                  <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mx-auto shadow-lg group-hover:shadow-xl transition-shadow">
-                    {card.icon}
-                  </div>
-                  {/* Decorative ring */}
-                  <div className="absolute inset-0 w-16 h-16 mx-auto rounded-2xl border-2 border-cranberry-200/50 scale-110 opacity-0 group-hover:opacity-100 group-hover:scale-125 transition-all duration-500"></div>
-                </div>
-                
-                <h4 className="text-card-title text-slate-900 mb-4 group-hover:text-cranberry-700 transition-colors">
-                  {card.title}
-                </h4>
-                
-                <p className="text-slate-600 leading-relaxed group-hover:text-slate-700 transition-colors">
-                  {card.description}
-                </p>
-                
-                {/* Subtle arrow indicator */}
-                <div className="mt-6 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <div className="w-8 h-0.5 bg-cranberry-300 mx-auto rounded-full"></div>
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
       </div>
     </section>
   );
