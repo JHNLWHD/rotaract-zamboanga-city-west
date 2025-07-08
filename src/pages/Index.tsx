@@ -5,6 +5,7 @@ import Footer from '../components/layout/Footer';
 import Hero from '../components/home/Hero';
 import About from '../components/home/About';
 import Programs from '../components/home/Programs';
+import Awards from '../components/home/Awards';
 import Join from '../components/home/Join';
 import Contact from '../components/home/Contact';
 
@@ -122,6 +123,7 @@ const Index = () => {
           <Hero />
           <About />
           <Programs />
+          <Awards />
           <Join />
           <Contact />
         </main>
