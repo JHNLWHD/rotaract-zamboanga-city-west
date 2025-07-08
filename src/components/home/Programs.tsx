@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Heart, Globe, BookOpen, Cpu, Users, Leaf, ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight, Sparkles } from 'lucide-react';
 
 const Programs = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -32,48 +32,55 @@ const Programs = () => {
     };
   }, []);
 
-  const programCards = [
+  const areasOfFocus = [
     {
-      icon: <Heart className="h-7 w-7" />,
-      title: "Community Service",
-      description: "Humanitarian projects addressing local needs in health, education, and poverty alleviation.",
-      color: "cranberry",
-      highlights: ["Healthcare Initiatives", "Educational Support", "Disaster Relief"]
-    },
-    {
-      icon: <Globe className="h-7 w-7" />,
-      title: "International Service",
-      description: "Collaborations with global Rotaract clubs to address international humanitarian issues.",
+      icon: "/areas_of_focus/AOF_peace_color_no_title.png",
+      title: "Peace & Conflict Prevention",
+      description: "Promoting understanding and building capacity to resolve conflicts and create lasting peace in communities.",
       color: "blue",
-      highlights: ["Global Partnerships", "Cross-cultural Exchange", "International Projects"]
+      highlights: ["Conflict Resolution Training", "Community Dialogue", "Peace Building"]
     },
     {
-      icon: <BookOpen className="h-7 w-7" />,
-      title: "Professional Development", 
-      description: "Workshops, mentorship, and networking opportunities to enhance career skills.",
-      color: "purple",
-      highlights: ["Skills Training", "Mentorship Programs", "Career Networking"]
+      icon: "/areas_of_focus/AOF_disease_color_no_title.png",
+      title: "Disease Prevention & Treatment",
+      description: "Improving access to healthcare and preventing the spread of life-threatening diseases in our communities.",
+      color: "cranberry",
+      highlights: ["Health Screenings", "Vaccination Campaigns", "Medical Missions"]
     },
     {
-      icon: <Cpu className="h-7 w-7" />,
-      title: "Digital Literacy",
-      description: "Training programs to bridge the digital divide in underserved communities.",
+      icon: "/areas_of_focus/AOF_water_color_no_title.png",
+      title: "Water, Sanitation & Hygiene",
+      description: "Ensuring access to clean water and promoting proper sanitation practices for healthier communities.",
       color: "teal",
-      highlights: ["Tech Training", "Digital Access", "Innovation Labs"]
+      highlights: ["Clean Water Projects", "Sanitation Programs", "Hygiene Education"]
     },
     {
-      icon: <Users className="h-7 w-7" />,
-      title: "Youth Empowerment",
-      description: "Initiatives to develop leadership and entrepreneurial skills among local youth.",
+      icon: "/areas_of_focus/AOF_maternal_color_no_title.png",
+      title: "Maternal & Child Health",
+      description: "Supporting mothers and children through healthcare programs and nutrition initiatives.",
+      color: "purple",
+      highlights: ["Prenatal Care", "Nutrition Programs", "Child Health Initiatives"]
+    },
+    {
+      icon: "/areas_of_focus/AOF_education_color_no_title.png",
+      title: "Basic Education & Literacy",
+      description: "Strengthening educational systems and promoting literacy to empower communities through knowledge.",
       color: "orange",
-      highlights: ["Leadership Training", "Entrepreneurship", "Youth Development"]
+      highlights: ["Literacy Programs", "School Support", "Educational Resources"]
     },
     {
-      icon: <Leaf className="h-7 w-7" />,
-      title: "Environmental Action",
-      description: "Projects promoting sustainability, conservation, and climate awareness.",
+      icon: "/areas_of_focus/AOF_economic_color_no_title.png",
+      title: "Economic & Community Development",
+      description: "Creating opportunities for economic growth and sustainable community development initiatives.",
       color: "green",
-      highlights: ["Sustainability Projects", "Climate Action", "Conservation Efforts"]
+      highlights: ["Microfinance Programs", "Skills Training", "Community Infrastructure"]
+    },
+    {
+      icon: "/areas_of_focus/AOF_environment_color_no_title.png",
+      title: "Environment",
+      description: "Protecting our planet through environmental conservation and sustainability projects.",
+      color: "emerald",
+      highlights: ["Environmental Education", "Conservation Projects", "Sustainability Initiatives"]
     }
   ];
 
@@ -82,7 +89,6 @@ const Programs = () => {
       cranberry: {
         bg: "bg-cranberry-50",
         border: "border-cranberry-200/50",
-        icon: "text-cranberry-600",
         iconBg: "bg-cranberry-100",
         accent: "text-cranberry-700",
         hover: "hover:border-cranberry-300"
@@ -90,7 +96,6 @@ const Programs = () => {
       blue: {
         bg: "bg-blue-50",
         border: "border-blue-200/50", 
-        icon: "text-blue-600",
         iconBg: "bg-blue-100",
         accent: "text-blue-700",
         hover: "hover:border-blue-300"
@@ -98,7 +103,6 @@ const Programs = () => {
       purple: {
         bg: "bg-purple-50",
         border: "border-purple-200/50",
-        icon: "text-purple-600", 
         iconBg: "bg-purple-100",
         accent: "text-purple-700",
         hover: "hover:border-purple-300"
@@ -106,7 +110,6 @@ const Programs = () => {
       teal: {
         bg: "bg-teal-50",
         border: "border-teal-200/50",
-        icon: "text-teal-600",
         iconBg: "bg-teal-100", 
         accent: "text-teal-700",
         hover: "hover:border-teal-300"
@@ -114,7 +117,6 @@ const Programs = () => {
       orange: {
         bg: "bg-orange-50",
         border: "border-orange-200/50",
-        icon: "text-orange-600",
         iconBg: "bg-orange-100",
         accent: "text-orange-700", 
         hover: "hover:border-orange-300"
@@ -122,10 +124,16 @@ const Programs = () => {
       green: {
         bg: "bg-green-50",
         border: "border-green-200/50",
-        icon: "text-green-600",
         iconBg: "bg-green-100",
         accent: "text-green-700",
         hover: "hover:border-green-300"
+      },
+      emerald: {
+        bg: "bg-emerald-50",
+        border: "border-emerald-200/50",
+        iconBg: "bg-emerald-100",
+        accent: "text-emerald-700",
+        hover: "hover:border-emerald-300"
       }
     };
     return colors[color as keyof typeof colors] || colors.cranberry;
@@ -150,36 +158,41 @@ const Programs = () => {
           <div className="reveal-on-scroll mb-6">
             <span className="inline-flex items-center px-4 py-2 rounded-full bg-cranberry-100 text-cranberry-700 text-sm font-semibold">
               <Sparkles className="w-4 h-4 mr-2" />
-              Our Impact Areas
+              Areas of Focus
             </span>
           </div>
           
           <h2 className="text-section-title text-slate-900 reveal-on-scroll mb-6">
-            Programs That <span className="text-gradient">Transform</span>
-            <br />Communities
+            Seven Areas of <span className="text-gradient">Impact</span>
+            <br />for Lasting Change
           </h2>
           
           <p className="text-xl text-slate-600 max-w-3xl mx-auto reveal-on-scroll leading-relaxed">
-            Discover our comprehensive range of initiatives designed to create lasting positive change 
-            across multiple sectors of society.
+            Through Rotary's seven areas of focus, we address the world's most persistent challenges 
+            and create sustainable solutions in our community.
           </p>
         </div>
 
-        {/* Programs grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-          {programCards.map((program, index) => {
-            const colorClasses = getColorClasses(program.color);
+        {/* Areas of Focus grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 justify-items-center xl:justify-items-stretch">
+          {areasOfFocus.map((area, index) => {
+            const colorClasses = getColorClasses(area.color);
             return (
               <article 
                 key={index}
-                className={`modern-card group cursor-pointer hover-lift reveal-on-scroll ${colorClasses.bg} border-2 ${colorClasses.border} ${colorClasses.hover}`}
+                className={`modern-card group cursor-pointer hover-lift reveal-on-scroll ${colorClasses.bg} border-2 ${colorClasses.border} ${colorClasses.hover} w-full max-w-sm xl:max-w-none ${index === 6 ? 'xl:col-start-2' : ''}`}
                 style={{ transitionDelay: `${index * 100}ms` }}
               >
                 <div className="p-8">
                   {/* Icon and header */}
                   <div className="flex items-start justify-between mb-6">
-                    <div className={`p-4 ${colorClasses.iconBg} rounded-2xl ${colorClasses.icon} group-hover:scale-110 transition-transform duration-300`}>
-                      {program.icon}
+                    <div className={`p-4 ${colorClasses.iconBg} rounded-2xl group-hover:scale-110 transition-transform duration-300`}>
+                      <img 
+                        src={area.icon} 
+                        alt={`${area.title} icon`}
+                        className="h-12 w-12 object-contain"
+                        loading="lazy"
+                      />
                     </div>
                     <ArrowRight className="h-5 w-5 text-gray-400 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300" />
                   </div>
@@ -187,16 +200,16 @@ const Programs = () => {
                   {/* Content */}
                   <div className="space-y-4">
                     <h3 className={`text-card-title ${colorClasses.accent} group-hover:text-slate-900 transition-colors`}>
-                      {program.title}
+                      {area.title}
                     </h3>
                     
                     <p className="text-slate-600 leading-relaxed group-hover:text-slate-700 transition-colors">
-                      {program.description}
+                      {area.description}
                     </p>
 
                     {/* Highlights */}
                     <div className="space-y-2">
-                      {program.highlights.map((highlight, idx) => (
+                      {area.highlights.map((highlight, idx) => (
                         <div key={idx} className="flex items-center space-x-2">
                           <div className={`w-1.5 h-1.5 ${colorClasses.iconBg} rounded-full`}></div>
                           <span className="text-sm text-slate-500 group-hover:text-slate-600 transition-colors">
