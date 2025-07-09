@@ -53,7 +53,7 @@ const Index = () => {
         <meta property="og:description" content="Join the Rotaract Club of Zamboanga City West - empowering young leaders through fellowship, community service, and professional development since 2010." />
         <meta property="og:image" content="https://rotaract.rotaryzcwest.org/og-image.png" />
         <meta property="og:site_name" content="Rotaract Club of Zamboanga City West" />
-        <meta property="og:locale" content="en_US" />
+        <meta property="og:locale" content="en_PH" />
         
         {/* Twitter */}
         <meta property="twitter:card" content="summary_large_image" />

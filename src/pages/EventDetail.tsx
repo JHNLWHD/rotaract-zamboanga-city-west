@@ -141,8 +141,6 @@ const EventDetail = () => {
         <meta property="og:title" content={`${event.title} | Rotaract Club of Zamboanga City West`} />
         <meta property="og:description" content={`${event.description} Join us on ${new Date(event.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })} at ${event.venue}.`} />
         <meta property="og:image" content={`https://rotaract.rotaryzcwest.org${event.invitationImage || event.image}`} />
-        <meta property="og:image:width" content="600" />
-        <meta property="og:image:height" content="800" />
         <meta property="og:image:alt" content={`${event.title} invitation`} />
         <meta property="og:site_name" content="Rotaract Club of Zamboanga City West" />
         <meta property="og:locale" content="en_US" />

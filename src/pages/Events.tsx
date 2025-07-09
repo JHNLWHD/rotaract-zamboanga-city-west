@@ -60,9 +60,7 @@ const Events = () => {
         <meta property="og:url" content="https://rotaract.rotaryzcwest.org/events" />
         <meta property="og:title" content="Club Events & Activities | Rotaract Club of Zamboanga City West" />
         <meta property="og:description" content="Discover upcoming Rotaract events in Zamboanga City West including fellowship meetings, leadership training seminars, induction ceremonies, and community service opportunities." />
-        <meta property="og:image" content="https://rotaract.rotaryzcwest.org/images/events-og-image.jpg" />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
+        <meta property="og:image" content="https://rotaract.rotaryzcwest.org/og-image.png" />
         <meta property="og:image:alt" content="Rotaract Club of Zamboanga City West Events" />
         <meta property="og:site_name" content="Rotaract Club of Zamboanga City West" />
         <meta property="og:locale" content="en_US" />
