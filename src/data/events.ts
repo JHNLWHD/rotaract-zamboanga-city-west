@@ -140,13 +140,6 @@ export const events: Event[] = [
       "8:30 PM - Photo Opportunities and Celebration",
       "9:00 PM - Closing Remarks"
     ],
-    requirements: [
-      "RSVP required by July 18, 2025 only!",
-      "Theme: Men in Black - formal black attire required",
-      "Rotaract members, alumni, and guests welcome",
-      "Bring valid ID for registration",
-      "Register through the provided Google Form link"
-    ],
     gallery: [
       {
         id: 1,
