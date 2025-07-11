@@ -443,17 +443,38 @@ const EventDetail = () => {
                       <CardTitle>Event Agenda</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <div className="grid md:grid-cols-2 gap-4">
-                        {event.agenda.map((item, index) => (
-                          <div key={index} className="flex items-start p-3 bg-cranberry-50 rounded-lg border border-cranberry-100">
-                            <div className="bg-cranberry-100 text-cranberry-700 px-2 py-1 rounded text-sm font-medium mr-3 min-w-fit">
-                              {item.split(' - ')[0]}
+                      <div className="grid gap-4">
+                        {event.agenda.map((item, index) => {
+                          let parts = item.split(' - ');
+                          let timeRange = '';
+                          let description = '';
+                          
+                          // Check if the first part contains a time range (e.g., "4:00 - 5:00 PM")
+                          if (parts[0].includes(':') && parts[1] && parts[1].includes(':') && parts[1].includes('PM')) {
+                            // Format: "4:00 - 5:00 PM - Description"
+                            timeRange = `${parts[0]} - ${parts[1]}`;
+                            description = parts.slice(2).join(' - ');
+                          } else if (parts[0].includes(':')) {
+                            // Format: "5:15 PM - Description"
+                            timeRange = parts[0];
+                            description = parts.slice(1).join(' - ');
+                          } else {
+                            // Fallback
+                            timeRange = parts[0];
+                            description = parts.slice(1).join(' - ');
+                          }
+                          
+                          return (
+                            <div key={index} className="flex items-center p-3 bg-cranberry-50 rounded-lg border border-cranberry-100">
+                              <div className="bg-white text-cranberry-600 px-2 py-1 rounded text-sm font-semibold mr-3 min-w-fit border border-cranberry-200">
+                                {timeRange}
+                              </div>
+                              <div className="text-gray-700 text-sm leading-relaxed">
+                                {description}
+                              </div>
                             </div>
-                            <div className="text-gray-700 text-sm leading-relaxed">
-                              {item.split(' - ').slice(1).join(' - ')}
-                            </div>
-                          </div>
-                        ))}
+                          );
+                        })}
                       </div>
                     </CardContent>
                   </Card>
