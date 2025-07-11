@@ -152,7 +152,13 @@ export const events: Event[] = [
         url: "/events/16th-induction-and-turnover/dress-code-female.png",
         caption: "Dress Code - Female",
         category: "Ceremony"
-      }
+      },
+      {
+        id: 3,
+        url: "/events/16th-induction-and-turnover/official-pubmat.jpg",
+        caption: "Official Pubmat",
+        category: "Ceremony"
+      },
     ]
   }
 ]; 
