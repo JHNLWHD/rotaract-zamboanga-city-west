@@ -484,7 +484,7 @@ const EventDetail = () => {
                     <CardHeader>
                       <CardTitle>Event Gallery</CardTitle>
                       <p className="text-sm text-gray-600">
-                        View dress code requirements and event details
+                        Photos and highlights from this event
                       </p>
                     </CardHeader>
                     <CardContent>
