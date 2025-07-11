@@ -104,5 +104,62 @@ export const events: Event[] = [
       "Commitment to full-day participation"
     ],
     gallery: []
+  },
+  {
+    id: 3,
+    title: "16th Joint Induction and Turnover Ceremonies",
+    slug: "16th-joint-induction-and-turnover-ceremonies",
+    description: "It's that time of the year — Induction Season is here! Join us for our Joint Induction and Turn-Over Ceremonies featuring the prestigious installation of new officers and recognition of outgoing leaders. Suit up in our 'Men in Black' theme and be part of this unforgettable night as we celebrate tradition, fellowship, and the commitment that defines our Rotaract community in Zamboanga City.",
+    date: "2025-07-26",
+    time: "4:00 PM",
+    venue: "The Sapphire Ballroom, Grand Astoria Hotel, Zamboanga City",
+    category: "Ceremony",
+    status: "registration_open",
+    registrationUrl: "https://forms.gle/a2A9gGp5ud8j4zux8",
+    shareableLink: "https://rotaract.rotaryzcwest.org/events/2025-07-26/16th-joint-induction-and-turnover-ceremonies",
+    image: "/events/16th-induction-and-turnover.png",
+    invitationImage: "/events/16th-induction-and-turnover/16th-induction-and-turnover.png",
+    highlights: [
+      "Joint Induction and Turn-Over Ceremonies",
+      "Men in Black theme - suit up and show up in style!",
+      "Formal installation of new officers and board members",
+      "Recognition and appreciation of outgoing leadership",
+      "Elegant evening of fellowship and celebration at Grand Astoria Hotel",
+      "Networking opportunities with Rotaract community members",
+      "RSVP required by July 18, 2025 - don't miss the deadline!"
+    ],
+    agenda: [
+      "4:00 PM - Registration and Welcome Reception",
+      "4:30 PM - Opening Ceremony and National Anthem",
+      "4:45 PM - Welcome Remarks and Introductions",
+      "5:00 PM - Recognition of Outgoing Officers",
+      "5:30 PM - Keynote Address",
+      "6:00 PM - Joint Induction and Turn-Over Ceremonies",
+      "7:00 PM - Oath Taking and Installation",
+      "7:30 PM - Fellowship Dinner and Networking",
+      "8:30 PM - Photo Opportunities and Celebration",
+      "9:00 PM - Closing Remarks"
+    ],
+    requirements: [
+      "RSVP required by July 18, 2025 only!",
+      "Theme: Men in Black - formal black attire required",
+      "Rotaract members, alumni, and guests welcome",
+      "Bring valid ID for registration",
+      "Register through the provided Google Form link"
+    ],
+    gallery: [
+      {
+        id: 1,
+        url: "/events/16th-induction-and-turnover/dress-code-male.png",
+        caption: "Dress Code - Male",
+        category: "Ceremony"
+      },
+      {
+        id: 2,
+        url: "/events/16th-induction-and-turnover/dress-code-female.png",
+        caption: "Dress Code - Female",
+        category: "Ceremony"
+      }
+    ]
   }
 ]; 

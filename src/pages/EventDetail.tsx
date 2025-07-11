@@ -496,8 +496,8 @@ const EventDetail = () => {
                   </Card>
                 )}
 
-                {/* Event Gallery (for past events) */}
-                {event.status === 'past' && event.gallery && event.gallery.length > 0 && (
+                {/* Event Gallery */}
+                {event.gallery && event.gallery.length > 0 && (
                   <Card>
                     <CardHeader>
                       <CardTitle>Event Gallery</CardTitle>

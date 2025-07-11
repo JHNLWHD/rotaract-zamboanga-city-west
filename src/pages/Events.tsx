@@ -192,9 +192,11 @@ const Events = () => {
               </div>
 
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8" role="list" aria-label="List of club events">
-                {events.map((event) => (
+                {events
+                  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+                  .map((event) => (
                   <Card key={event.id} className="overflow-hidden hover:shadow-lg transition-shadow duration-300 flex flex-col h-full" role="listitem">
-                    <div className="aspect-auto bg-gradient-to-br from-cranberry-100 to-cranberry-200 flex items-center justify-center overflow-hidden" aria-hidden="true">
+                    <div className="aspect-square bg-gradient-to-br from-cranberry-100 to-cranberry-200 flex items-center justify-center overflow-hidden" aria-hidden="true">
                       <img 
                         src={event.invitationImage} 
                         alt={`${event.title} invitation`}
