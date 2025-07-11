@@ -1,20 +1,20 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
+import ModalImage from 'react-modal-image';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import ShareModal from '../components/ShareModal';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Calendar, MapPin, Clock, ExternalLink, Share2, ArrowLeft, Download, X, ChevronLeft, ChevronRight, Image as ImageIcon } from 'lucide-react';
+import { Calendar, MapPin, Clock, ExternalLink, Share2, ArrowLeft, Download, Image as ImageIcon } from 'lucide-react';
 import { toast } from 'sonner';
 import { events, Event } from '../data/events';
 
 const EventDetail = () => {
   const { date, slug } = useParams();
   const navigate = useNavigate();
-  const [selectedGalleryImage, setSelectedGalleryImage] = useState<number | null>(null);
   const [showShareModal, setShowShareModal] = useState(false);
 
   // Find the event based on date and slug
@@ -60,24 +60,6 @@ const EventDetail = () => {
       link.click();
       document.body.removeChild(link);
       toast.success('Invitation downloaded!');
-    }
-  };
-
-  const openGalleryModal = (index: number) => {
-    setSelectedGalleryImage(index);
-  };
-
-  const closeGalleryModal = () => {
-    setSelectedGalleryImage(null);
-  };
-
-  const navigateGallery = (direction: 'prev' | 'next') => {
-    if (selectedGalleryImage === null || !event.gallery) return;
-    
-    if (direction === 'prev') {
-      setSelectedGalleryImage(selectedGalleryImage > 0 ? selectedGalleryImage - 1 : event.gallery.length - 1);
-    } else {
-      setSelectedGalleryImage(selectedGalleryImage < event.gallery.length - 1 ? selectedGalleryImage + 1 : 0);
     }
   };
 
@@ -502,7 +484,7 @@ const EventDetail = () => {
                     <CardHeader>
                       <CardTitle>Event Gallery</CardTitle>
                       <p className="text-sm text-gray-600">
-                        Relive the memories from this amazing event
+                        View dress code requirements and event details
                       </p>
                     </CardHeader>
                     <CardContent>
@@ -510,21 +492,23 @@ const EventDetail = () => {
                         {event.gallery.map((photo, index) => (
                           <div 
                             key={photo.id}
-                            className="aspect-square bg-gray-100 rounded-lg overflow-hidden cursor-pointer hover:opacity-90 transition-opacity"
-                            onClick={() => openGalleryModal(index)}
+                            className="bg-gray-100 rounded-lg overflow-hidden"
                           >
-                            <img 
-                              src={photo.url} 
-                              alt={photo.caption}
-                              className="w-full h-full object-cover"
-                              onError={(e) => {
-                                const target = e.target as HTMLImageElement;
-                                target.style.display = 'none';
-                                target.nextElementSibling?.classList.remove('hidden');
-                              }}
-                            />
-                            <div className="hidden w-full h-full flex items-center justify-center bg-gray-200">
-                              <ImageIcon className="w-8 h-8 text-gray-400" />
+                            <div className="aspect-square overflow-hidden">
+                              <ModalImage 
+                                small={photo.url}
+                                large={photo.url}
+                                alt={photo.caption}
+                                hideDownload={false}
+                                hideZoom={true}
+                                showRotate={false}
+                                showFullscreen={true}
+                                className="w-full h-full object-cover cursor-pointer hover:opacity-90 transition-opacity"
+                              />
+                            </div>
+                            <div className="p-3">
+                              <p className="text-sm font-medium text-gray-900">{photo.caption}</p>
+                              <p className="text-xs text-gray-500 mt-1">{photo.category}</p>
                             </div>
                           </div>
                         ))}
@@ -574,63 +558,6 @@ const EventDetail = () => {
           event={event}
         />
       </div>
-
-      {/* Gallery Modal */}
-      {selectedGalleryImage !== null && event.gallery && (
-        <div 
-          className="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4"
-          onClick={closeGalleryModal}
-        >
-          <div className="relative max-w-4xl max-h-full" onClick={(e) => e.stopPropagation()}>
-            {/* Close Button */}
-            <Button
-              variant="ghost"
-              size="sm"
-              className="absolute top-4 right-4 z-10 text-white hover:bg-white/20"
-              onClick={closeGalleryModal}
-            >
-              <X className="w-6 h-6" />
-            </Button>
-
-            {/* Navigation Buttons */}
-            {event.gallery.length > 1 && (
-              <>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="absolute left-4 top-1/2 -translate-y-1/2 z-10 text-white hover:bg-white/20"
-                  onClick={() => navigateGallery('prev')}
-                >
-                  <ChevronLeft className="w-8 h-8" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="absolute right-4 top-1/2 -translate-y-1/2 z-10 text-white hover:bg-white/20"
-                  onClick={() => navigateGallery('next')}
-                >
-                  <ChevronRight className="w-8 h-8" />
-                </Button>
-              </>
-            )}
-
-            {/* Image */}
-            <img 
-              src={event.gallery[selectedGalleryImage].url}
-              alt={event.gallery[selectedGalleryImage].caption}
-              className="max-w-full max-h-full object-contain"
-            />
-
-            {/* Caption */}
-            <div className="absolute bottom-4 left-4 right-4 bg-black bg-opacity-70 text-white p-4 rounded-lg">
-              <p className="text-sm">{event.gallery[selectedGalleryImage].caption}</p>
-              <p className="text-xs text-gray-300 mt-1">
-                {selectedGalleryImage + 1} of {event.gallery.length} • {event.gallery[selectedGalleryImage].category}
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 };
