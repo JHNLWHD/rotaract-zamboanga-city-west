@@ -223,8 +223,8 @@ const ProjectDetail = () => {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
                   </div>
                   <CardContent className="p-8">
-                    <div className="flex items-start justify-between mb-6">
-                      <div>
+                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">
+                      <div className="flex-1">
                         <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
                           {project.title}
                         </h1>
@@ -232,7 +232,7 @@ const ProjectDetail = () => {
                           {project.category}
                         </Badge>
                       </div>
-                      <div className="flex space-x-2">
+                      <div className="flex flex-col sm:flex-row gap-2 sm:space-x-2">
                         <Button
                           variant="outline"
                           size="sm"
