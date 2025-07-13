@@ -6,78 +6,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Calendar, MapPin, Users } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { projects } from '../data/projects';
+import { Button } from '../components/ui/button';
 
 const Projects = () => {
   const navigate = useNavigate();
-
-  const projects = [
-    {
-      title: "Bida el Comunidad",
-      description: "A 2-in-1 partnership project with RAC Makati featuring Project BTS (Beware the Snake) educational sessions for children about personal safety and the Gardenator workshop teaching sustainable urban farming to vulnerable families.",
-      date: "November 25, 2023",
-      location: "Barangay Tulungatung, Zamboanga City",
-      beneficiaries: 120,
-      status: "Completed",
-      image: "https://images.unsplash.com/photo-1497486751825-1233686d5d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      partners: ["RAC Makati", "Kids Who Farm", "Kids Can Compost", "Philippine Air Force 6th Air Reserve Center"],
-      impact: "100 children learned safety awareness through interactive reading sessions, 20 mothers received gardenator systems for sustainable food production"
-    },
-    {
-      title: "Cultivar en la Agua: Hydroponics Gardening",
-      description: "Asia Pacific Regional Awardee 2021 - Introduced hydroponics farming to women affected by the 2013 Zamboanga Siege, developing a 2,000 square meter vegetable farm for food security and income generation.",
-      date: "2020-2021",
-      location: "Zamboanga City",
-      beneficiaries: 50,
-      status: "Completed",
-      image: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      partners: ["Local Farmers", "Agricultural Experts"],
-      impact: "Established sustainable farming system, improved food security, created income source for affected families"
-    },
-    {
-      title: "Mangrove Conservation Initiative",
-      description: "Environmental protection project focusing on mangrove planting and coastal rehabilitation to combat climate change and protect marine ecosystems.",
-      date: "2022-2024",
-      location: "Barangay Talon-Talon, Zamboanga City",
-      beneficiaries: 1000,
-      status: "Ongoing",
-      image: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      partners: ["City Environment and Natural Resources Office", "Local Government Unit"],
-      impact: "Over 8,520 mangrove propagules planted covering 3.4 hectares, coastal protection enhanced"
-    },
-    {
-      title: "Great West Education Support Program",
-      description: "Comprehensive educational assistance providing scholarships, school supplies, and learning materials to underprivileged students to promote literacy and academic excellence.",
-      date: "2023-2024",
-      location: "Various Schools in Zamboanga City West",
-      beneficiaries: 150,
-      status: "Ongoing",
-      image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      partners: ["Local Schools", "Parent-Teacher Associations"],
-      impact: "Improved school attendance, reduced dropout rates, enhanced learning outcomes"
-    },
-    {
-      title: "Community Health and Wellness Drive",
-      description: "Health awareness campaigns, medical missions, and hygiene kit distributions addressing public health needs in underserved communities.",
-      date: "2023-2024",
-      location: "Remote Barangays, Zamboanga City",
-      beneficiaries: 300,
-      status: "Ongoing",
-      image: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      partners: ["Local Health Centers", "Medical Professionals", "Department of Health"],
-      impact: "Increased health awareness, early disease detection, improved community hygiene practices"
-    },
-    {
-      title: "Youth Leadership Development Program",
-      description: "Empowering young leaders through skills training, leadership workshops, and mentorship programs to develop the next generation of community advocates.",
-      date: "2024",
-      location: "Community Centers, Zamboanga City West",
-      beneficiaries: 200,
-      status: "Planning",
-      image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      partners: ["Youth Organizations", "Professional Mentors", "Local Universities"],
-      impact: "Enhanced leadership skills, increased civic engagement, stronger youth network"
-    }
-  ];
 
   return (
     <>
@@ -130,9 +63,9 @@ const Projects = () => {
                 "description": project.description,
                 "location": {
                   "@type": "Place",
-                  "name": project.location
+                  "name": project.venue
                 },
-                "startDate": project.date.includes("-") ? project.date.split("-")[0] : project.date,
+                "startDate": project.date,
                 "organizer": {
                   "@type": "Organization",
                   "name": "Rotaract Club of Zamboanga City West"
@@ -170,48 +103,51 @@ const Projects = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {projects.map((project, index) => (
-                <article key={index} className="group bg-white/80 backdrop-blur-sm border-0 shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden flex flex-col h-full">
+              {projects
+                .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+                .map((project, index) => (
+                <article key={project.id} className="group bg-white/80 backdrop-blur-sm border-0 shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden flex flex-col h-full">
                   <div className="aspect-video overflow-hidden relative">
                     <img 
                       src={project.image} 
-                      alt={`${project.title} - Community service project in ${project.location} benefiting ${project.beneficiaries} people`}
+                      alt={`${project.title} - Community service project in ${project.venue} benefiting ${project.beneficiaries || 'multiple'} people`}
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-                    <div className="absolute top-4 right-4">
-                      <span className={`inline-block px-3 py-1 text-xs rounded-full font-medium backdrop-blur-sm ${
-                        project.status === 'Completed' ? 'bg-green-500/80 text-white' :
-                        project.status === 'Ongoing' ? 'bg-cranberry-500/80 text-white' :
-                        'bg-blue-500/80 text-white'
-                      }`}>
-                        {project.status}
-                      </span>
-                    </div>
                   </div>
                   <CardContent className="p-6 flex flex-col flex-1">
                     <header>
-                      <CardTitle className="text-xl text-slate-900 mb-3 group-hover:text-cranberry-700 transition-colors" itemProp="name">
+                      <CardTitle 
+                        className="text-xl text-slate-900 mb-3 group-hover:text-cranberry-700 transition-colors cursor-pointer" 
+                        itemProp="name"
+                        onClick={() => navigate(`/projects/${project.slug}`)}
+                      >
                         {project.title}
                       </CardTitle>
                     </header>
                     <p className="text-slate-600 mb-4 text-sm leading-relaxed" itemProp="description">
-                      {project.description}
+                      {project.shortDescription}
                     </p>
                     
                     <div className="space-y-2 text-sm mb-4">
                       <div className="flex items-center text-slate-700">
                         <Calendar className="w-4 h-4 mr-2 text-cranberry-500 flex-shrink-0" />
-                        <span>{project.date}</span>
+                        <span>{new Date(project.date).toLocaleDateString('en-US', { 
+                          year: 'numeric', 
+                          month: 'long', 
+                          day: 'numeric' 
+                        })}</span>
                       </div>
                       <div className="flex items-center text-slate-700">
                         <MapPin className="w-4 h-4 mr-2 text-cranberry-500 flex-shrink-0" />
-                        <span className="line-clamp-1">{project.location}</span>
+                        <span className="line-clamp-1">{project.venue}</span>
                       </div>
-                      <div className="flex items-center text-slate-700">
-                        <Users className="w-4 h-4 mr-2 text-cranberry-500 flex-shrink-0" />
-                        <span>{project.beneficiaries} beneficiaries</span>
-                      </div>
+                      {project.beneficiaries && (
+                        <div className="flex items-center text-slate-700">
+                          <Users className="w-4 h-4 mr-2 text-cranberry-500 flex-shrink-0" />
+                          <span>{project.beneficiaries} beneficiaries</span>
+                        </div>
+                      )}
                     </div>
 
                     {project.impact && (
@@ -238,16 +174,26 @@ const Projects = () => {
                         </div>
                       </div>
                     )}
+
+                    {project.hashtags && project.hashtags.length > 0 && (
+                      <div className="mb-4">
+                        <div className="flex flex-wrap gap-1">
+                          {project.hashtags.map((hashtag, idx) => (
+                            <Badge key={idx} variant="outline" className="text-xs px-2 py-1 border-blue-200 text-blue-600">
+                              {hashtag}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                     
                     <div className="pt-4 border-t border-gray-200 mt-auto">
-                      <a 
-                        href="https://www.facebook.com/RotaractClubZamboWest" 
-                        target="_blank" 
-                        rel="noopener noreferrer"
+                      <Button 
+                        onClick={() => navigate(`/projects/${project.slug}`)}
                         className="block w-full bg-gradient-to-r from-cranberry-600 to-cranberry-700 text-white px-4 py-2 rounded-lg text-sm font-medium hover:from-cranberry-700 hover:to-cranberry-800 transition-all duration-300 group-hover:shadow-lg text-center"
                       >
                         Learn More
-                      </a>
+                      </Button>
                     </div>
                   </CardContent>
                 </article>

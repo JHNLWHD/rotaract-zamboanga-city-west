@@ -14,29 +14,58 @@ import {
   TelegramIcon,
   EmailIcon
 } from 'react-share';
-import { Event } from '../data/events';
+
+interface ShareableContent {
+  title: string;
+  description: string;
+  date: string;
+  venue: string;
+  shareableLink: string;
+  time?: string; // Optional for projects
+  category?: string; // Optional for projects
+}
 
 interface ShareModalProps {
   isOpen: boolean;
   onClose: () => void;
-  event: Event | null;
+  content: ShareableContent | null;
+  contentType: 'event' | 'project';
 }
 
-const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, event }) => {
-  if (!isOpen || !event) return null;
+const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, content, contentType }) => {
+  if (!isOpen || !content) return null;
 
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(event.shareableLink);
-    toast.success('Event link copied to clipboard!');
+    navigator.clipboard.writeText(content.shareableLink);
+    toast.success(`${contentType === 'event' ? 'Event' : 'Project'} link copied to clipboard!`);
     onClose();
   };
 
-  const formatEventDate = (date: string) => {
+  const formatDate = (date: string) => {
     return new Date(date).toLocaleDateString('en-US', { 
       year: 'numeric', 
       month: 'long', 
       day: 'numeric' 
     });
+  };
+
+  const getShareTitle = () => {
+    return contentType === 'event' ? 'Share Event' : 'Share Project';
+  };
+
+  const getWhatsappMessage = () => {
+    const baseMessage = `${content.title} - ${content.description}`;
+    const details = `\n\n📅 ${formatDate(content.date)}${content.time ? `\n⏰ ${content.time}` : ''}\n📍 ${content.venue}`;
+    return baseMessage + details;
+  };
+
+  const getEmailBody = () => {
+    const baseBody = `Hi there!\n\nI'd like to share with you ${contentType === 'event' ? 'this event' : 'this project'}: ${content.title}.\n\n${content.description}\n\nDetails:\n📅 Date: ${formatDate(content.date)}${content.time ? `\n⏰ Time: ${content.time}` : ''}\n📍 Venue: ${content.venue}\n\nFor more information, please visit:`;
+    return baseBody;
+  };
+
+  const getEmailSubject = () => {
+    return `${content.title} - Rotaract Club of Zamboanga City West`;
   };
 
   return (
@@ -46,7 +75,7 @@ const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, event }) => {
     >
       <div className="bg-white rounded-lg p-6 max-w-md w-full" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold">Share Event</h3>
+          <h3 className="text-lg font-semibold">{getShareTitle()}</h3>
           <Button
             variant="ghost"
             size="sm"
@@ -62,38 +91,38 @@ const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, event }) => {
             <p className="text-sm text-gray-600 mb-3">Share on social media:</p>
             <div className="grid grid-cols-5 gap-3">
               <FacebookShareButton
-                url={event.shareableLink}
+                url={content.shareableLink}
                 hashtag="#RotaractZamboangaCityWest"
               >
                 <FacebookIcon size={40} round />
               </FacebookShareButton>
               
               <TwitterShareButton
-                url={event.shareableLink}
-                title={`${event.title} - ${event.description}`}
-                hashtags={['RotaractZamboangaCityWest', 'RotaractEvent', 'ServiceAboveSelf']}
+                url={content.shareableLink}
+                title={`${content.title} - ${content.description}`}
+                hashtags={['RotaractZamboangaCityWest', contentType === 'event' ? 'RotaractEvent' : 'RotaractProject', 'ServiceAboveSelf']}
               >
                 <TwitterIcon size={40} round />
               </TwitterShareButton>
               
               <WhatsappShareButton
-                url={event.shareableLink}
-                title={`${event.title} - ${event.description}\n\n📅 ${formatEventDate(event.date)}\n⏰ ${event.time}\n📍 ${event.venue}`}
+                url={content.shareableLink}
+                title={getWhatsappMessage()}
               >
                 <WhatsappIcon size={40} round />
               </WhatsappShareButton>
               
               <TelegramShareButton
-                url={event.shareableLink}
-                title={`${event.title} - ${event.description}`}
+                url={content.shareableLink}
+                title={`${content.title} - ${content.description}`}
               >
                 <TelegramIcon size={40} round />
               </TelegramShareButton>
               
               <EmailShareButton
-                url={event.shareableLink}
-                subject={`${event.title} - Rotaract Club of Zamboanga City West`}
-                body={`Hi there!\n\nI'd like to invite you to join us for ${event.title}.\n\n${event.description}\n\nEvent Details:\n📅 Date: ${formatEventDate(event.date)}\n⏰ Time: ${event.time}\n📍 Venue: ${event.venue}\n\nFor more information and registration, please visit:`}
+                url={content.shareableLink}
+                subject={getEmailSubject()}
+                body={getEmailBody()}
               >
                 <EmailIcon size={40} round />
               </EmailShareButton>
@@ -105,7 +134,7 @@ const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, event }) => {
             <div className="flex items-center gap-2">
               <input
                 type="text"
-                value={event.shareableLink}
+                value={content.shareableLink}
                 readOnly
                 className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm bg-gray-50"
               />

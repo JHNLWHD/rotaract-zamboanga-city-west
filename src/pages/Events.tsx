@@ -286,7 +286,16 @@ const Events = () => {
         <ShareModal 
           isOpen={showShareModal}
           onClose={closeShareModal}
-          event={currentShareEvent}
+          content={currentShareEvent ? {
+            title: currentShareEvent.title,
+            description: currentShareEvent.description,
+            date: currentShareEvent.date,
+            venue: currentShareEvent.venue,
+            shareableLink: currentShareEvent.shareableLink,
+            time: currentShareEvent.time,
+            category: currentShareEvent.category
+          } : null}
+          contentType="event"
         />
       </div>
     </>
