@@ -1,21 +1,29 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-import ModalImage from 'react-modal-image';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import ShareModal from '../components/ShareModal';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Calendar, MapPin, Clock, ExternalLink, Share2, ArrowLeft, Download, Image as ImageIcon } from 'lucide-react';
+import { Calendar, MapPin, Clock, ExternalLink, Share2, ArrowLeft, Download, Image as ImageIcon, X } from 'lucide-react';
 import { toast } from 'sonner';
 import { events, Event } from '../data/events';
+import Lightbox from 'yet-another-react-lightbox';
+import 'yet-another-react-lightbox/styles.css';
+import "yet-another-react-lightbox/plugins/captions.css";
+import "yet-another-react-lightbox/plugins/thumbnails.css";
+import Captions from 'yet-another-react-lightbox/plugins/captions';
+import DownloadPlugin from 'yet-another-react-lightbox/plugins/download';
+import Thumbnails from 'yet-another-react-lightbox/plugins/thumbnails';
 
 const EventDetail = () => {
   const { date, slug } = useParams();
   const navigate = useNavigate();
   const [showShareModal, setShowShareModal] = useState(false);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
 
   // Find the event based on date and slug
   const event = events.find(e => {
@@ -515,16 +523,19 @@ const EventDetail = () => {
                             key={photo.id}
                             className="bg-gray-100 rounded-lg overflow-hidden"
                           >
-                            <div className="aspect-square overflow-hidden">
-                              <ModalImage 
-                                small={photo.url}
-                                large={photo.url}
+                            <div className="aspect-square relative flex items-center justify-center">
+                              <img 
+                                src={photo.url}
                                 alt={photo.caption}
-                                hideDownload={false}
-                                hideZoom={true}
-                                showRotate={false}
-                                showFullscreen={true}
                                 className="w-full h-full object-cover cursor-pointer hover:opacity-90 transition-opacity"
+                                onClick={() => {
+                                  setLightboxIndex(index);
+                                  setLightboxOpen(true);
+                                }}
+                                onError={(e) => {
+                                  const target = e.target as HTMLImageElement;
+                                  target.style.display = 'none';
+                                }}
                               />
                             </div>
                             <div className="p-3">
@@ -576,7 +587,32 @@ const EventDetail = () => {
         <ShareModal 
           isOpen={showShareModal}
           onClose={closeShareModal}
-          event={event}
+          content={event ? {
+            title: event.title,
+            description: event.description,
+            date: event.date,
+            venue: event.venue,
+            shareableLink: event.shareableLink,
+            time: event.time,
+            category: event.category
+          } : null}
+          contentType="event"
+        />
+        <Lightbox
+          open={lightboxOpen}
+          index={lightboxIndex}
+          close={() => setLightboxOpen(false)}
+          slides={event.gallery?.map(photo => ({
+            src: photo.url,
+            alt: photo.caption,
+            download: photo.url,
+            description: photo.caption
+          }))}
+          plugins={[Captions, DownloadPlugin, Thumbnails]}
+          captions={{
+            descriptionTextAlign: 'center',
+            descriptionMaxLines: 3,
+          }}
         />
       </div>
     </>
