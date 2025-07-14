@@ -69,21 +69,15 @@ export const projects: Project[] = [
     gallery: [
       {
         id: 1,
-        url: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-        caption: "Medical check-ups for first-time mothers",
+        url: "/projects/regala-esperanza-3-in-1-project/gallery-1.png",
+        caption: "PRIMAGRAVIDA Safe Motherhood initiative - Medical check-ups for first-time mothers",
         category: "Health & Wellness"
       },
       {
         id: 2,
-        url: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-        caption: "MOA signing ceremony with partners",
+        url: "/projects/regala-esperanza-3-in-1-project/gallery-2.png",
+        caption: "MOA signing ceremony with Rotary Club, ZCMC, and Myler Agribusiness",
         category: "Partnership"
-      },
-      {
-        id: 3,
-        url: "https://images.unsplash.com/photo-1582750433449-648ed127bb54?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-        caption: "Informative sessions for safe motherhood",
-        category: "Education"
       }
     ]
   },
@@ -112,6 +106,20 @@ export const projects: Project[] = [
       "BACK TO SCHOOL initiative",
       "Book turnover ceremony",
       "Day Care Center improvement unveiling"
+    ],
+    gallery: [
+      {
+        id: 1,
+        url: "/projects/kids-fun-day/gallery-1.png",
+        caption: "Kids Fun Day activities at Barney Child Development Center",
+        category: "Education & Youth"
+      },
+      {
+        id: 2,
+        url: "/projects/kids-fun-day/gallery-2.png",
+        caption: "Book turnover and Day Care Center improvement unveiling ceremony",
+        category: "Education & Youth"
+      }
     ]
   },
   {
@@ -135,6 +143,26 @@ export const projects: Project[] = [
       "International Coastal Cleanup Day 2024",
       "Presidential Proclamation No. 470 compliance",
       "City-wide coastal clean-up initiative"
+    ],
+    gallery: [
+      {
+        id: 1,
+        url: "/projects/international-coastal-cleanup-2024/gallery-1.png",
+        caption: "International Coastal Cleanup 2024 - Community volunteers at R.T. Lim Boulevard",
+        category: "Environment"
+      },
+      {
+        id: 2,
+        url: "/projects/international-coastal-cleanup-2024/gallery-2.png",
+        caption: "Rotaract Club members participating in coastal cleanup activities",
+        category: "Environment"
+      },
+      {
+        id: 3,
+        url: "/projects/international-coastal-cleanup-2024/gallery-3.png",
+        caption: "Environmental awareness campaign with SK Federation and stakeholders",
+        category: "Environment"
+      }
     ]
   },
   {
@@ -163,6 +191,26 @@ export const projects: Project[] = [
       "END POLIO Motorcade initiative",
       "Polio vaccination awareness campaign",
       "Community health advocacy"
+    ],
+    gallery: [
+      {
+        id: 1,
+        url: "/projects/end-polio-motorcade/gallery-1.png",
+        caption: "END POLIO Motorcade procession starting from Futura Condominium",
+        category: "Health & Wellness"
+      },
+      {
+        id: 2,
+        url: "/projects/end-polio-motorcade/gallery-2.png",
+        caption: "Community leaders and health advocates spreading polio awareness",
+        category: "Health & Wellness"
+      },
+      {
+        id: 3,
+        url: "/projects/end-polio-motorcade/gallery-3.png",
+        caption: "Rotaract Club supporting polio vaccination awareness campaign",
+        category: "Health & Wellness"
+      }
     ]
   },
   {
@@ -197,6 +245,20 @@ export const projects: Project[] = [
       "D' Beat of Nutrition Project",
       "Gardenator vertical farming system",
       "Food security for remote communities"
+    ],
+    gallery: [
+      {
+        id: 1,
+        url: "/projects/foodloop-isla-kah-bilang-project/gallery-1.png",
+        caption: "Gardenator vertical farming system deployment in Sitio Bilang Bilang",
+        category: "Food Security"
+      },
+      {
+        id: 2,
+        url: "/projects/foodloop-isla-kah-bilang-project/gallery-2.png",
+        caption: "D' Beat of Nutrition Project - Community food security initiative",
+        category: "Food Security"
+      }
     ]
   },
   {
@@ -261,6 +323,20 @@ export const projects: Project[] = [
       "Multi-club collaboration",
       "Full-cycle technology transfer",
       "Gardenators deployment"
+    ],
+    gallery: [
+      {
+        id: 1,
+        url: "/projects/bida-el-comunidad-year-2-muntinlupa/gallery-1.png",
+        caption: "Multi-club collaboration - Rotaract Club of Makati and Zamboanga City West",
+        category: "Community Development"
+      },
+      {
+        id: 2,
+        url: "/projects/bida-el-comunidad-year-2-muntinlupa/gallery-2.png",
+        caption: "Full-cycle technology transfer on vegetable production and composting",
+        category: "Community Development"
+      }
     ]
   }
 ];

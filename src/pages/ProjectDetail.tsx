@@ -364,6 +364,27 @@ const ProjectDetail = () => {
                         </CardHeader>
                         <CardContent>
                           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                            {/* Header Image */}
+                            <div className="bg-gray-100 rounded-lg overflow-hidden">
+                              <div className="aspect-square relative flex items-center justify-center">
+                                <img
+                                  src={project.image}
+                                  alt={`${project.title} - Main project image`}
+                                  className="w-full h-full object-cover cursor-pointer hover:opacity-90 transition-opacity"
+                                  onClick={() => { setLightboxIndex(0); setLightboxOpen(true); }}
+                                  onError={(e) => {
+                                    const target = e.target as HTMLImageElement;
+                                    target.style.display = 'none';
+                                  }}
+                                />
+                              </div>
+                              <div className="p-3">
+                                <p className="text-sm font-medium text-gray-900">{project.title}</p>
+                                <p className="text-xs text-gray-500 mt-1">Main Project Image</p>
+                              </div>
+                            </div>
+                            
+                            {/* Gallery Images */}
                             {project.gallery.map((photo, idx) => (
                               <div 
                                 key={photo.id}
@@ -374,7 +395,7 @@ const ProjectDetail = () => {
                                     src={photo.url}
                                     alt={photo.caption}
                                     className="w-full h-full object-cover cursor-pointer hover:opacity-90 transition-opacity"
-                                    onClick={() => { setLightboxIndex(idx); setLightboxOpen(true); }}
+                                    onClick={() => { setLightboxIndex(idx + 1); setLightboxOpen(true); }}
                                     onError={(e) => {
                                       const target = e.target as HTMLImageElement;
                                       target.style.display = 'none';
@@ -388,10 +409,10 @@ const ProjectDetail = () => {
                               </div>
                             ))}
                           </div>
-                          {project.gallery.length > 6 && (
+                          {(project.gallery.length + 1) > 6 && (
                             <div className="mt-4 text-center">
                               <p className="text-sm text-gray-600">
-                                {project.gallery.length} photos total • Click any photo to view full size
+                                {project.gallery.length + 1} photos total • Click any photo to view full size
                               </p>
                             </div>
                           )}
@@ -399,12 +420,20 @@ const ProjectDetail = () => {
                             open={lightboxOpen}
                             close={() => setLightboxOpen(false)}
                             index={lightboxIndex}
-                            slides={project.gallery.map(photo => ({
-                              src: photo.url,
-                              alt: photo.caption,
-                              download: photo.url,
-                              description: photo.caption
-                            }))}
+                            slides={[
+                              {
+                                src: project.image,
+                                alt: `${project.title} - Main project image`,
+                                download: project.image,
+                                description: `${project.title} - Main project image`
+                              },
+                              ...project.gallery.map(photo => ({
+                                src: photo.url,
+                                alt: photo.caption,
+                                download: photo.url,
+                                description: photo.caption
+                              }))
+                            ]}
                             plugins={[Captions, DownloadPlugin, Thumbnails]}
                             captions={{
                               descriptionTextAlign: 'center',
