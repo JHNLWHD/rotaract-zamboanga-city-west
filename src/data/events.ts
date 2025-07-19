@@ -126,7 +126,7 @@ export const events: Event[] = [
       "Recognition and appreciation of outgoing leadership",
       "Elegant evening of fellowship and celebration at Grand Astoria Hotel",
       "Networking opportunities with Rotaract community members",
-      "RSVP required by July 18, 2025 - don't miss the deadline!"
+      "RSVP required by July 23, 2025 - don't miss the deadline!"
     ],
     agenda: [
       "4:00 - 5:00 PM - Registration",
