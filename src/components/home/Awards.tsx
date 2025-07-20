@@ -134,24 +134,6 @@ const Awards = () => {
             </div>
           ))}
         </div>
-
-        {/* Bottom CTA section */}
-        <div className="text-center reveal-on-scroll">
-          <div className="modern-card p-8 bg-gradient-to-r from-cranberry-50 to-cranberry-100/50 border border-cranberry-200/50">
-            <div className="flex justify-center mb-4">
-              <div className="p-3 bg-cranberry-600 rounded-xl">
-                <Trophy className="h-8 w-8 text-white" />
-              </div>
-            </div>
-            <h3 className="text-2xl font-bold text-slate-900 mb-4">
-              Excellence is Our Standard
-            </h3>
-            <p className="text-slate-600 max-w-2xl mx-auto">
-              These awards represent not just our achievements, but our ongoing commitment to excellence, 
-              innovation, and meaningful community impact. Join us in our journey of service and leadership.
-            </p>
-          </div>
-        </div>
       </div>
     </section>
   );

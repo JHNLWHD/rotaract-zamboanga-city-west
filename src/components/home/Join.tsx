@@ -1,10 +1,10 @@
 import React, { useEffect, useRef } from 'react';
-import { 
-  User, 
-  Heart, 
-  Users, 
-  Calendar, 
-  ArrowRight, 
+import {
+  User,
+  Heart,
+  Users,
+  Calendar,
+  ArrowRight,
   Sparkles,
   CheckCircle,
   Star,
@@ -107,9 +107,9 @@ const Join = () => {
   ];
 
   return (
-    <section 
-      id="join" 
-      ref={sectionRef} 
+    <section
+      id="join"
+      ref={sectionRef}
       className="section-container relative overflow-hidden bg-gradient-to-br from-cranberry-50 via-white to-pink-50"
     >
       {/* Modern background elements */}
@@ -127,22 +127,21 @@ const Join = () => {
               Join Our Community
             </span>
           </div>
-          
+
           <h2 className="text-section-title text-slate-900 reveal-on-scroll mb-6">
             Start Your <span className="text-gradient">Leadership</span>
-            <br />Journey Today
+            <br />Journey with the <span className="text-gradient">Great West</span>
           </h2>
-          
+
           <p className="text-xl text-slate-600 max-w-3xl mx-auto reveal-on-scroll leading-relaxed">
-            Become part of a dynamic community of young leaders committed to making a positive 
-            impact in Zamboanga City and beyond.
+            Become part of a dynamic community of young leaders committed to making a positive impact in Zamboanga City and beyo
           </p>
         </div>
 
         {/* Benefits grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
           {benefits.map((benefit, index) => (
-            <div 
+            <div
               key={index}
               className="modern-card p-6 text-center hover-lift reveal-on-scroll group"
               style={{ transitionDelay: `${index * 100}ms` }}
@@ -167,7 +166,7 @@ const Join = () => {
                 </div>
                 <h3 className="text-2xl font-bold text-slate-900">Membership Requirements</h3>
               </div>
-              
+
               <div className="space-y-4">
                 {requirements.map((requirement, index) => (
                   <div key={index} className="flex items-start space-x-3">
@@ -175,22 +174,6 @@ const Join = () => {
                     <span className="text-slate-600">{requirement}</span>
                   </div>
                 ))}
-              </div>
-
-              <div className="mt-8 p-6 bg-cranberry-50 rounded-2xl border border-cranberry-100">
-                <h4 className="font-semibold text-cranberry-800 mb-2">Ready to Apply?</h4>
-                <p className="text-cranberry-700 text-sm mb-4">
-                  Take the first step towards becoming a Rotaractor and making a difference in your community.
-                </p>
-                <a 
-                  href={MEMBERSHIP_APPLICATION_FORM}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="primary-button group w-full inline-flex items-center justify-center"
-                >
-                  <span>Start Application</span>
-                  <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                </a>
               </div>
             </div>
           </div>
@@ -200,7 +183,7 @@ const Join = () => {
             <h3 className="text-2xl font-bold text-slate-900 mb-8">
               Your Journey to <span className="text-cranberry-600">Membership</span>
             </h3>
-            
+
             <div className="space-y-6">
               {membershipLevels.map((level, index) => (
                 <div key={index} className="flex items-start space-x-4">
@@ -232,11 +215,10 @@ const Join = () => {
           <div className="modern-card p-12 bg-gradient-to-r from-cranberry-600 to-cranberry-500 text-white">
             <h3 className="text-3xl font-bold mb-6">Ready to Make an Impact?</h3>
             <p className="text-cranberry-100 text-lg mb-8 max-w-2xl mx-auto">
-              Join fellow young leaders who are passionate about creating positive change 
-              in our community and around the world.
+              Join fellow young leaders of the Great West who are passionate about creating positive change in our community and around the world.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <a 
+              <a
                 href={MEMBERSHIP_APPLICATION_FORM}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -245,9 +227,9 @@ const Join = () => {
                 <span>Apply Now</span>
                 <ArrowRight className="w-4 h-4 ml-2" />
               </a>
-              <a 
-                href="https://www.facebook.com/RotaractClubZamboWest" 
-                target="_blank" 
+              <a
+                href="https://www.facebook.com/RotaractClubZamboWest"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="border-2 border-white text-white px-8 py-4 rounded-full font-semibold hover:bg-white hover:text-cranberry-600 transition-colors"
               >

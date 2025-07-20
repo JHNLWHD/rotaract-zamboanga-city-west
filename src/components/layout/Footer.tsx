@@ -33,7 +33,7 @@ const Footer = () => {
     },
     {
       icon: <Instagram className="h-5 w-5" />,
-      label: "Instagram", 
+      label: "Instagram",
       href: "https://www.instagram.com/rotaractzcwest",
       color: "hover:text-pink-500"
     },
@@ -78,10 +78,10 @@ const Footer = () => {
                   </p>
                 </div>
               </div>
-              
-              <p className="text-gray-300 max-w-md leading-relaxed">
-                Empowering young leaders through fellowship, service, and professional development 
-                while celebrating the vibrant culture of Zamboanga City since 2010.
+
+              <p className="text-gray-300 max-w-md leading-relaxed text-justify">
+                Empowering young leaders through fellowship, service, and professional growth, we proudly advance
+                Rotary's mission of lasting global impact while honouring the rich culture of Zamboanga City since 2010.
               </p>
 
               {/* Social links */}
@@ -106,9 +106,9 @@ const Footer = () => {
               <h4 className="font-semibold text-lg text-white">Quick Links</h4>
               <nav className="grid grid-cols-1 gap-3">
                 {quickLinks.map((link, index) => (
-                  <a 
+                  <a
                     key={index}
-                    href={link.href} 
+                    href={link.href}
                     className="text-gray-300 hover:text-cranberry-300 transition-colors duration-300 text-sm flex items-center group"
                   >
                     <span>{link.label}</span>
