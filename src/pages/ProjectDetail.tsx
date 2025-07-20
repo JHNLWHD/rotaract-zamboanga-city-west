@@ -96,18 +96,16 @@ const ProjectDetail = () => {
   return (
     <>
       <Helmet>
-        <title>{project.title} | Rotaract Club of Zamboanga City West Projects</title>
-        <meta name="title" content={`${project.title} | Rotaract Club of Zamboanga City West Projects`} />
-        <meta name="description" content={`${project.shortDescription} ${project.impact} Join us in making a difference in Zamboanga City.`} />
-        <meta name="keywords" content={`${project.title}, Rotaract ${project.category.toLowerCase()}, ${project.venue}, Zamboanga City West, ${project.date}, ${project.category.toLowerCase()} project Philippines, Rotaract club activities`} />
+        <title>{project.title} | Great West Community Impact - Rotaract Club of Zamboanga City West</title>
+        <meta name="title" content={`${project.title} | Great West Community Impact - Rotaract Club of Zamboanga City West`} />
+        <meta name="description" content={`${project.shortDescription} ${project.impact} See how the Great West is making lasting impact in Zamboanga City through this award-winning community service project.`} />
+        <meta name="keywords" content={`${project.title}, Great West community impact, Rotaract ${project.category.toLowerCase()}, ${project.venue}, Zamboanga City West, ${project.date}, ${project.category.toLowerCase()} project Philippines, award-winning community service, volunteer projects`} />
         <meta name="author" content="Rotaract Club of Zamboanga City West" />
         <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta httpEquiv="Content-Language" content="en" />
-        <meta name="geo.region" content="PH-ZMB" />
+        <meta name="geo.region" content="PH-ZAM" />
         <meta name="geo.placename" content="Zamboanga City" />
-        <meta name="geo.position" content="6.9214;122.0790" />
-        <meta name="ICBM" content="6.9214, 122.0790" />
         
         {/* Project-specific meta tags */}
         <meta name="project:start_date" content={project.date} />
@@ -116,10 +114,10 @@ const ProjectDetail = () => {
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="article" />
         <meta property="og:url" content={`https://rotaract.rotaryzcwest.org/projects/${project.slug}`} />
-        <meta property="og:title" content={`${project.title} | Rotaract Club of Zamboanga City West`} />
-        <meta property="og:description" content={`${project.shortDescription} ${project.impact}`} />
+        <meta property="og:title" content={`${project.title} | Great West Community Impact - Rotaract Club of Zamboanga City West`} />
+        <meta property="og:description" content={`${project.shortDescription} ${project.impact} See how the Great West is making lasting impact in Zamboanga City through this award-winning community service project.`} />
         <meta property="og:image" content={project.image} />
-        <meta property="og:image:alt" content={`${project.title} project`} />
+        <meta property="og:image:alt" content={`${project.title} - Great West community impact project`} />
         <meta property="og:site_name" content="Rotaract Club of Zamboanga City West" />
         <meta property="og:locale" content="en_PH" />
         
@@ -128,10 +126,10 @@ const ProjectDetail = () => {
         <meta name="twitter:site" content="@RotaractZCWest" />
         <meta name="twitter:creator" content="@RotaractZCWest" />
         <meta name="twitter:url" content={`https://rotaract.rotaryzcwest.org/projects/${project.slug}`} />
-        <meta name="twitter:title" content={`${project.title} | Rotaract Club of Zamboanga City West`} />
-        <meta name="twitter:description" content={`${project.shortDescription} ${project.impact}`} />
+        <meta name="twitter:title" content={`${project.title} | Great West Community Impact - Rotaract Club of Zamboanga City West`} />
+        <meta name="twitter:description" content={`${project.shortDescription} ${project.impact} See how the Great West is making lasting impact in Zamboanga City through this award-winning community service project.`} />
         <meta name="twitter:image" content={project.image} />
-        <meta name="twitter:image:alt" content={`${project.title} project`} />
+        <meta name="twitter:image:alt" content={`${project.title} - Great West community impact project`} />
         <meta name="twitter:label1" content="Date" />
         <meta name="twitter:data1" content={formatDate(project.date)} />
         <meta name="twitter:label2" content="Location" />
@@ -178,6 +176,7 @@ const ProjectDetail = () => {
             "organizer": {
               "@type": "Organization",
               "name": "Rotaract Club of Zamboanga City West",
+              "alternateName": "Great West",
               "url": "https://rotaract.rotaryzcwest.org",
               "logo": "https://rotaract.rotaryzcwest.org/images/logo.png",
               "sameAs": [
@@ -185,11 +184,40 @@ const ProjectDetail = () => {
                 "https://www.instagram.com/rotaractzcwest"
               ]
             },
-            "funder": project.partners.map(partner => ({
+            "funder": project.partners ? project.partners.map(partner => ({
               "@type": "Organization",
               "name": partner
-            })),
-            "category": project.category
+            })) : undefined,
+            "category": project.category,
+            "impact": project.impact
+          })}
+        </script>
+        
+        {/* Breadcrumb Structured Data */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "https://rotaract.rotaryzcwest.org"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Community Impact",
+                "item": "https://rotaract.rotaryzcwest.org/projects"
+              },
+              {
+                "@type": "ListItem",
+                "position": 3,
+                "name": project.title,
+                "item": `https://rotaract.rotaryzcwest.org/projects/${project.slug}`
+              }
+            ]
           })}
         </script>
       </Helmet>

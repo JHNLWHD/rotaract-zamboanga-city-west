@@ -106,18 +106,16 @@ const EventDetail = () => {
   return (
     <>
       <Helmet>
-        <title>{event.title} | Rotaract Club of Zamboanga City West Events</title>
-        <meta name="title" content={`${event.title} | Rotaract Club of Zamboanga City West Events`} />
-        <meta name="description" content={`${event.description} Join us on ${new Date(event.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })} at ${event.venue}. ${event.status === 'upcoming' ? 'Register now!' : event.status === 'registration_open' ? 'Registration is open!' : 'See event highlights and photos.'}`} />
-        <meta name="keywords" content={`${event.title}, Rotaract ${event.category.toLowerCase()}, ${event.venue}, Zamboanga City West, ${event.date}, ${event.category.toLowerCase()} event Philippines, Rotaract club activities`} />
+        <title>{event.title} | Great West in Action - Rotaract Club of Zamboanga City West</title>
+        <meta name="title" content={`${event.title} | Great West in Action - Rotaract Club of Zamboanga City West`} />
+        <meta name="description" content={`${event.description} Join the Great West in Action on ${new Date(event.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })} at ${event.venue}. ${event.status === 'upcoming' ? 'Register now and be part of our dynamic community!' : event.status === 'registration_open' ? 'Registration is open - join us!' : 'See event highlights and photos from this memorable Great West gathering.'}`} />
+        <meta name="keywords" content={`${event.title}, Great West in Action, Rotaract ${event.category.toLowerCase()}, ${event.venue}, Zamboanga City West, ${event.date}, ${event.category.toLowerCase()} event Philippines, Rotaract club activities, fellowship events`} />
         <meta name="author" content="Rotaract Club of Zamboanga City West" />
         <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta httpEquiv="Content-Language" content="en" />
-        <meta name="geo.region" content="PH-ZMB" />
+        <meta name="geo.region" content="PH-ZAM" />
         <meta name="geo.placename" content="Zamboanga City" />
-        <meta name="geo.position" content="6.9214;122.0790" />
-        <meta name="ICBM" content="6.9214, 122.0790" />
         
         {/* Event-specific meta tags */}
         <meta name="event:start_date" content={`${event.date}T${event.time.split(' - ')[0].replace(' ', '').toLowerCase()}`} />
@@ -128,12 +126,12 @@ const EventDetail = () => {
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="event" />
         <meta property="og:url" content={event.shareableLink} />
-        <meta property="og:title" content={`${event.title} | Rotaract Club of Zamboanga City West`} />
-        <meta property="og:description" content={`${event.description} Join us on ${new Date(event.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })} at ${event.venue}.`} />
+        <meta property="og:title" content={`${event.title} | Great West in Action - Rotaract Club of Zamboanga City West`} />
+        <meta property="og:description" content={`${event.description} Join the Great West in Action on ${new Date(event.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })} at ${event.venue}.`} />
         <meta property="og:image" content={`https://rotaract.rotaryzcwest.org${event.invitationImage || event.image}`} />
-        <meta property="og:image:alt" content={`${event.title} invitation`} />
+        <meta property="og:image:alt" content={`${event.title} - Great West in Action event`} />
         <meta property="og:site_name" content="Rotaract Club of Zamboanga City West" />
-        <meta property="og:locale" content="en_US" />
+        <meta property="og:locale" content="en_PH" />
         <meta property="event:start_time" content={`${event.date}T${event.time.split(' - ')[0].replace(/[^0-9:]/g, '')}`} />
         <meta property="event:end_time" content={`${event.date}T${event.time.split(' - ')[1]?.replace(/[^0-9:]/g, '') || '23:59'}`} />
         
@@ -142,10 +140,10 @@ const EventDetail = () => {
         <meta name="twitter:site" content="@RotaractZCWest" />
         <meta name="twitter:creator" content="@RotaractZCWest" />
         <meta name="twitter:url" content={event.shareableLink} />
-        <meta name="twitter:title" content={`${event.title} | Rotaract Club of Zamboanga City West`} />
-        <meta name="twitter:description" content={`${event.description} Join us on ${new Date(event.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })} at ${event.venue}.`} />
+        <meta name="twitter:title" content={`${event.title} | Great West in Action - Rotaract Club of Zamboanga City West`} />
+        <meta name="twitter:description" content={`${event.description} Join the Great West in Action on ${new Date(event.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })} at ${event.venue}.`} />
         <meta name="twitter:image" content={`https://rotaract.rotaryzcwest.org${event.invitationImage || event.image}`} />
-        <meta name="twitter:image:alt" content={`${event.title} invitation`} />
+        <meta name="twitter:image:alt" content={`${event.title} - Great West in Action event`} />
         <meta name="twitter:label1" content="Date" />
         <meta name="twitter:data1" content={new Date(event.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })} />
         <meta name="twitter:label2" content="Location" />
@@ -195,6 +193,7 @@ const EventDetail = () => {
             "organizer": {
               "@type": "Organization",
               "name": "Rotaract Club of Zamboanga City West",
+              "alternateName": "Great West",
               "url": "https://rotaract.rotaryzcwest.org",
               "logo": "https://rotaract.rotaryzcwest.org/images/logo.png",
               "sameAs": [
@@ -205,12 +204,14 @@ const EventDetail = () => {
                 "@type": "PostalAddress",
                 "addressLocality": "Zamboanga City",
                 "addressRegion": "Zamboanga Peninsula",
-                "addressCountry": "PH"
+                "addressCountry": "PH",
+                "postalCode": "7000"
               }
             },
             "performer": {
               "@type": "Organization",
-              "name": "Rotaract Club of Zamboanga City West"
+              "name": "Rotaract Club of Zamboanga City West",
+              "alternateName": "Great West"
             },
             "offers": event.registrationUrl ? {
               "@type": "Offer",
@@ -221,7 +222,7 @@ const EventDetail = () => {
               "validFrom": new Date().toISOString()
             } : undefined,
             "category": event.category,
-            "keywords": `${event.category}, Rotaract, Zamboanga City West, community service, leadership, fellowship`,
+            "keywords": `${event.category}, Great West in Action, Rotaract, Zamboanga City West, community service, leadership, fellowship`,
             "url": event.shareableLink,
             "identifier": event.id.toString(),
             "mainEntityOfPage": {
@@ -261,7 +262,7 @@ const EventDetail = () => {
               {
                 "@type": "ListItem",
                 "position": 2,
-                "name": "Events",
+                "name": "Great West in Action",
                 "item": "https://rotaract.rotaryzcwest.org/events"
               },
               {

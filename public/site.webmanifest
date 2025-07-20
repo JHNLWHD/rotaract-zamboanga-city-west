@@ -1,7 +1,7 @@
 {
-  "name": "Rotaract Club of Zamboanga City West",
-  "short_name": "RAC ZC West",
-  "description": "Empowering young leaders through fellowship, community service, and professional development since 2010.",
+  "name": "Rotaract Club of Zamboanga City West - Great West",
+  "short_name": "Great West",
+  "description": "Empowering young Zamboangueño leaders through fellowship, community service, and professional development since 2010. Join the Great West movement!",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
@@ -26,21 +26,25 @@
       "type": "image/png"
     }
   ],
-  "categories": ["community", "nonprofit", "volunteer"],
+  "categories": ["community", "nonprofit", "volunteer", "leadership", "education"],
   "shortcuts": [
     {
-      "name": "Our Projects",
-      "short_name": "Projects",
-      "description": "View our community impact projects",
-      "url": "/projects",
-      "icons": [{ "src": "/favicon-32x32.png", "sizes": "32x32" }]
+      "name": "Great West in Action",
+      "short_name": "Events",
+      "description": "View our club events and activities",
+      "url": "/events"
     },
     {
-      "name": "Leadership Team",
+      "name": "Community Impact",
+      "short_name": "Projects",
+      "description": "View our award-winning community service projects",
+      "url": "/projects"
+    },
+    {
+      "name": "Great West Leadership",
       "short_name": "Officers",
-      "description": "Meet our club officers and leaders",
-      "url": "/officers",
-      "icons": [{ "src": "/favicon-32x32.png", "sizes": "32x32" }]
+      "description": "Meet our leadership team and officers",
+      "url": "/officers"
     }
   ]
 }
