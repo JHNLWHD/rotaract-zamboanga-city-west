@@ -181,7 +181,7 @@ const ProjectDetail = () => {
               "logo": "https://rotaract.rotaryzcwest.org/images/logo.png",
               "sameAs": [
                 "https://www.facebook.com/RotaractClubZamboWest",
-                "https://www.instagram.com/rotaractzcwest"
+                "https://www.instagram.com/raczambowest1"
               ]
             },
             "funder": project.partners ? project.partners.map(partner => ({
