@@ -34,7 +34,7 @@ const Footer = () => {
     {
       icon: <Instagram className="h-5 w-5" />,
       label: "Instagram",
-      href: "https://www.instagram.com/rotaractzcwest",
+      href: "https://www.instagram.com/raczambowest1",
       color: "hover:text-pink-500"
     },
     {

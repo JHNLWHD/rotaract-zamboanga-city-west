@@ -198,7 +198,7 @@ const EventDetail = () => {
               "logo": "https://rotaract.rotaryzcwest.org/images/logo.png",
               "sameAs": [
                 "https://www.facebook.com/RotaractClubZamboWest",
-                "https://www.instagram.com/rotaractzcwest"
+                "https://www.instagram.com/raczambowest1"
               ],
               "address": {
                 "@type": "PostalAddress",

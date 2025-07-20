@@ -119,7 +119,7 @@ const Index = () => {
             },
             "sameAs": [
               "https://www.facebook.com/RotaractClubZamboWest",
-              "https://www.instagram.com/rotaractzcwest"
+              "https://www.instagram.com/raczambowest1"
             ],
             "foundingDate": "2010",
             "description": "Empowering young Zamboangueño leaders through fellowship, community service, and professional development since 2010. Part of the Great West movement creating lasting impact in Zamboanga City.",
