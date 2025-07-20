@@ -202,37 +202,56 @@ const Officers = () => {
     <>
       <Helmet>
         {/* Primary Meta Tags */}
-        <title>Leadership Team & Officers - Rotaract Club of Zamboanga City West</title>
-        <meta name="title" content="Leadership Team & Officers - Rotaract Club of Zamboanga City West" />
-        <meta name="description" content="Meet our dedicated leadership team and officers driving positive change in Zamboanga City. Learn about our Executive Board, Directors, and Advisors for 2025-2026." />
-        <meta name="keywords" content="Rotaract officers, leadership team, Zamboanga City West, president, directors, advisors, club leadership, Rotaract board members" />
+        <title>Great West Leadership Team & Officers - Rotaract Club of Zamboanga City West</title>
+        <meta name="title" content="Great West Leadership Team & Officers - Rotaract Club of Zamboanga City West" />
+        <meta name="description" content="Meet the dedicated Great West leadership team driving positive change in Zamboanga City. Learn about our Executive Board, Directors, and Advisors for 2025-2026 who embody our values of fellowship, service, and leadership." />
+        <meta name="keywords" content="Rotaract officers Zamboanga City West, Great West leadership team, club president, directors, advisors, Rotaract board members, youth leadership Philippines, club officers 2025-2026" />
         <meta name="author" content="Rotaract Club of Zamboanga City West" />
-        <meta name="robots" content="index, follow" />
+        <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta httpEquiv="Content-Language" content="en" />
+        <meta name="geo.region" content="PH-ZAM" />
+        <meta name="geo.placename" content="Zamboanga City" />
         
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://rotaract.rotaryzcwest.org/officers" />
-        <meta property="og:title" content="Leadership Team & Officers - Rotaract Club of Zamboanga City West" />
-        <meta property="og:description" content="Meet our dedicated leadership team and officers driving positive change in Zamboanga City. Learn about our Executive Board, Directors, and Advisors for 2025-2026." />
+        <meta property="og:title" content="Great West Leadership Team & Officers - Rotaract Club of Zamboanga City West" />
+        <meta property="og:description" content="Meet the dedicated Great West leadership team driving positive change in Zamboanga City. Learn about our Executive Board, Directors, and Advisors for 2025-2026 who embody our values of fellowship, service, and leadership." />
         <meta property="og:image" content="https://rotaract.rotaryzcwest.org/og-image.png" />
+        <meta property="og:image:alt" content="Great West Leadership Team - Rotaract Club of Zamboanga City West" />
         <meta property="og:site_name" content="Rotaract Club of Zamboanga City West" />
+        <meta property="og:locale" content="en_PH" />
         
         {/* Twitter */}
         <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:site" content="@RotaractZCWest" />
+        <meta property="twitter:creator" content="@RotaractZCWest" />
         <meta property="twitter:url" content="https://rotaract.rotaryzcwest.org/officers" />
-        <meta property="twitter:title" content="Leadership Team & Officers - Rotaract Club of Zamboanga City West" />
-        <meta property="twitter:description" content="Meet our dedicated leadership team and officers driving positive change in Zamboanga City. Learn about our Executive Board, Directors, and Advisors for 2025-2026." />
+        <meta property="twitter:title" content="Great West Leadership Team & Officers - Rotaract Club of Zamboanga City West" />
+        <meta property="twitter:description" content="Meet the dedicated Great West leadership team driving positive change in Zamboanga City. Learn about our Executive Board, Directors, and Advisors for 2025-2026 who embody our values of fellowship, service, and leadership." />
         <meta property="twitter:image" content="https://rotaract.rotaryzcwest.org/og-image.png" />
+        <meta property="twitter:image:alt" content="Great West Leadership Team - Rotaract Club of Zamboanga City West" />
+        
+        {/* Additional SEO Tags */}
+        <meta name="theme-color" content="#BE185D" />
+        <meta name="msapplication-TileColor" content="#BE185D" />
+        <meta name="application-name" content="Rotaract ZC West" />
         
         {/* Canonical URL */}
         <link rel="canonical" href="https://rotaract.rotaryzcwest.org/officers" />
         
-        {/* Structured Data for Officers */}
+        {/* Preconnect for performance */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        
+        {/* Enhanced Structured Data for Officers */}
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Organization",
             "name": "Rotaract Club of Zamboanga City West",
+            "alternateName": "Great West",
             "url": "https://rotaract.rotaryzcwest.org",
             "employee": allOfficers.map(officer => ({
               "@type": "Person",
@@ -240,9 +259,50 @@ const Officers = () => {
               "jobTitle": officer.position,
               "worksFor": {
                 "@type": "Organization",
-                "name": "Rotaract Club of Zamboanga City West"
+                "name": "Rotaract Club of Zamboanga City West",
+                "alternateName": "Great West"
+              },
+              "description": officer.responsibilities
+            })),
+            "department": [
+              {
+                "@type": "Organization",
+                "name": "Executive Board",
+                "description": "Senior leadership team of the Rotaract Club"
+              },
+              {
+                "@type": "Organization", 
+                "name": "Board of Directors",
+                "description": "Directors responsible for specific areas of focus"
+              },
+              {
+                "@type": "Organization",
+                "name": "Club Advisors",
+                "description": "Experienced advisors providing guidance and support"
               }
-            }))
+            ]
+          })}
+        </script>
+        
+        {/* Breadcrumb Structured Data */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "https://rotaract.rotaryzcwest.org"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Great West Leadership",
+                "item": "https://rotaract.rotaryzcwest.org/officers"
+              }
+            ]
           })}
         </script>
       </Helmet>

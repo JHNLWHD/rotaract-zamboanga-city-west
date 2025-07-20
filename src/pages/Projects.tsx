@@ -16,46 +16,68 @@ const Projects = () => {
     <>
       <Helmet>
         {/* Primary Meta Tags */}
-        <title>Community Projects & Impact - Rotaract Club of Zamboanga City West</title>
-        <meta name="title" content="Community Projects & Impact - Rotaract Club of Zamboanga City West" />
-        <meta name="description" content="Discover our award-winning community service projects including hydroponics farming, mangrove conservation, education support, and health initiatives transforming lives in Zamboanga City." />
-        <meta name="keywords" content="community projects, Zamboanga City, hydroponics farming, mangrove conservation, education support, health initiatives, community service, Rotaract projects, Philippines" />
+        <title>Community Impact & Award-Winning Projects - Rotaract Club of Zamboanga City West</title>
+        <meta name="title" content="Community Impact & Award-Winning Projects - Rotaract Club of Zamboanga City West" />
+        <meta name="description" content="Discover our award-winning community service projects including hydroponics farming, mangrove conservation, education support, and health initiatives. See how the Great West is making lasting impact in Zamboanga City with 1,820+ lives transformed." />
+        <meta name="keywords" content="community projects Zamboanga City, award-winning Rotaract projects, hydroponics farming Philippines, mangrove conservation, education support programs, health initiatives, community service impact, Great West projects, volunteer projects Philippines" />
         <meta name="author" content="Rotaract Club of Zamboanga City West" />
-        <meta name="robots" content="index, follow" />
+        <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta httpEquiv="Content-Language" content="en" />
+        <meta name="geo.region" content="PH-ZAM" />
+        <meta name="geo.placename" content="Zamboanga City" />
 
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://rotaract.rotaryzcwest.org/projects" />
-        <meta property="og:title" content="Community Projects & Impact - Rotaract Club of Zamboanga City West" />
-        <meta property="og:description" content="Discover our award-winning community service projects including hydroponics farming, mangrove conservation, education support, and health initiatives transforming lives in Zamboanga City." />
+        <meta property="og:title" content="Community Impact & Award-Winning Projects - Rotaract Club of Zamboanga City West" />
+        <meta property="og:description" content="Discover our award-winning community service projects including hydroponics farming, mangrove conservation, education support, and health initiatives. See how the Great West is making lasting impact in Zamboanga City with 1,820+ lives transformed." />
         <meta property="og:image" content="https://rotaract.rotaryzcwest.org/og-image.png" />
+        <meta property="og:image:alt" content="Community Impact Projects - Rotaract Club of Zamboanga City West" />
         <meta property="og:site_name" content="Rotaract Club of Zamboanga City West" />
+        <meta property="og:locale" content="en_PH" />
 
         {/* Twitter */}
         <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:site" content="@RotaractZCWest" />
+        <meta property="twitter:creator" content="@RotaractZCWest" />
         <meta property="twitter:url" content="https://rotaract.rotaryzcwest.org/projects" />
-        <meta property="twitter:title" content="Community Projects & Impact - Rotaract Club of Zamboanga City West" />
-        <meta property="twitter:description" content="Discover our award-winning community service projects including hydroponics farming, mangrove conservation, education support, and health initiatives transforming lives in Zamboanga City." />
+        <meta property="twitter:title" content="Community Impact & Award-Winning Projects - Rotaract Club of Zamboanga City West" />
+        <meta property="twitter:description" content="Discover our award-winning community service projects including hydroponics farming, mangrove conservation, education support, and health initiatives. See how the Great West is making lasting impact in Zamboanga City with 1,820+ lives transformed." />
         <meta property="twitter:image" content="https://rotaract.rotaryzcwest.org/og-image.png" />
+        <meta property="twitter:image:alt" content="Community Impact Projects - Rotaract Club of Zamboanga City West" />
+
+        {/* Additional SEO Tags */}
+        <meta name="theme-color" content="#BE185D" />
+        <meta name="msapplication-TileColor" content="#BE185D" />
+        <meta name="application-name" content="Rotaract ZC West" />
 
         {/* Canonical URL */}
         <link rel="canonical" href="https://rotaract.rotaryzcwest.org/projects" />
 
-        {/* Structured Data for Projects */}
+        {/* Preconnect for performance */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+
+        {/* Enhanced Structured Data for Projects */}
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
             "@type": "CollectionPage",
-            "name": "Community Projects",
-            "description": "Award-winning community service projects making positive impact in Zamboanga City",
+            "name": "Community Impact & Award-Winning Projects",
+            "description": "Award-winning community service projects making positive impact in Zamboanga City with 1,820+ lives transformed",
             "url": "https://rotaract.rotaryzcwest.org/projects",
             "publisher": {
               "@type": "Organization",
               "name": "Rotaract Club of Zamboanga City West",
+              "alternateName": "Great West",
               "url": "https://rotaract.rotaryzcwest.org"
             },
             "mainEntity": {
               "@type": "ItemList",
+              "name": "Community Service Projects",
+              "description": "Award-winning projects including hydroponics farming, mangrove conservation, education support, and health initiatives",
+              "numberOfItems": projects.length,
               "itemListElement": projects.map((project, index) => ({
                 "@type": "Project",
                 "position": index + 1,
@@ -63,14 +85,44 @@ const Projects = () => {
                 "description": project.description,
                 "location": {
                   "@type": "Place",
-                  "name": project.venue
+                  "name": project.venue,
+                  "address": {
+                    "@type": "PostalAddress",
+                    "addressLocality": "Zamboanga City",
+                    "addressRegion": "Zamboanga Peninsula",
+                    "addressCountry": "PH"
+                  }
                 },
                 "startDate": project.date,
                 "organizer": {
                   "@type": "Organization",
-                  "name": "Rotaract Club of Zamboanga City West"
-                }
+                  "name": "Rotaract Club of Zamboanga City West",
+                  "alternateName": "Great West"
+                },
+                "funder": project.partners ? project.partners.map(partner => ({
+                  "@type": "Organization",
+                  "name": partner
+                })) : undefined,
+                "category": project.category,
+                "impact": project.impact
               }))
+            },
+            "breadcrumb": {
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Home",
+                  "item": "https://rotaract.rotaryzcwest.org"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "Community Impact",
+                  "item": "https://rotaract.rotaryzcwest.org/projects"
+                }
+              ]
             }
           })}
         </script>

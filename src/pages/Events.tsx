@@ -42,26 +42,24 @@ const Events = () => {
     <>
       <Helmet>
         {/* Primary Meta Tags */}
-        <title>Club Events & Activities | Rotaract Club of Zamboanga City West</title>
-        <meta name="title" content="Club Events & Activities | Rotaract Club of Zamboanga City West" />
-        <meta name="description" content="Discover upcoming Rotaract events in Zamboanga City West including fellowship meetings, leadership training seminars, induction ceremonies, and community service opportunities." />
-        <meta name="keywords" content="Rotaract events Zamboanga, club activities Philippines, leadership training Zamboanga City, fellowship meetings, induction ceremony, community service events, youth organization Philippines" />
+        <title>Great West in Action - Club Events & Activities | Rotaract Club of Zamboanga City West</title>
+        <meta name="title" content="Great West in Action - Club Events & Activities | Rotaract Club of Zamboanga City West" />
+        <meta name="description" content="Join the Great West in Action! Discover purposeful meetings, leadership trainings, social gatherings, and special fellowship ceremonies that strengthen our Rotaract community in Zamboanga City West." />
+        <meta name="keywords" content="Rotaract events Zamboanga City West, Great West in Action, fellowship meetings Philippines, leadership training Zamboanga, club activities, Rotaract community events, youth organization activities, volunteer events Philippines" />
         <meta name="author" content="Rotaract Club of Zamboanga City West" />
         <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta httpEquiv="Content-Language" content="en" />
-        <meta name="geo.region" content="PH-ZMB" />
+        <meta name="geo.region" content="PH-ZAM" />
         <meta name="geo.placename" content="Zamboanga City" />
-        <meta name="geo.position" content="6.9214;122.0790" />
-        <meta name="ICBM" content="6.9214, 122.0790" />
 
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://rotaract.rotaryzcwest.org/events" />
-        <meta property="og:title" content="Club Events & Activities | Rotaract Club of Zamboanga City West" />
-        <meta property="og:description" content="Discover upcoming Rotaract events in Zamboanga City West including fellowship meetings, leadership training seminars, induction ceremonies, and community service opportunities." />
+        <meta property="og:title" content="Great West in Action - Club Events & Activities | Rotaract Club of Zamboanga City West" />
+        <meta property="og:description" content="Join the Great West in Action! Discover purposeful meetings, leadership trainings, social gatherings, and special fellowship ceremonies that strengthen our Rotaract community in Zamboanga City West." />
         <meta property="og:image" content="https://rotaract.rotaryzcwest.org/og-image.png" />
-        <meta property="og:image:alt" content="Rotaract Club of Zamboanga City West Events" />
+        <meta property="og:image:alt" content="Great West in Action - Rotaract Club of Zamboanga City West Events" />
         <meta property="og:site_name" content="Rotaract Club of Zamboanga City West" />
         <meta property="og:locale" content="en_US" />
 
@@ -70,10 +68,10 @@ const Events = () => {
         <meta name="twitter:site" content="@RotaractZCWest" />
         <meta name="twitter:creator" content="@RotaractZCWest" />
         <meta name="twitter:url" content="https://rotaract.rotaryzcwest.org/events" />
-        <meta name="twitter:title" content="Club Events & Activities | Rotaract Club of Zamboanga City West" />
-        <meta name="twitter:description" content="Discover upcoming Rotaract events in Zamboanga City West including fellowship meetings, leadership training seminars, induction ceremonies, and community service opportunities." />
+        <meta name="twitter:title" content="Great West in Action - Club Events & Activities | Rotaract Club of Zamboanga City West" />
+        <meta name="twitter:description" content="Join the Great West in Action! Discover purposeful meetings, leadership trainings, social gatherings, and special fellowship ceremonies that strengthen our Rotaract community in Zamboanga City West." />
         <meta name="twitter:image" content="https://rotaract.rotaryzcwest.org/images/events-og-image.jpg" />
-        <meta name="twitter:image:alt" content="Rotaract Club of Zamboanga City West Events" />
+        <meta name="twitter:image:alt" content="Great West in Action - Rotaract Club of Zamboanga City West Events" />
 
         {/* Additional SEO Tags */}
         <meta name="theme-color" content="#BE185D" />
@@ -92,16 +90,17 @@ const Events = () => {
           {JSON.stringify({
             "@context": "https://schema.org",
             "@type": "CollectionPage",
-            "name": "Club Events & Activities",
-            "description": "Comprehensive list of Rotaract Club of Zamboanga City West events including fellowship meetings, leadership training, and community service activities",
+            "name": "Great West in Action - Club Events & Activities",
+            "description": "Comprehensive list of Rotaract Club of Zamboanga City West events including purposeful meetings, leadership training, and fellowship activities that strengthen our community",
             "url": "https://rotaract.rotaryzcwest.org/events",
             "mainEntity": {
               "@type": "EventSeries",
-              "name": "Rotaract Club of Zamboanga City West Events",
-              "description": "Regular club meetings, fellowship activities, leadership training, and social events for Rotaract members and community",
+              "name": "Great West in Action - Rotaract Club of Zamboanga City West Events",
+              "description": "Purposeful meetings, leadership trainings, social gatherings, and special fellowship ceremonies that strengthen our Rotaract community",
               "organizer": {
                 "@type": "Organization",
                 "name": "Rotaract Club of Zamboanga City West",
+                "alternateName": "Great West",
                 "url": "https://rotaract.rotaryzcwest.org",
                 "logo": "https://rotaract.rotaryzcwest.org/images/logo.png",
                 "sameAs": [
@@ -112,7 +111,8 @@ const Events = () => {
                   "@type": "PostalAddress",
                   "addressLocality": "Zamboanga City",
                   "addressRegion": "Zamboanga Peninsula",
-                  "addressCountry": "PH"
+                  "addressCountry": "PH",
+                  "postalCode": "7000"
                 }
               },
               "location": {
@@ -130,6 +130,10 @@ const Events = () => {
                   "latitude": "6.9214",
                   "longitude": "122.0790"
                 }
+              },
+              "eventSchedule": {
+                "@type": "Schedule",
+                "description": "Regular club meetings and special events throughout the year"
               }
             },
             "breadcrumb": {
@@ -144,7 +148,7 @@ const Events = () => {
                 {
                   "@type": "ListItem",
                   "position": 2,
-                  "name": "Events",
+                  "name": "Great West in Action",
                   "item": "https://rotaract.rotaryzcwest.org/events"
                 }
               ]
