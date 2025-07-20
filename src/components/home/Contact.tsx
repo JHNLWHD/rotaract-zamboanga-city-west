@@ -69,11 +69,11 @@ const Contact = () => {
     try {
       // Check if we're in production (deployed to Netlify)
       const isProduction = window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1';
-      
+
       if (isProduction) {
         // Production: Submit to Netlify
         const formData = new FormData(e.target as HTMLFormElement);
-        
+
         const response = await fetch('/', {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -94,10 +94,10 @@ const Contact = () => {
           subject: formData.subject,
           message: formData.message
         });
-        
+
         // Simulate network delay
         await new Promise(resolve => setTimeout(resolve, 1000));
-        
+
         setSubmitStatus('success');
         setFormData({ name: '', email: '', subject: '', message: '' });
       }
@@ -125,9 +125,9 @@ const Contact = () => {
   ];
 
   return (
-    <section 
-      id="contact" 
-      ref={sectionRef} 
+    <section
+      id="contact"
+      ref={sectionRef}
       className="section-container relative overflow-hidden bg-gradient-to-br from-slate-50 via-white to-cranberry-50/30"
     >
       {/* Modern background elements */}
@@ -145,15 +145,14 @@ const Contact = () => {
               Get in Touch
             </span>
           </div>
-          
+
           <h2 className="text-section-title text-slate-900 reveal-on-scroll mb-6">
-            Ready to <span className="text-gradient">Connect</span>?
+            <span className="text-gradient">Connect with Us!</span>
             <br />Let's Start the Conversation
           </h2>
-          
+
           <p className="text-xl text-slate-600 max-w-3xl mx-auto reveal-on-scroll leading-relaxed">
-            Have questions about joining Rotaract? Want to partner with us on a project? 
-            We'd love to hear from you and explore how we can work together.
+            Have questions about joining Rotaract? Want to partner with us on a project? We'd love to hear from you and explore how we can work together.
           </p>
         </div>
 
@@ -163,7 +162,7 @@ const Contact = () => {
           <div className="reveal-on-scroll">
             <div className="modern-card p-8">
               <h3 className="text-2xl font-bold text-slate-900 mb-6">Send us a Message</h3>
-              
+
               <form onSubmit={handleSubmit} className="space-y-6" name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field">
                 <input type="hidden" name="form-name" value="contact" />
                 <div style={{ display: 'none' }}>
@@ -187,7 +186,7 @@ const Contact = () => {
                       placeholder="Your full name"
                     />
                   </div>
-                  
+
                   <div>
                     <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-2">
                       Email Address *
@@ -267,7 +266,7 @@ const Contact = () => {
               <h3 className="text-2xl font-bold text-slate-900 mb-6">
                 Other Ways to <span className="text-cranberry-600">Reach Us</span>
               </h3>
-              
+
               <div className="space-y-6">
                 {contactInfo.map((info, index) => (
                   <a
@@ -292,12 +291,12 @@ const Contact = () => {
               <div className="modern-card p-8 bg-gradient-to-br from-cranberry-50 to-cranberry-100/50 border border-cranberry-200/50">
                 <h4 className="font-semibold text-cranberry-800 mb-4">Quick Response</h4>
                 <p className="text-cranberry-700 text-sm mb-4">
-                  We typically respond to inquiries within 24-48 hours. For urgent matters, 
+                  We typically respond to inquiries within 24-48 hours. For urgent matters,
                   feel free to reach out to us directly on Facebook.
                 </p>
-                <a 
-                  href="https://www.facebook.com/RotaractClubZamboWest" 
-                  target="_blank" 
+                <a
+                  href="https://www.facebook.com/RotaractClubZamboWest"
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center text-cranberry-600 hover:text-cranberry-700 font-medium text-sm"
                 >
@@ -315,23 +314,22 @@ const Contact = () => {
       {/* Toast Notification */}
       {showToast && (
         <div className="fixed bottom-4 right-4 z-50 animate-in slide-in-from-bottom-2 duration-300">
-          <div className={`flex items-center space-x-3 px-6 py-4 rounded-xl shadow-lg transition-all duration-200 hover:shadow-xl hover:-translate-y-1 ${
-            submitStatus === 'success' 
-              ? 'bg-green-500 text-white' 
+          <div className={`flex items-center space-x-3 px-6 py-4 rounded-xl shadow-lg transition-all duration-200 hover:shadow-xl hover:-translate-y-1 ${submitStatus === 'success'
+              ? 'bg-green-500 text-white'
               : 'bg-red-500 text-white'
-          }`}>
+            }`}>
             {submitStatus === 'success' ? (
               <CheckCircle className="h-5 w-5 flex-shrink-0" />
             ) : (
               <AlertCircle className="h-5 w-5 flex-shrink-0" />
             )}
             <span className="font-medium">
-              {submitStatus === 'success' 
-                ? 'Message sent successfully! We\'ll get back to you soon.' 
+              {submitStatus === 'success'
+                ? 'Message sent successfully! We\'ll get back to you soon.'
                 : 'There was an error sending your message. Please try again.'}
             </span>
-            <button 
-              onClick={closeToast} 
+            <button
+              onClick={closeToast}
               className="text-white hover:opacity-70 transition-opacity p-1 rounded-full hover:bg-white/20"
               aria-label="Close notification"
             >

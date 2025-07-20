@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Users, Globe, Handshake, Award, Heart, Zap, Sparkles } from 'lucide-react';
+import Markdown from 'react-markdown';
 
 const About = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -61,9 +62,9 @@ const About = () => {
   ];
 
   return (
-    <section 
-      id="about" 
-      ref={sectionRef} 
+    <section
+      id="about"
+      ref={sectionRef}
       className="section-container relative overflow-hidden bg-gradient-to-br from-gray-50 via-white to-cranberry-50/30"
       aria-labelledby="about-heading"
     >
@@ -82,14 +83,14 @@ const About = () => {
               About Our Community
             </span>
           </div>
-          
+
           <h2 id="about-heading" className="text-section-title text-slate-900 reveal-on-scroll mb-6">
-            Driven by <span className="text-gradient">Purpose</span>, 
+            Driven by <span className="text-gradient">Purpose</span>,
             <br />United by <span className="text-gradient">Impact</span>
           </h2>
-          
+
           <p className="text-xl text-slate-600 max-w-3xl mx-auto reveal-on-scroll leading-relaxed">
-            The Rotaract Club of Zamboanga City West stands as a beacon of hope and transformation, 
+            The Rotaract Club of Zamboanga City West exemplifies the principles of hope and transformation,
             where passionate young leaders come together to create meaningful change in our community.
           </p>
         </div>
@@ -101,9 +102,9 @@ const About = () => {
             <div className="relative">
               {/* Main image */}
               <div className="relative rounded-3xl overflow-hidden shadow-modern-xl">
-                <img 
-                  src="/lovable-uploads/77e591d9-27b0-4497-b290-8fa95806ace4.png" 
-                  alt="Rotaract Club of Zamboanga City West members gathered for a community event" 
+                <img
+                  src="/lovable-uploads/77e591d9-27b0-4497-b290-8fa95806ace4.png"
+                  alt="Rotaract Club of Zamboanga City West members gathered for a community event"
                   className="w-full h-auto"
                   loading="lazy"
                   width="500"
@@ -133,26 +134,23 @@ const About = () => {
               <h3 className="text-3xl font-bold text-slate-900 mb-6">
                 Our <span className="text-cranberry-600">Story</span>
               </h3>
-              
-              <div className="space-y-4 text-slate-600 leading-relaxed">
-                <p>
-                  Since our establishment in 2010, we've been dedicated to fostering young leadership 
-                  while celebrating the rich cultural heritage of Zamboanga City. Our diverse membership 
-                  brings together passionate individuals committed to making a difference.
-                </p>
-                
-                <p>
-                  Through innovative community service projects, professional development programs, 
-                  and meaningful fellowship activities, we continue to strengthen the bonds that 
-                  unite us in our mission of service above self.
-                </p>
+
+              <div className="prose prose-lg max-w-none text-slate-600 leading-relaxed text-justify">
+                <Markdown
+                  components={{
+                    p: ({ children }) => <p className="mb-6 last:mb-0">{children}</p>,
+                    em: ({ children }) => <em className="text-cranberry-600 font-semibold not-italic">{children}</em>
+                  }}
+                >
+                  {`Since 2010, the Rotaract Club of Zamboanga City West has brought together young Zamboangueño professionals who are passionate about creating positive change. We celebrate our local culture and heritage while working together to build a better future for our city and the nation. \n\n Chartered under Rotary International District 3850 and sponsored by the Rotary Club of Zamboanga City West, we are driven by our motto "*Fellowship Through Service*." By taking part in creative service projects, professional development programs, and meaningful connections, we continually build our skills and deepen the bonds that unite us through *"Service Above Self."*`}
+                </Markdown>
               </div>
             </div>
 
             {/* Key metrics */}
             <div className="grid grid-cols-2 gap-4 reveal-on-scroll">
               {achievements.map((achievement, index) => (
-                <div 
+                <div
                   key={index}
                   className="modern-card p-6 text-center group hover:scale-105 transition-transform duration-300"
                 >
