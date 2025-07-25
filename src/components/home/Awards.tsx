@@ -32,32 +32,73 @@ const Awards = () => {
     };
   }, []);
 
+  const parseYear = (year) => {
+    if (!year) return 0;
+    if (year.includes('-')) {
+      const parts = year.split('-');
+      return parseInt(parts[1]) || parseInt(parts[0]);
+    }
+    return parseInt(year);
+  };
+
   const awards = [
     {
+      name: "ROPA",
+      year: "2021",
+      icon: <Star className="h-12 w-12 text-purple-500" aria-hidden="true" />,
+      description: "Rotaract Outstanding Performance Award - Recognizing excellence in service and leadership.",
+      gradient: "from-purple-100 to-violet-50",
+      accent: "purple-500"
+    },
+    {
       name: "EON",
-      year: "2023",
+      year: "2020",
       icon: <Trophy className="h-12 w-12 text-yellow-500" aria-hidden="true" />,
-      description: "Excellence in Outstanding Networks - Recognizing our commitment to building strong community connections and partnerships.",
+      description: "Excellence in Outstanding Networks - For building strong community connections.",
       gradient: "from-yellow-100 to-amber-50",
       accent: "yellow-500"
     },
     {
-      name: "GEAR",
-      year: "2022",
+      name: "ROPA Finalist",
+      year: "2019-2020",
+      icon: <Star className="h-12 w-12 text-purple-400" aria-hidden="true" />,
+      description: "Finalist for the Rotaract Outstanding Performance Award (2019-2020).",
+      gradient: "from-purple-50 to-violet-100",
+      accent: "purple-400"
+    },
+    {
+      name: "EON Gold Prize",
+      year: "2019-2020",
+      icon: <Trophy className="h-12 w-12 text-yellow-400" aria-hidden="true" />,
+      description: "Gold Prize for Excellence in Outstanding Networks (2019-2020).",
+      gradient: "from-yellow-50 to-amber-100",
+      accent: "yellow-400"
+    },
+    {
+      name: "ROPA Asia-Pacific Winner",
+      year: "2020-2021",
+      icon: <Star className="h-12 w-12 text-indigo-500" aria-hidden="true" />,
+      description: "Asia-Pacific Winner of the Rotaract Outstanding Performance Award (2020-2021).",
+      gradient: "from-indigo-100 to-blue-50",
+      accent: "indigo-500"
+    },
+    {
+      name: "Gear Awards - Exemplary Rotaract Club",
+      year: "2020-2021",
       icon: <Award className="h-12 w-12 text-blue-500" aria-hidden="true" />,
-      description: "Global Excellence Achievement Recognition - Celebrating our innovative approaches to community service and leadership development.",
+      description: "Recognized as an Exemplary Rotaract Club in the Gear Awards (Groundbreaking and Exemplary Accomplishments of Rotaractors) for 2020-2021.",
       gradient: "from-blue-100 to-sky-50",
       accent: "blue-500"
     },
     {
-      name: "ROPA",
-      year: "2024",
-      icon: <Star className="h-12 w-12 text-purple-500" aria-hidden="true" />,
-      description: "Rotaract Outstanding Performance Award - Honoring our exceptional dedication to the Rotaract values and impactful community initiatives.",
-      gradient: "from-purple-100 to-violet-50",
-      accent: "purple-500"
+      name: "GEAR",
+      year: "2021-2025",
+      icon: <Award className="h-12 w-12 text-blue-600" aria-hidden="true" />,
+      description: "Global Excellence Achievement Recognition (GEAR: Groundbreaking and Exemplary Accomplishments of Rotaractors) for the years 2021-2025.",
+      gradient: "from-blue-50 to-sky-100",
+      accent: "blue-600"
     }
-  ];
+  ].sort((a, b) => parseYear(b.year) - parseYear(a.year));
 
   return (
     <section 
