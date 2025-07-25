@@ -7,6 +7,9 @@ const Footer = () => {
   const quickLinks = [
     { label: 'About Us', href: '/#about' },
     { label: 'Our Programs', href: '/#programs' },
+    { label: 'Community Impact', href: '/projects' },
+    { label: 'Great West in Action', href: '/events' },
+    { label: 'Leadership Team', href: '/officers' },
     { label: 'Join Us', href: '/#join' },
     { label: 'Contact', href: '/#contact' }
   ];
