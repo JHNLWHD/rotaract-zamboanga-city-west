@@ -134,7 +134,7 @@ const Join = () => {
           </h2>
 
           <p className="text-xl text-slate-600 max-w-3xl mx-auto reveal-on-scroll leading-relaxed">
-            Become part of a dynamic community of young leaders committed to making a positive impact in Zamboanga City and beyo
+            Become part of a dynamic community of young leaders committed to making a positive impact in Zamboanga City and beyond.
           </p>
         </div>
 
