@@ -91,50 +91,47 @@ const Events = () => {
             "@context": "https://schema.org",
             "@type": "CollectionPage",
             "name": "Great West in Action - Club Events & Activities",
-            "description": "Comprehensive list of Rotaract Club of Zamboanga City West events including purposeful meetings, leadership training, and fellowship activities that strengthen our community",
+            "description": "Join the Great West in Action! Discover purposeful meetings, leadership trainings, social gatherings, and special fellowship ceremonies that strengthen our Rotaract community in Zamboanga City West.",
             "url": "https://rotaract.rotaryzcwest.org/events",
+            "publisher": {
+              "@type": "Organization",
+              "name": "Rotaract Club of Zamboanga City West",
+              "alternateName": "Great West",
+              "url": "https://rotaract.rotaryzcwest.org"
+            },
             "mainEntity": {
-              "@type": "EventSeries",
-              "name": "Great West in Action - Rotaract Club of Zamboanga City West Events",
-              "description": "Purposeful meetings, leadership trainings, social gatherings, and special fellowship ceremonies that strengthen our Rotaract community",
-              "organizer": {
-                "@type": "Organization",
-                "name": "Rotaract Club of Zamboanga City West",
-                "alternateName": "Great West",
-                "url": "https://rotaract.rotaryzcwest.org",
-                "logo": "https://rotaract.rotaryzcwest.org/images/logo.png",
-                "sameAs": [
-                  "https://www.facebook.com/RotaractClubZamboWest",
-                  "https://www.instagram.com/rotaractzcwest"
-                ],
-                "address": {
-                  "@type": "PostalAddress",
-                  "addressLocality": "Zamboanga City",
-                  "addressRegion": "Zamboanga Peninsula",
-                  "addressCountry": "PH",
-                  "postalCode": "7000"
+              "@type": "ItemList",
+              "itemListElement": events.map((event, index) => ({
+                "@type": "ListItem",
+                "position": index + 1,
+                "item": {
+                  "@type": "Event",
+                  "name": event.title,
+                  "description": event.description,
+                  "startDate": `${event.date}T${event.time.split(' - ')[0].replace(' ', '').toLowerCase()}`,
+                  "endDate": `${event.date}T${event.time.split(' - ')[1]?.replace(' ', '').toLowerCase() || '23:59'}`,
+                  "location": {
+                    "@type": "Place",
+                    "name": event.venue,
+                    "address": {
+                      "@type": "PostalAddress",
+                      "addressLocality": "Zamboanga City",
+                      "addressRegion": "Zamboanga Peninsula",
+                      "addressCountry": "PH"
+                    }
+                  },
+                  "organizer": {
+                    "@type": "Organization",
+                    "name": "Rotaract Club of Zamboanga City West",
+                    "url": "https://rotaract.rotaryzcwest.org"
+                  },
+                  "url": event.shareableLink,
+                  "image": `https://rotaract.rotaryzcwest.org${event.image}`,
+                  "eventStatus": event.status === 'upcoming' ? "https://schema.org/EventScheduled" : 
+                                event.status === 'registration_open' ? "https://schema.org/EventScheduled" : 
+                                "https://schema.org/EventCompleted"
                 }
-              },
-              "location": {
-                "@type": "Place",
-                "name": "Various venues in Zamboanga City",
-                "address": {
-                  "@type": "PostalAddress",
-                  "addressLocality": "Zamboanga City",
-                  "addressRegion": "Zamboanga Peninsula",
-                  "postalCode": "7000",
-                  "addressCountry": "PH"
-                },
-                "geo": {
-                  "@type": "GeoCoordinates",
-                  "latitude": "6.9214",
-                  "longitude": "122.0790"
-                }
-              },
-              "eventSchedule": {
-                "@type": "Schedule",
-                "description": "Regular club meetings and special events throughout the year"
-              }
+              }))
             },
             "breadcrumb": {
               "@type": "BreadcrumbList",
