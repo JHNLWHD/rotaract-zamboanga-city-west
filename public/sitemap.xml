@@ -11,21 +11,18 @@
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
-  
   <url>
     <loc>https://rotaract.rotaryzcwest.org/projects</loc>
     <lastmod>2024-12-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
-  
   <url>
     <loc>https://rotaract.rotaryzcwest.org/events</loc>
     <lastmod>2024-12-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
-  
   <url>
     <loc>https://rotaract.rotaryzcwest.org/officers</loc>
     <lastmod>2024-12-30</lastmod>
@@ -36,35 +33,37 @@
   <!-- Dynamic Project Pages -->
   <url>
     <loc>https://rotaract.rotaryzcwest.org/projects/regala-esperanza-3-in-1-project</loc>
-    <lastmod>2024-12-30</lastmod>
+    <lastmod>2024-07-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
-  
   <url>
     <loc>https://rotaract.rotaryzcwest.org/projects/kids-fun-day</loc>
-    <lastmod>2024-12-30</lastmod>
+    <lastmod>2024-08-31</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
-  
   <url>
     <loc>https://rotaract.rotaryzcwest.org/projects/international-coastal-cleanup-2024</loc>
-    <lastmod>2024-12-30</lastmod>
+    <lastmod>2024-09-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
-  
   <url>
     <loc>https://rotaract.rotaryzcwest.org/projects/end-polio-motorcade</loc>
-    <lastmod>2024-12-30</lastmod>
+    <lastmod>2024-10-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
-  
   <url>
     <loc>https://rotaract.rotaryzcwest.org/projects/foodloop-isla-kah-bilang-project</loc>
-    <lastmod>2024-12-30</lastmod>
+    <lastmod>2024-11-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://rotaract.rotaryzcwest.org/projects/bida-el-comunidad-year-2-muntinlupa</loc>
+    <lastmod>2025-02-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -72,21 +71,19 @@
   <!-- Dynamic Event Pages -->
   <url>
     <loc>https://rotaract.rotaryzcwest.org/events/2025-06-12/basic-orientation-seminar-2025</loc>
-    <lastmod>2024-12-30</lastmod>
+    <lastmod>2025-06-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
-
   <url>
     <loc>https://rotaract.rotaryzcwest.org/events/2025-06-20/solidares-3-0</loc>
-    <lastmod>2024-12-30</lastmod>
+    <lastmod>2025-06-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
-
   <url>
     <loc>https://rotaract.rotaryzcwest.org/events/2025-07-26/16th-joint-induction-and-turnover-ceremonies</loc>
-    <lastmod>2024-12-30</lastmod>
+    <lastmod>2025-07-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
