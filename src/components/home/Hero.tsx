@@ -1,10 +1,12 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';  
+import { fetchHeroContent } from '../../hooks/landingpageContent'; 
 import { ArrowDown, Sparkles, Users, Target } from 'lucide-react';
 
 const Hero = () => {
   const heroRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
+  useEffect(() => { 
     const loadModernAnimation = () => {
       if (heroRef.current) {
         const elements = heroRef.current.querySelectorAll('.animate-on-load');
@@ -19,7 +21,14 @@ const Hero = () => {
     };
 
     loadModernAnimation();
-  }, []);
+  }, []); 
+
+  {/* function to get hero Content */} 
+  const {data, isLoading, isError } = useQuery({
+    queryKey: ['heroContent'], 
+    queryFn: () => fetchHeroContent(),  
+  }); 
+
 
   const scrollToAbout = () => {
     const aboutSection = document.getElementById('about');
@@ -75,26 +84,25 @@ const Hero = () => {
           <div className="opacity-0 animate-on-load">
             <span className="inline-flex items-center px-4 py-2 rounded-full bg-cranberry-500/10 backdrop-blur-sm border border-cranberry-300/20 text-cranberry-200 text-sm font-medium">
               <Sparkles className="w-4 h-4 mr-2" />
-              Empowering Young Leaders Since 2010
+              {isLoading ? 'Loading...' : isError ? 'Error loading content' : data?.heroButtonMotto} 
             </span>
           </div>
 
           {/* Hero title with modern typography */}
           <h1 className="text-hero text-white opacity-0 animate-on-load leading-none">
             <span className="block mb-4">
-              <span className="text-gradient font-extrabold">ROTARACT CLUB</span>
+              <span className="text-gradient font-extrabold"> {isLoading ? 'Loading...' : isError ? 'Error loading content' : data?.heroTitle} </span>
             </span>
             <span className="block text-white/90 font-bold">
-              ZAMBOANGA CITY WEST
+            {isLoading ? 'Loading...' : isError ? 'Error loading content' : data?.heroTitleTwo} 
             </span>
           </h1>
 
           {/* Subtitle with modern styling */}
           <p className="text-xl md:text-2xl text-white/80 max-w-3xl mx-auto opacity-0 animate-on-load leading-relaxed">
-            Where <span className="text-cranberry-300 font-semibold">fellowship</span>, 
-            <span className="text-cranberry-300 font-semibold"> service</span>, and 
-            <span className="text-cranberry-300 font-semibold"> leadership</span> unite to create 
-            lasting impact in our community.
+            Where <span className="text-cranberry-300 font-semibold"> {isLoading ? 'Loading...' : isError ? 'Error loading content' : data?.wordHighLightOne} </span>, 
+            <span className="text-cranberry-300 font-semibold"> {isLoading ? 'Loading...' : isError ? 'Error loading content' : data?.wordFillersTwo}</span>, and 
+            <span className="text-cranberry-300 font-semibold"> {isLoading ? 'Loading...' : isError ? 'Error loading content' : data?.wordHighlightThree}</span> {isLoading ? 'Loading...' : isError ? 'Error loading content' : data?.heroShortDes}
           </p>
 
           {/* Modern CTA buttons */}
@@ -103,14 +111,14 @@ const Hero = () => {
               href="#join" 
               className="primary-button group"
             >
-              <span>Join Our Movement</span>
+              <span> {isLoading ? 'Loading...' : isError ? 'Error loading content' : data?.heroButtonOne} </span>
               <ArrowDown className="w-4 h-4 ml-2 group-hover:translate-y-1 transition-transform" />
             </a>
             <a 
               href="#programs" 
               className="secondary-button group"
             >
-              <span>Explore Programs</span>
+              <span> {isLoading ? 'Loading...' : isError ? 'Error loading content' : data?.heroButtonTwo} </span>
               <Users className="w-4 h-4 ml-2 group-hover:scale-110 transition-transform" />
             </a>
           </div>
@@ -118,16 +126,16 @@ const Hero = () => {
           {/* Stats section */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-2xl mx-auto mt-16 opacity-0 animate-on-load py-4">
             <div className="bg-slate-900/90 backdrop-blur-xl border border-cranberry-400/30 rounded-2xl p-6 text-center shadow-xl">
-              <div className="text-3xl font-bold text-cranberry-400 mb-2">14+</div>
-              <div className="text-white/90 text-sm font-medium">Years of Service</div>
+              <div className="text-3xl font-bold text-cranberry-400 mb-2"> {isLoading ? 'Loading...' : isError ? 'Error loading content' : data?.heroDivNumberOne} </div>
+              <div className="text-white/90 text-sm font-medium"> {isLoading ? 'Loading...' : isError ? 'Error loading content' : data?.heroDivDesOne}</div>
             </div>
             <div className="bg-slate-900/90 backdrop-blur-xl border border-cranberry-400/30 rounded-2xl p-6 text-center shadow-xl">
-              <div className="text-3xl font-bold text-cranberry-400 mb-2">50+</div>
-              <div className="text-white/90 text-sm font-medium">Active Members</div>
+              <div className="text-3xl font-bold text-cranberry-400 mb-2">{isLoading ? 'Loading...' : isError ? 'Error loading content' : data?.heroDivNumberTwo}</div>
+              <div className="text-white/90 text-sm font-medium">{isLoading ? 'Loading...' : isError ? 'Error loading content' : data?.heroDivDescTwo}</div>
             </div>
             <div className="bg-slate-900/90 backdrop-blur-xl border border-cranberry-400/30 rounded-2xl p-6 text-center shadow-xl">
-              <div className="text-3xl font-bold text-cranberry-400 mb-2">100+</div>
-              <div className="text-white/90 text-sm font-medium">Community Projects</div>
+              <div className="text-3xl font-bold text-cranberry-400 mb-2">{isLoading ? 'Loading...' : isError ? 'Error loading content' : data?.heroDivNumberThree}</div>
+              <div className="text-white/90 text-sm font-medium">{isLoading ? 'Loading...' : isError ? 'Error loading content' : data?.heroDivDesThree}</div>
             </div>
           </div>
         </div>
