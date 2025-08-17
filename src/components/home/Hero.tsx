@@ -29,6 +29,14 @@ const Hero = () => {
     queryFn: () => fetchHeroContent(),  
   }); 
 
+  // Debug logging
+  console.log('🔍 Hero Debug:');
+  console.log('- isLoading:', isLoading);
+  console.log('- isError:', isError);
+  console.log('- data:', data);
+  console.log('- heroBox exists:', !!data?.heroBox);
+  console.log('- heroBox length:', data?.heroBox?.length || 0);
+  console.log('- heroBox content:', data?.heroBox);
 
   const scrollToAbout = () => {
     const aboutSection = document.getElementById('about');
