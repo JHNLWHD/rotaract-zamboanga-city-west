@@ -44,7 +44,7 @@ const Hero = () => {
       aboutSection.scrollIntoView({ behavior: 'smooth' });
     }
   };
-
+//
   return (
     <section 
       ref={heroRef}
@@ -133,7 +133,7 @@ const Hero = () => {
 
           {/* Stats section - Dynamic content from Contentful */}
           {!isLoading && !isError && data?.heroBox && data.heroBox.length > 0 && (
-            <div className={`grid grid-cols-1 ${data.heroBox.length === 2 ? 'md:grid-cols-2' : data.heroBox.length >= 3 ? 'md:grid-cols-3' : 'md:grid-cols-1'} gap-8 max-w-2xl mx-auto mt-16 opacity-0 animate-on-load py-4`}>
+            <div className={`grid grid-cols-1 ${data.heroBox.length === 2 ? 'md:grid-cols-2' : data.heroBox.length >= 3 ? 'md:grid-cols-3' : 'md:grid-cols-1'} gap-8 max-w-2xl mx-auto mt-16 py-4 animate-fade-in-up`}>
               {data.heroBox.map((box, index) => (
                 <div key={index} className="bg-slate-900/90 backdrop-blur-xl border border-cranberry-400/30 rounded-2xl p-6 text-center shadow-xl">
                   <div className="text-3xl font-bold text-cranberry-400 mb-2">{box.number}</div>
