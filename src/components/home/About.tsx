@@ -1,6 +1,23 @@
 import React, { useEffect, useRef } from 'react';
 import { Users, Globe, Handshake, Award, Heart, Zap, Sparkles } from 'lucide-react';
 import Markdown from 'react-markdown';
+import { fetchAboutCommunity } from '../../hooks/landing-page/aboutCommunity'; 
+import { useQuery } from '@tanstack/react-query';  
+
+const iconMap = {
+  Award,
+  Users,
+  Globe,
+  Heart,
+  Zap,
+  Handshake,
+  Sparkles
+};
+
+const DynamicIcon = ({ iconName, className = "h-5 w-5" }: { iconName: string; className?: string }) => {
+  const IconComponent = iconMap[iconName as keyof typeof iconMap] || Award; // Default to Award
+  return <IconComponent className={className} />;
+};
 
 const About = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -31,7 +48,12 @@ const About = () => {
         observer.unobserve(sectionRef.current);
       }
     };
-  }, []);
+  }, []); 
+
+  const {data, isLoading, isError } = useQuery({
+    queryKey: ['aboutContent'], 
+    queryFn: () => fetchAboutCommunity(), 
+  });  
 
   const valueCards = [
     {
@@ -60,6 +82,15 @@ const About = () => {
     { number: "100+", label: "Projects Completed", icon: <Globe className="h-5 w-5" /> },
     { number: "5000+", label: "Lives Touched", icon: <Heart className="h-5 w-5" /> }
   ];
+
+  const fallbackAchievements = [
+    { number: "14+", label: "Years of Impact", iconName: "Award" },
+    { number: "50+", label: "Active Members", iconName: "Users" },
+    { number: "100+", label: "Projects Completed", iconName: "Globe" },
+    { number: "5000+", label: "Lives Touched", iconName: "Heart" }
+  ];
+
+  // Use Contentful data if available, otherwise use fallbackfallbackAchievements;
 
   return (
     <section
@@ -103,8 +134,8 @@ const About = () => {
               {/* Main image */}
               <div className="relative rounded-3xl overflow-hidden shadow-modern-xl">
                 <img
-                  src="/lovable-uploads/77e591d9-27b0-4497-b290-8fa95806ace4.png"
-                  alt="Rotaract Club of Zamboanga City West members gathered for a community event"
+                  src={data?.aboutImage?.url || "/lovable-uploads/77e591d9-27b0-4497-b290-8fa95806ace4.png"}
+                  alt={data?.aboutImage?.description || "Rotaract Club of Zamboanga City West members gathered for a community event"}
                   className="w-full h-auto"
                   loading="lazy"
                   width="500"
@@ -120,8 +151,8 @@ const About = () => {
                     <Award className="h-6 w-6 text-cranberry-600" />
                   </div>
                   <div>
-                    <div className="text-2xl font-bold text-slate-900">2010</div>
-                    <div className="text-sm text-slate-500">Established</div>
+                    <div className="text-2xl font-bold text-slate-900">  {isLoading ? 'Loading...' : isError ? 'Error loading content' : data?.sideInformation.number} </div>
+                    <div className="text-sm text-slate-500"> {isLoading ? 'Loading...' : isError ? 'Error loading content' : data?.sideInformation.description} </div>
                   </div>
                 </div>
               </div>
@@ -147,23 +178,26 @@ const About = () => {
               </div>
             </div>
 
-            {/* Key metrics */}
-            <div className="grid grid-cols-2 gap-4 reveal-on-scroll">
-              {achievements.map((achievement, index) => (
-                <div
-                  key={index}
-                  className="modern-card p-6 text-center group hover:scale-105 transition-transform duration-300"
-                >
-                  <div className="flex justify-center mb-3">
-                    <div className="p-2 bg-cranberry-100 rounded-lg text-cranberry-600 group-hover:bg-cranberry-600 group-hover:text-white transition-colors">
-                      {achievement.icon}
+            {/* Dynamic metrics */} 
+            {!isLoading && !isError && data?.aboutCommunityBoxes && data.aboutCommunityBoxes.length > 0 && (
+              <div className={`grid ${data.aboutCommunityBoxes.length === 2 ? 'grid-cols-2' : data.aboutCommunityBoxes.length >= 4 ? 'grid-cols-2' : 'grid-cols-1'} gap-4 reveal-on-scroll`}>
+                {data.aboutCommunityBoxes.map((achievement, index) => (
+                  <div
+                    key={index}
+                    className="modern-card p-6 text-center group hover:scale-105 transition-transform duration-300"
+                  >
+                    <div className="flex justify-center mb-3">
+                      <div className="p-2 bg-cranberry-100 rounded-lg text-cranberry-600 group-hover:bg-cranberry-600 group-hover:text-white transition-colors">
+                        <DynamicIcon iconName={achievement.iconName || "Award"} />
+                      </div>
                     </div>
+                    <div className="text-2xl font-bold text-slate-900 mb-1">{achievement.number}</div>
+                    <div className="text-sm text-slate-500">{achievement.description}</div>
                   </div>
-                  <div className="text-2xl font-bold text-slate-900 mb-1">{achievement.number}</div>
-                  <div className="text-sm text-slate-500">{achievement.label}</div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
+
           </div>
         </div>
       </div>
