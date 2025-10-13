@@ -1,62 +1,68 @@
 import contentful from "../contentfulClient";
 import type { EntrySkeletonType, EntryFieldTypes } from "contentful";
 
-type LandingHeroSkeleton = EntrySkeletonType & {
-	contentTypeId: "landingPageHeroSection";
-	fields: { 
-		heroHeading: EntryFieldTypes.Symbol;
-		heroBox: EntryFieldTypes.Array<
-			EntryFieldTypes.EntryLink<HeroBoxSkeleton> 
-		>; 
-	};
+type StatItemSkeleton = EntrySkeletonType & {
+  contentTypeId: "statItem";
+  fields: {
+    value: EntryFieldTypes.Symbol; 
+    description: EntryFieldTypes.Symbol; 
+  };
 };
 
-type HeroBoxSkeleton = EntrySkeletonType & {
-	contentTypeId: "heroBox"; 
-	fields: {
-		number: EntryFieldTypes.Integer;
-		description: EntryFieldTypes.Text;	
-	}
-}
+type HomepageHeroSectionSkeleton = EntrySkeletonType & {
+  contentTypeId: "homepageHeroSection";
+  fields: {
+    badgeText: EntryFieldTypes.Symbol; 
+    subTitle: EntryFieldTypes.Text; 
+    stats: EntryFieldTypes.Array<EntryFieldTypes.EntryLink<StatItemSkeleton>>; 
+  };
+};
 
-export type HeroBox = {
-	number: number; 
-	description: string; 
-}
+export type StatItem = {
+  value: string;
+  description: string;
+};
 
-export type LandingHeroFields = {
-	heroHeading?: string;
-	heroBox: HeroBox[];  
+export type HomepageHeroSection = {
+  badgeText?: string;
+  subTitle?: string;
+  stats: StatItem[];
+};
 
-}; 
+
+const DEFAULT_HERO_ENTRY_ID = "7iiwiewk0D0T1NlMFEByWu";
+
+export async function fetchHeroContent(
+  entryId?: string
+): Promise<HomepageHeroSection | null> {
+  try {
+
+    const entry = await contentful.client.getEntry<HomepageHeroSectionSkeleton>(
+      entryId || DEFAULT_HERO_ENTRY_ID
+    );
+
+    const f = entry.fields;
 
 
-const DEFAULT_HERO_ENTRY_ID = "5O1VUbXjkEBa0NJTYlDqd7";
+    const stats: StatItem[] = await Promise.all(
+      (f.stats || []).map(async (statLink) => {
+        const statEntry = await contentful.client.getEntry<StatItemSkeleton>(
+          statLink.sys.id
+        );
+        return {
+          value: statEntry.fields.value,
+          description: statEntry.fields.description,
+        };
+      })
+    );
 
-export async function fetchHeroContent(entryId?: string): Promise<LandingHeroFields | null> {
-	try {		
-		const entry = await contentful.client.getEntry<LandingHeroSkeleton>(entryId || DEFAULT_HERO_ENTRY_ID);
-
-		const f = entry.fields;
-
-    	{/* Fetch box entries */}
-		const heroBox: HeroBox[] = await Promise.all(
-			(f.heroBox || []).map(async (boxLink) => {
-				const boxEntry = await contentful.client.getEntry<HeroBoxSkeleton>(boxLink.sys.id);
-				return {
-					number: boxEntry.fields.number,
-					description: boxEntry.fields.description,
-				};
-			})
-		);
-
-		const result = {
-			heroHeading: f.heroHeading ?? "",
-			heroBox, 
-		};
-		return result;
-		
-	} catch (error) {
-		return null;
-	}
+    return {
+      badgeText: f.badgeText,
+      subTitle: f.subTitle,
+      stats,
+    };
+  } catch (error) {
+    console.error("Error fetching homepage hero section:", error);
+    return null;
+  }
 }

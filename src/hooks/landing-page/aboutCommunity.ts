@@ -1,116 +1,83 @@
 import contentful from "../contentfulClient";
-import type { EntrySkeletonType, EntryFieldTypes, Asset } from "contentful"; 
+import type { EntrySkeletonType, EntryFieldTypes } from "contentful"; 
 
-type LandingAboutCommunitySkeleton = EntrySkeletonType & {
-    contentTypeId: "landingPageAboutCommunity"; 
-    fields: {
-        aboutCommunityBoxes: EntryFieldTypes.Array<
-            EntryFieldTypes.EntryLink<AboutCommunityBoxesSkeleton>
-        >; 
+type StatItemSkeleton = EntrySkeletonType & {
+  contentTypeId: "statItem";
+  fields: {
+    value: EntryFieldTypes.Symbol; 
+    description: EntryFieldTypes.Symbol; 
+    icon: EntryFieldTypes.Symbol; 
+  };
+};
 
-        sideInformation: EntryFieldTypes.EntryLink<SideInformationSkeleton>; 
+type HomepageAboutSectionSkeleton = EntrySkeletonType & {
+  contentTypeId: "homepageAboutSection"; 
+  fields: {
+    stats: EntryFieldTypes.Array<EntryFieldTypes.EntryLink<StatItemSkeleton>>; 
+    outStory: EntryFieldTypes.Text; 
+    image: EntryFieldTypes.AssetLink; 
+  };
+};
 
-        aboutImage: EntryFieldTypes.AssetLink; 
-    }
-} 
+export type Stat = {
+  value: string;  
+  description: string; 
+  icon: string; 
+};
 
-type SideInformationSkeleton = EntrySkeletonType & {
-    contentTypeId: "sideInformation"; 
-    fields: {
-        number: EntryFieldTypes.Symbol;  
-		description: EntryFieldTypes.Text;
-		iconName: EntryFieldTypes.Symbol;  
-    }
-}
+export type ImageData = {
+  url: string;
+  title?: string;
+  description?: string;
+};
 
-type AboutCommunityBoxesSkeleton = EntrySkeletonType & {
-    contentTypeId: "aboutCommunityBoxes"; 
-    fields: {
-		number: EntryFieldTypes.Symbol;  
-		description: EntryFieldTypes.Text;
-		iconName: EntryFieldTypes.Symbol;  
-    }
-} 
+export type HomepageAboutSection = {
+  stats: Stat[];
+  outStory: string; 
+  image?: ImageData;
+};
 
-export type SideInformation = {
-    number: string; 
-    description: string; 
-    iconName: string; 
-}
+const DEFAULT_ABOUT_SECTION_ENTRY_ID = "5s0nfiDYTuRS7wbQ5Y3lqI";  
 
-export type AboutCommunityBoxes = {
-    number: string;  
-    description: string; 
-    iconName: string; 
-} 
+export async function fetchAboutCommunity(entryId?: string): Promise<HomepageAboutSection | null> {
+  try {
+    const entry = await contentful.client.getEntry<HomepageAboutSectionSkeleton>(
+      entryId || DEFAULT_ABOUT_SECTION_ENTRY_ID
+    );
 
-export type LandingAboutFields = {
-    aboutCommunityBoxes: AboutCommunityBoxes[]; 
-    sideInformation: SideInformation; 
-    aboutImage?: ContentfulImage;
-}
+    const f = entry.fields;
 
-export type ContentfulImage = {
-    url: string;
-    title?: string;
-    description?: string;
-}
-
-const DEFAULT_ABOUT_COMMUNITY_ENTRY_ID = "5uyW4S1SOEH4aiIBZA8yQ9";  
-
-export async function fetchAboutCommunity(entryId?: string): Promise<LandingAboutFields | null>{
-    try {
-        const entry = await contentful.client.getEntry<LandingAboutCommunitySkeleton>(entryId || DEFAULT_ABOUT_COMMUNITY_ENTRY_ID);
-
-        const f = entry.fields;
-
-        // Fetch aboutCommunityBoxes entries
-        const aboutCommunityBoxes: AboutCommunityBoxes[] = await Promise.all(
-            (f.aboutCommunityBoxes || []).map(async (boxlink) => {
-                const cardEntry = await contentful.client.getEntry<AboutCommunityBoxesSkeleton>(boxlink.sys.id); 
-                return {
-                    number: cardEntry.fields.number ?? "",
-                    description: cardEntry.fields.description ?? "",
-                    iconName: cardEntry.fields.iconName ?? "Award",  
-                }; 
-            }) 
-        ); 
-
-        let aboutImage: ContentfulImage | undefined;
-        if (f.aboutImage) {
-            const imageAsset = await contentful.client.getAsset(f.aboutImage.sys.id);
-            aboutImage = {
-                url: imageAsset.fields.file?.url ? `https:${imageAsset.fields.file.url}` : "",
-                title: imageAsset.fields.title || "",
-                description: imageAsset.fields.description || "",
-            };
-        }
-
-        // Fetch sideInformation entry (single reference)
-        let sideInformation: SideInformation = {
-            number: "",
-            description: "",
-            iconName: "Award"
+    const stats: Stat[] = await Promise.all(
+      (f.stats || []).map(async (statLink) => {
+        const statEntry = await contentful.client.getEntry<StatItemSkeleton>(statLink.sys.id);
+        return {
+          value: statEntry.fields.value ?? "",
+          description: statEntry.fields.description ?? "",
+          icon: statEntry.fields.icon ?? "",
         };
-        
-        if (f.sideInformation) {
-            const sideEntry = await contentful.client.getEntry<SideInformationSkeleton>(f.sideInformation.sys.id);
-            sideInformation = {
-                number: sideEntry.fields.number ?? "",
-                description: sideEntry.fields.description ?? "",
-                iconName: sideEntry.fields.iconName ?? "Award",  
-            };
-        } 
+      })
+    );
 
-        const result = {
-            aboutCommunityBoxes,
-            aboutImage, 
-            sideInformation,
-        };
-        
-        return result; 
-
-    } catch (error) {
-        return null; 
+    let image: ImageData | undefined;
+    if (f.image) {
+      const imageAsset = await contentful.client.getAsset(f.image.sys.id);
+      image = {
+        url: imageAsset.fields.file?.url ? `https:${imageAsset.fields.file.url}` : "",
+        title: imageAsset.fields.title || "",
+        description: imageAsset.fields.description || "",
+      };
     }
+
+    const result: HomepageAboutSection = {
+      stats,
+      outStory: f.outStory || "",
+      image,
+    };
+
+    return result; 
+
+  } catch (error) {
+    console.error("Error fetching About Community section:", error);
+    return null; 
+  }
 }
