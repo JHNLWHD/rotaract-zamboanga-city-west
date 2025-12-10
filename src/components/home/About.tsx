@@ -1,28 +1,9 @@
 import React, { useEffect, useRef } from 'react';
-import { Users, Globe, Handshake, Award, Heart, Zap, Sparkles, Ribbon, Book, Star, Trophy } from 'lucide-react';
+import { Sparkles, Ribbon } from 'lucide-react';
 import Markdown from 'react-markdown';
 import { fetchAboutCommunity } from '../../hooks/landing-page/aboutCommunity'; 
 import { useQuery } from '@tanstack/react-query';  
-
-const iconMap = {
-  ribbon: Ribbon,
-  book: Book,
-  star: Star,
-  trophy: Trophy,
-  none: Award, 
-  Award,
-  Users,
-  Globe,
-  Heart,
-  Zap,
-  Handshake,
-  Sparkles
-};
-
-const DynamicIcon = ({ iconName, className = "h-5 w-5" }: { iconName: string; className?: string }) => {
-  const IconComponent = iconMap[iconName as keyof typeof iconMap] || Award; 
-  return <IconComponent className={className} />;
-};
+import DynamicIcon from '../IconChanger';
 
 const About = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -62,14 +43,14 @@ const About = () => {
       className="section-container relative overflow-hidden bg-gradient-to-br from-gray-50 via-white to-cranberry-50/30"
       aria-labelledby="about-heading"
     >
-      {/* Modern geometric background */}
+
       <div className="absolute inset-0 opacity-30">
         <div className="absolute top-20 -right-32 w-96 h-96 bg-cranberry-200/20 rounded-full blur-3xl"></div>
         <div className="absolute -bottom-20 -left-32 w-80 h-80 bg-cranberry-300/15 rounded-full blur-3xl"></div>
       </div>
 
       <div className="relative z-10">
-        {/* Section header */}
+
         <div className="text-center mb-20">
           <div className="reveal-on-scroll">
             <span className="inline-flex items-center px-4 py-2 rounded-full bg-cranberry-100 text-cranberry-700 text-sm font-semibold mb-4">
@@ -121,7 +102,6 @@ const About = () => {
             </div>
           </div>
 
-          {/* Right side - Content */}
           <div className="space-y-8">
             <div className="reveal-on-scroll">
               <h3 className="text-3xl font-bold text-slate-900 mb-6">

@@ -1,14 +1,8 @@
 import React, { useEffect, useRef } from 'react';
-import { Award, Trophy, Star, Sparkles } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 import { fetchAwards } from '../../hooks/landing-page/awardsSection';
 import { useQuery } from '@tanstack/react-query';
-
-const iconMap = {
-  Award,
-  Trophy,
-  Star,
-  Sparkles
-};
+import DynamicIcon from '../IconChanger';
 
 const getColorClasses = (color: string) => {
   const colorMap = {
@@ -80,17 +74,6 @@ const getColorClasses = (color: string) => {
   return colorMap[color as keyof typeof colorMap] || colorMap.blue;
 };
 
-const DynamicIcon = ({
-  iconName,
-  className = 'h-5 w-5'
-}: {
-  iconName: string;
-  className?: string;
-}) => {
-  const IconComponent = iconMap[iconName as keyof typeof iconMap] || Award;
-  return <IconComponent className={className} />;
-};
-
 const Awards = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
 
@@ -125,13 +108,6 @@ const Awards = () => {
   const { isLoading, isError, data } = useQuery({
     queryKey: ['AwardData'],
     queryFn: () => fetchAwards()
-  });
-
-  console.log('Awards Debug:', {
-    loading: isLoading,
-    error: isError,
-    dataExists: !!data,
-    itemCount: data?.awards?.length || 0
   });
 
   const filteredAwards =
@@ -210,7 +186,7 @@ const Awards = () => {
                           <DynamicIcon
                             iconName={award.icon || 'Award'}
                             className={`h-12 w-12 ${colors.icon}`}
-                          />
+                          /> 
                         </div>
                       </div>
 
