@@ -1,20 +1,20 @@
-import contentful from "../contentfulClient";
-import type { EntrySkeletonType, EntryFieldTypes } from "contentful";
+import contentful from '../contentfulClient';
+import type { EntrySkeletonType, EntryFieldTypes } from 'contentful';
 
 type StatItemSkeleton = EntrySkeletonType & {
-  contentTypeId: "statItem";
+  contentTypeId: 'statItem';
   fields: {
-    value: EntryFieldTypes.Symbol; 
-    description: EntryFieldTypes.Symbol; 
+    value: EntryFieldTypes.Symbol;
+    description: EntryFieldTypes.Symbol;
   };
 };
 
 type HomepageHeroSectionSkeleton = EntrySkeletonType & {
-  contentTypeId: "homepageHeroSection";
+  contentTypeId: 'homepageHeroSection';
   fields: {
-    badgeText: EntryFieldTypes.Symbol; 
-    subTitle: EntryFieldTypes.Text; 
-    stats: EntryFieldTypes.Array<EntryFieldTypes.EntryLink<StatItemSkeleton>>; 
+    badgeText: EntryFieldTypes.Symbol;
+    subTitle: EntryFieldTypes.Text;
+    stats: EntryFieldTypes.Array<EntryFieldTypes.EntryLink<StatItemSkeleton>>;
   };
 };
 
@@ -29,23 +29,25 @@ export type HomepageHeroSection = {
   stats: StatItem[];
 };
 
-
-const DEFAULT_HERO_ENTRY_ID = "7iiwiewk0D0T1NlMFEByWu";
-
-export async function fetchHeroContent(
-  entryId?: string
-): Promise<HomepageHeroSection | null> {
+export async function fetchHeroContent(): Promise<HomepageHeroSection | null> {
   try {
+    // Query for the first homepageHeroSection entry instead of using hardcoded ID
+    const entries =
+      await contentful.client.getEntries<HomepageHeroSectionSkeleton>({
+        content_type: 'homepageHeroSection',
+        limit: 1,
+      });
 
-    const entry = await contentful.client.getEntry<HomepageHeroSectionSkeleton>(
-      entryId || DEFAULT_HERO_ENTRY_ID
-    );
+    if (entries.items.length === 0) {
+      console.warn('No homepage hero section found');
+      return null;
+    }
 
+    const entry = entries.items[0];
     const f = entry.fields;
 
-
     const stats: StatItem[] = await Promise.all(
-      (f.stats || []).map(async (statLink) => {
+      (f.stats || []).map(async statLink => {
         const statEntry = await contentful.client.getEntry<StatItemSkeleton>(
           statLink.sys.id
         );
@@ -62,7 +64,7 @@ export async function fetchHeroContent(
       stats,
     };
   } catch (error) {
-    console.error("Error fetching homepage hero section:", error);
+    console.error('Error fetching homepage hero section:', error);
     return null;
   }
 }
