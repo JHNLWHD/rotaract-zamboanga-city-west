@@ -24,3 +24,9 @@ dist-ssr
 *.sw?
 
 .env
+
+# Sensitive data files
+scripts/officers-data.json
+
+# Environment-specific generated files
+scripts/asset-mapping.json

@@ -1,5 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Mail, Phone, MapPin, Send, CheckCircle, AlertCircle, Sparkles, X } from 'lucide-react';
+import {
+  Mail,
+  Phone,
+  MapPin,
+  Send,
+  CheckCircle,
+  AlertCircle,
+  Sparkles,
+  X,
+} from 'lucide-react';
 
 const Contact = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -7,16 +16,18 @@ const Contact = () => {
     name: '',
     email: '',
     subject: '',
-    message: ''
+    message: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [submitStatus, setSubmitStatus] = useState<
+    'idle' | 'success' | 'error'
+  >('idle');
   const [showToast, setShowToast] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
+      entries => {
+        entries.forEach(entry => {
           if (entry.isIntersecting) {
             const elements = entry.target.querySelectorAll('.reveal-on-scroll');
             elements.forEach((el, i) => {
@@ -30,13 +41,14 @@ const Contact = () => {
       { threshold: 0.1 }
     );
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
+    const currentRef = sectionRef.current;
+    if (currentRef) {
+      observer.observe(currentRef);
     }
 
     return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current);
+      if (currentRef) {
+        observer.unobserve(currentRef);
       }
     };
   }, []);
@@ -52,11 +64,13 @@ const Contact = () => {
     }
   }, [showToast]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -68,7 +82,9 @@ const Contact = () => {
 
     try {
       // Check if we're in production (deployed to Netlify)
-      const isProduction = window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1';
+      const isProduction =
+        window.location.hostname !== 'localhost' &&
+        window.location.hostname !== '127.0.0.1';
 
       if (isProduction) {
         // Production: Submit to Netlify
@@ -77,7 +93,9 @@ const Contact = () => {
         const response = await fetch('/', {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: new URLSearchParams(formData as any).toString()
+          body: new URLSearchParams(
+            formData as Record<string, string>
+          ).toString(),
         });
 
         if (response.ok) {
@@ -92,7 +110,7 @@ const Contact = () => {
           name: formData.name,
           email: formData.email,
           subject: formData.subject,
-          message: formData.message
+          message: formData.message,
         });
 
         // Simulate network delay
@@ -118,10 +136,10 @@ const Contact = () => {
   const contactInfo = [
     {
       icon: <Mail className="h-6 w-6" />,
-      title: "Email Us",
-      content: "raczambowest1@gmail.com",
-      link: "mailto:raczambowest1@gmail.com"
-    }
+      title: 'Email Us',
+      content: 'raczambowest1@gmail.com',
+      link: 'mailto:raczambowest1@gmail.com',
+    },
   ];
 
   return (
@@ -130,14 +148,12 @@ const Contact = () => {
       ref={sectionRef}
       className="section-container relative overflow-hidden bg-gradient-to-br from-slate-50 via-white to-cranberry-50/30"
     >
-      {/* Modern background elements */}
       <div className="absolute inset-0">
         <div className="absolute top-20 -right-32 w-96 h-96 bg-cranberry-500/10 rounded-full blur-3xl"></div>
         <div className="absolute -bottom-20 -left-32 w-80 h-80 bg-cranberry-400/10 rounded-full blur-3xl"></div>
       </div>
 
       <div className="relative z-10">
-        {/* Section header */}
         <div className="text-center mb-20">
           <div className="reveal-on-scroll mb-6">
             <span className="inline-flex items-center px-4 py-2 rounded-full bg-cranberry-100 text-cranberry-700 text-sm font-semibold">
@@ -148,31 +164,45 @@ const Contact = () => {
 
           <h2 className="text-section-title text-slate-900 reveal-on-scroll mb-6">
             <span className="text-gradient">Connect with Us!</span>
-            <br />Let's Start the Conversation
+            <br />
+            Let's Start the Conversation
           </h2>
 
           <p className="text-xl text-slate-600 max-w-3xl mx-auto reveal-on-scroll leading-relaxed">
-            Have questions about joining Rotaract? Want to partner with us on a project? We'd love to hear from you and explore how we can work together.
+            Have questions about joining Rotaract? Want to partner with us on a
+            project? We'd love to hear from you and explore how we can work
+            together.
           </p>
         </div>
 
-        {/* Contact content grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-          {/* Left side - Contact form */}
           <div className="reveal-on-scroll">
             <div className="modern-card p-8">
-              <h3 className="text-2xl font-bold text-slate-900 mb-6">Send us a Message</h3>
+              <h3 className="text-2xl font-bold text-slate-900 mb-6">
+                Send us a Message
+              </h3>
 
-              <form onSubmit={handleSubmit} className="space-y-6" name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+              <form
+                onSubmit={handleSubmit}
+                className="space-y-6"
+                name="contact"
+                method="POST"
+                data-netlify="true"
+                netlify-honeypot="bot-field"
+              >
                 <input type="hidden" name="form-name" value="contact" />
                 <div style={{ display: 'none' }}>
                   <label>
-                    Don't fill this out if you're human: <input name="bot-field" />
+                    Don't fill this out if you're human:{' '}
+                    <input name="bot-field" />
                   </label>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-slate-700 mb-2">
+                    <label
+                      htmlFor="name"
+                      className="block text-sm font-medium text-slate-700 mb-2"
+                    >
                       Full Name *
                     </label>
                     <input
@@ -188,7 +218,10 @@ const Contact = () => {
                   </div>
 
                   <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-2">
+                    <label
+                      htmlFor="email"
+                      className="block text-sm font-medium text-slate-700 mb-2"
+                    >
                       Email Address *
                     </label>
                     <input
@@ -205,7 +238,10 @@ const Contact = () => {
                 </div>
 
                 <div>
-                  <label htmlFor="subject" className="block text-sm font-medium text-slate-700 mb-2">
+                  <label
+                    htmlFor="subject"
+                    className="block text-sm font-medium text-slate-700 mb-2"
+                  >
                     Subject *
                   </label>
                   <input
@@ -221,7 +257,10 @@ const Contact = () => {
                 </div>
 
                 <div>
-                  <label htmlFor="message" className="block text-sm font-medium text-slate-700 mb-2">
+                  <label
+                    htmlFor="message"
+                    className="block text-sm font-medium text-slate-700 mb-2"
+                  >
                     Message *
                   </label>
                   <textarea
@@ -236,7 +275,6 @@ const Contact = () => {
                   />
                 </div>
 
-                {/* Submit button */}
                 <div>
                   <button
                     type="submit"
@@ -260,11 +298,11 @@ const Contact = () => {
             </div>
           </div>
 
-          {/* Right side - Contact information */}
           <div className="space-y-8">
             <div className="reveal-on-scroll">
               <h3 className="text-2xl font-bold text-slate-900 mb-6">
-                Other Ways to <span className="text-cranberry-600">Reach Us</span>
+                Other Ways to{' '}
+                <span className="text-cranberry-600">Reach Us</span>
               </h3>
 
               <div className="space-y-6">
@@ -278,7 +316,9 @@ const Contact = () => {
                       {info.icon}
                     </div>
                     <div>
-                      <h4 className="font-semibold text-slate-900 mb-1">{info.title}</h4>
+                      <h4 className="font-semibold text-slate-900 mb-1">
+                        {info.title}
+                      </h4>
                       <p className="text-slate-600">{info.content}</p>
                     </div>
                   </a>
@@ -286,13 +326,15 @@ const Contact = () => {
               </div>
             </div>
 
-            {/* Additional info */}
             <div className="reveal-on-scroll">
               <div className="modern-card p-8 bg-gradient-to-br from-cranberry-50 to-cranberry-100/50 border border-cranberry-200/50">
-                <h4 className="font-semibold text-cranberry-800 mb-4">Quick Response</h4>
+                <h4 className="font-semibold text-cranberry-800 mb-4">
+                  Quick Response
+                </h4>
                 <p className="text-cranberry-700 text-sm mb-4">
-                  We typically respond to inquiries within 24-48 hours. For urgent matters,
-                  feel free to reach out to us directly on Facebook.
+                  We typically respond to inquiries within 24-48 hours. For
+                  urgent matters, feel free to reach out to us directly on
+                  Facebook.
                 </p>
                 <a
                   href="https://www.facebook.com/RotaractClubZamboWest"
@@ -301,8 +343,18 @@ const Contact = () => {
                   className="inline-flex items-center text-cranberry-600 hover:text-cranberry-700 font-medium text-sm"
                 >
                   Visit our Facebook Page
-                  <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  <svg
+                    className="w-4 h-4 ml-1"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                    />
                   </svg>
                 </a>
               </div>
@@ -311,13 +363,15 @@ const Contact = () => {
         </div>
       </div>
 
-      {/* Toast Notification */}
       {showToast && (
         <div className="fixed bottom-4 right-4 z-50 animate-in slide-in-from-bottom-2 duration-300">
-          <div className={`flex items-center space-x-3 px-6 py-4 rounded-xl shadow-lg transition-all duration-200 hover:shadow-xl hover:-translate-y-1 ${submitStatus === 'success'
-              ? 'bg-green-500 text-white'
-              : 'bg-red-500 text-white'
-            }`}>
+          <div
+            className={`flex items-center space-x-3 px-6 py-4 rounded-xl shadow-lg transition-all duration-200 hover:shadow-xl hover:-translate-y-1 ${
+              submitStatus === 'success'
+                ? 'bg-green-500 text-white'
+                : 'bg-red-500 text-white'
+            }`}
+          >
             {submitStatus === 'success' ? (
               <CheckCircle className="h-5 w-5 flex-shrink-0" />
             ) : (
@@ -325,7 +379,7 @@ const Contact = () => {
             )}
             <span className="font-medium">
               {submitStatus === 'success'
-                ? 'Message sent successfully! We\'ll get back to you soon.'
+                ? "Message sent successfully! We'll get back to you soon."
                 : 'There was an error sending your message. Please try again.'}
             </span>
             <button
@@ -342,4 +396,4 @@ const Contact = () => {
   );
 };
 
-export default Contact; 
+export default Contact;
