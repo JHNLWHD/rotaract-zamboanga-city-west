@@ -30,3 +30,7 @@ scripts/officers-data.json
 
 # Environment-specific generated files
 scripts/asset-mapping.json
+
+# Build-time generated files (copied from .prod/.dev variants)
+public/robots.txt
+public/_headers

@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "cp public/robots.prod.txt public/robots.txt && npm run type-check && vite build",
-    "build:dev": "cp public/robots.dev.txt public/robots.txt && npm run type-check && vite build --mode development",
+    "build": "cp public/robots.prod.txt public/robots.txt && cp public/_headers.prod public/_headers && npm run type-check && vite build",
+    "build:dev": "cp public/robots.dev.txt public/robots.txt && cp public/_headers.dev public/_headers && npm run type-check && vite build --mode development",
     "type-check": "tsc --noEmit",
     "lint": "npm run format && eslint . --fix",
     "lint:check": "npm run format:check && eslint .",

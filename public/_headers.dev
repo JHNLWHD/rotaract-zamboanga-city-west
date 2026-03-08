@@ -1,0 +1,6 @@
+# Development/Preview headers
+# This file is copied to dist/_headers during dev/preview builds
+
+/*
+  X-Robots-Tag: noindex, nofollow
+  X-Content-Type-Options: nosniff
