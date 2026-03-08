@@ -1,28 +1,28 @@
-import contentful from "../contentfulClient";
-import type { EntrySkeletonType, EntryFieldTypes } from "contentful"; 
+import contentful from '../contentfulClient';
+import type { EntrySkeletonType, EntryFieldTypes } from 'contentful';
 
 type StatItemSkeleton = EntrySkeletonType & {
-  contentTypeId: "statItem";
+  contentTypeId: 'statItem';
   fields: {
-    value: EntryFieldTypes.Symbol; 
-    description: EntryFieldTypes.Symbol; 
-    icon: EntryFieldTypes.Symbol; 
+    value: EntryFieldTypes.Symbol;
+    description: EntryFieldTypes.Symbol;
+    icon: EntryFieldTypes.Symbol;
   };
 };
 
 type HomepageAboutSectionSkeleton = EntrySkeletonType & {
-  contentTypeId: "homepageAboutSection"; 
+  contentTypeId: 'homepageAboutSection';
   fields: {
-    stats: EntryFieldTypes.Array<EntryFieldTypes.EntryLink<StatItemSkeleton>>; 
-    outStory: EntryFieldTypes.Text; 
-    image: EntryFieldTypes.AssetLink; 
+    stats: EntryFieldTypes.Array<EntryFieldTypes.EntryLink<StatItemSkeleton>>;
+    ourStory: EntryFieldTypes.Text;
+    image: EntryFieldTypes.AssetLink;
   };
 };
 
 export type Stat = {
-  value: string;  
-  description: string; 
-  icon: string; 
+  value: string;
+  description: string;
+  icon: string;
 };
 
 export type ImageData = {
@@ -33,27 +33,36 @@ export type ImageData = {
 
 export type HomepageAboutSection = {
   stats: Stat[];
-  outStory: string; 
+  ourStory: string;
   image?: ImageData;
 };
 
-const DEFAULT_ABOUT_SECTION_ENTRY_ID = "5s0nfiDYTuRS7wbQ5Y3lqI";  
-
-export async function fetchAboutCommunity(entryId?: string): Promise<HomepageAboutSection | null> {
+export async function fetchAboutCommunity(): Promise<HomepageAboutSection | null> {
   try {
-    const entry = await contentful.client.getEntry<HomepageAboutSectionSkeleton>(
-      entryId || DEFAULT_ABOUT_SECTION_ENTRY_ID
-    );
+    // Query for the first homepageAboutSection entry instead of using hardcoded ID
+    const entries =
+      await contentful.client.getEntries<HomepageAboutSectionSkeleton>({
+        content_type: 'homepageAboutSection',
+        limit: 1,
+      });
 
+    if (entries.items.length === 0) {
+      console.warn('No homepage about section found');
+      return null;
+    }
+
+    const entry = entries.items[0];
     const f = entry.fields;
 
     const stats: Stat[] = await Promise.all(
-      (f.stats || []).map(async (statLink) => {
-        const statEntry = await contentful.client.getEntry<StatItemSkeleton>(statLink.sys.id);
+      (f.stats || []).map(async statLink => {
+        const statEntry = await contentful.client.getEntry<StatItemSkeleton>(
+          statLink.sys.id
+        );
         return {
-          value: statEntry.fields.value ?? "",
-          description: statEntry.fields.description ?? "",
-          icon: statEntry.fields.icon ?? "",
+          value: statEntry.fields.value ?? '',
+          description: statEntry.fields.description ?? '',
+          icon: statEntry.fields.icon ?? '',
         };
       })
     );
@@ -62,22 +71,23 @@ export async function fetchAboutCommunity(entryId?: string): Promise<HomepageAbo
     if (f.image) {
       const imageAsset = await contentful.client.getAsset(f.image.sys.id);
       image = {
-        url: imageAsset.fields.file?.url ? `https:${imageAsset.fields.file.url}` : "",
-        title: imageAsset.fields.title || "",
-        description: imageAsset.fields.description || "",
+        url: imageAsset.fields.file?.url
+          ? `https:${imageAsset.fields.file.url}`
+          : '',
+        title: imageAsset.fields.title || '',
+        description: imageAsset.fields.description || '',
       };
     }
 
     const result: HomepageAboutSection = {
       stats,
-      outStory: f.outStory || "",
+      ourStory: f.ourStory || '',
       image,
     };
 
-    return result; 
-
+    return result;
   } catch (error) {
-    console.error("Error fetching About Community section:", error);
-    return null; 
+    console.error('Error fetching About Community section:', error);
+    return null;
   }
 }
