@@ -1,0 +1,6 @@
+# Production-only headers
+# This file is copied to dist/_headers during production builds only
+
+/*
+  X-Robots-Tag: index, follow
+  X-Content-Type-Options: nosniff
