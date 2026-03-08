@@ -1,0 +1,8 @@
+# Development/Staging robots.txt
+# This file blocks all search engine crawling for development and staging environments
+# Usage: Copy this file to robots.txt before deploying to development/staging:
+#   cp public/robots.dev.txt public/robots.txt
+# Or automate it in your build:dev script
+
+User-agent: *
+Disallow: /
