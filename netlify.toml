@@ -1,0 +1,17 @@
+# Netlify configuration for Rotaract Zamboanga City West
+
+[build]
+  # Production build - uses robots.prod.txt (allows crawling)
+  command = "npm run build"
+  publish = "dist"
+
+# Deploy Preview and Branch Deploy contexts use development robots.txt (blocks crawling)
+[context.deploy-preview]
+  command = "npm run build:dev"
+
+[context.branch-deploy]
+  command = "npm run build:dev"
+
+# Optional: Production context (explicit)
+[context.production]
+  command = "npm run build"
