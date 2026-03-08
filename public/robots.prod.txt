@@ -1,7 +1,6 @@
 # Production robots.txt
 # This file allows search engine crawling for production deployment
-# For development/staging: use robots.dev.txt instead
-# See also: robots.prod.txt (production) and robots.dev.txt (development)
+# Usage: This is the default configuration for production sites
 
 User-agent: *
 Allow: /
