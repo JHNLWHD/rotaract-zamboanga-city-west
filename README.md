@@ -23,6 +23,7 @@ This project is built with:
 Follow these steps to set up and run the project locally:
 
 ### Prerequisites
+
 - [Bun](https://bun.sh/) (Install via `curl -fsSL https://bun.sh/install | bash`)
 
 ### Installation & Development

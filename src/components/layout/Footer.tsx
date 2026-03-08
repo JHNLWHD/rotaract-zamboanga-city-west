@@ -1,5 +1,13 @@
 import React from 'react';
-import { Facebook, Instagram, Mail, MapPin, Phone, Heart, ExternalLink } from 'lucide-react';
+import {
+  Facebook,
+  Instagram,
+  Mail,
+  MapPin,
+  Phone,
+  Heart,
+  ExternalLink,
+} from 'lucide-react';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -11,46 +19,45 @@ const Footer = () => {
     { label: 'Great West in Action', href: '/events' },
     { label: 'Leadership Team', href: '/officers' },
     { label: 'Join Us', href: '/#join' },
-    { label: 'Contact', href: '/#contact' }
+    { label: 'Contact', href: '/#contact' },
   ];
 
   const contactInfo = [
     {
       icon: <MapPin className="h-5 w-5" />,
-      title: "Location",
-      content: "Zamboanga City"
+      title: 'Location',
+      content: 'Zamboanga City',
     },
     {
       icon: <Mail className="h-5 w-5" />,
-      title: "Email",
-      content: "raczambowest1@gmail.com"
-    }
+      title: 'Email',
+      content: 'raczambowest1@gmail.com',
+    },
   ];
 
   const socialLinks = [
     {
       icon: <Facebook className="h-5 w-5" />,
-      label: "Facebook",
-      href: "https://www.facebook.com/RotaractClubZamboWest",
-      color: "hover:text-blue-500"
+      label: 'Facebook',
+      href: 'https://www.facebook.com/RotaractClubZamboWest',
+      color: 'hover:text-blue-500',
     },
     {
       icon: <Instagram className="h-5 w-5" />,
-      label: "Instagram",
-      href: "https://www.instagram.com/raczambowest1",
-      color: "hover:text-pink-500"
+      label: 'Instagram',
+      href: 'https://www.instagram.com/raczambowest1',
+      color: 'hover:text-pink-500',
     },
     {
       icon: <Mail className="h-5 w-5" />,
-      label: "Email",
-      href: "mailto:raczambowest1@gmail.com",
-      color: "hover:text-cranberry-500"
-    }
+      label: 'Email',
+      href: 'mailto:raczambowest1@gmail.com',
+      color: 'hover:text-cranberry-500',
+    },
   ];
 
   return (
     <footer className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white overflow-hidden">
-      {/* Modern background elements */}
       <div className="absolute inset-0">
         <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-cranberry-500/50 to-transparent"></div>
         <div className="absolute top-20 -left-32 w-96 h-96 bg-cranberry-500/10 rounded-full blur-3xl"></div>
@@ -58,10 +65,8 @@ const Footer = () => {
       </div>
 
       <div className="relative z-10">
-        {/* Main footer content */}
         <div className="max-w-7xl mx-auto py-16 px-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
-            {/* Brand section */}
             <div className="lg:col-span-2 space-y-6">
               <div className="flex items-center space-x-4">
                 <div className="relative">
@@ -83,11 +88,12 @@ const Footer = () => {
               </div>
 
               <p className="text-gray-300 max-w-md leading-relaxed text-justify">
-                Empowering young leaders through fellowship, service, and professional growth, we proudly advance
-                Rotary's mission of lasting global impact while honouring the rich culture of Zamboanga City since 2010.
+                Empowering young leaders through fellowship, service, and
+                professional growth, we proudly advance Rotary's mission of
+                lasting global impact while honouring the rich culture of
+                Zamboanga City since 2010.
               </p>
 
-              {/* Social links */}
               <div className="flex items-center space-x-4">
                 {socialLinks.map((social, index) => (
                   <a
@@ -104,7 +110,6 @@ const Footer = () => {
               </div>
             </div>
 
-            {/* Quick links */}
             <div className="space-y-6">
               <h4 className="font-semibold text-lg text-white">Quick Links</h4>
               <nav className="grid grid-cols-1 gap-3">
@@ -121,7 +126,6 @@ const Footer = () => {
               </nav>
             </div>
 
-            {/* Contact info */}
             <div className="space-y-6">
               <h4 className="font-semibold text-lg text-white">Get in Touch</h4>
               <div className="space-y-4">
@@ -131,7 +135,9 @@ const Footer = () => {
                       {info.icon}
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-white">{info.title}</p>
+                      <p className="text-sm font-medium text-white">
+                        {info.title}
+                      </p>
                       <p className="text-sm text-gray-300">{info.content}</p>
                     </div>
                   </div>
@@ -141,12 +147,13 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Bottom section */}
         <div className="border-t border-white/10">
           <div className="max-w-7xl mx-auto py-8 px-6">
             <div className="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0">
               <div className="flex items-center space-x-2 text-sm text-gray-300">
-                <span>© {currentYear} Rotaract Club of Zamboanga City West.</span>
+                <span>
+                  © {currentYear} Rotaract Club of Zamboanga City West.
+                </span>
                 <span>Made with</span>
                 <Heart className="h-4 w-4 text-cranberry-400" />
                 <span>for our community.</span>

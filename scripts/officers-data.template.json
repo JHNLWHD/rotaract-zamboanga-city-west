@@ -1,0 +1,57 @@
+{
+  "boardOfDirectors": [
+    {
+      "name": "Full Name",
+      "position": "President",
+      "term": "2025-2026",
+      "responsibilities": "Overall leadership and strategic direction of the club",
+      "category": "Executive",
+      "email": "email@example.com",
+      "phone": "9XXXXXXXXX",
+      "displayOrder": 1
+    }
+  ],
+  "directors": [
+    {
+      "name": "Full Name",
+      "position": "Membership Chair",
+      "term": "2025-2026",
+      "responsibilities": "Recruitment, retention, and new member orientation",
+      "category": "Director",
+      "email": "email@example.com",
+      "phone": "9XXXXXXXXX",
+      "displayOrder": 7
+    }
+  ],
+  "advisors": [
+    {
+      "name": "Full Name",
+      "position": "Rotaract Club Adviser",
+      "term": "2025-2026",
+      "responsibilities": "Provides guidance and mentorship to the club",
+      "category": "Advisor",
+      "email": "email@example.com",
+      "phone": "9XXXXXXXXX",
+      "displayOrder": 21
+    }
+  ],
+  "pastPresidents": [
+    {
+      "term": "2009-2010",
+      "name": "Full Name",
+      "displayOrder": 1
+    },
+    {
+      "term": "2025-2026",
+      "name": "Current President Name",
+      "status": "current",
+      "displayOrder": 17
+    },
+    {
+      "term": "2026-2027",
+      "name": "President-Elect Name",
+      "status": "president_elect",
+      "displayOrder": 18
+    }
+  ]
+}
