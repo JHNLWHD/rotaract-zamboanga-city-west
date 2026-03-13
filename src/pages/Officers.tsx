@@ -3,24 +3,34 @@ import { Helmet } from 'react-helmet';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import { Badge } from '@/components/ui/badge';
-import { Users, Award } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import ExecutiveBoard from '../components/officers/ExecutiveBoard';
 import BoardOfDirectors from '../components/officers/BoardOfDirectors';
 import ClubAdvisors from '../components/officers/ClubAdvisors';
 import PastPresidents from '../components/officers/PastPresidents';
-import {
-  allOfficers,
-  pastPresidents,
-  getExecutiveBoard,
-  getCurrentDirectors,
-  getAdvisors,
-  getCurrentTerm,
-} from '@/data/officers';
+import { useOfficers, usePastPresidents } from '../hooks/officers/useOfficers';
+import { getCurrentTerm } from '@/data/officers';
 
 const Officers = () => {
-  const executiveBoard = getExecutiveBoard();
-  const currentDirectors = getCurrentDirectors();
-  const advisorsList = getAdvisors();
+  const currentTerm = getCurrentTerm();
+  const {
+    data: officers,
+    isLoading: isLoadingOfficers,
+    isError: isErrorOfficers,
+  } = useOfficers(currentTerm);
+  const {
+    data: pastPresidentsList,
+    isLoading: isLoadingPastPresidents,
+    isError: isErrorPastPresidents,
+  } = usePastPresidents();
+
+  const isLoading = isLoadingOfficers || isLoadingPastPresidents;
+  const isError = isErrorOfficers || isErrorPastPresidents;
+
+  const executiveBoard = officers?.executive || [];
+  const currentDirectors = officers?.directors || [];
+  const advisorsList = officers?.advisors || [];
+  const allOfficers = [...executiveBoard, ...currentDirectors, ...advisorsList];
 
   return (
     <>
@@ -199,13 +209,36 @@ const Officers = () => {
               </Badge>
             </div>
 
-            <ExecutiveBoard executives={executiveBoard} />
+            {isLoading && (
+              <div className="flex items-center justify-center py-16">
+                <div className="text-center">
+                  <Loader2 className="w-12 h-12 animate-spin text-cranberry-600 mx-auto mb-4" />
+                  <p className="text-gray-600">Loading officers...</p>
+                </div>
+              </div>
+            )}
 
-            <BoardOfDirectors directors={currentDirectors} />
+            {isError && (
+              <div className="flex items-center justify-center py-16">
+                <div className="text-center">
+                  <p className="text-red-600 mb-4">
+                    Failed to load officers. Please try again later.
+                  </p>
+                </div>
+              </div>
+            )}
 
-            <ClubAdvisors advisors={advisorsList} />
+            {!isLoading && !isError && (
+              <>
+                <ExecutiveBoard executives={executiveBoard} />
 
-            <PastPresidents pastPresidents={pastPresidents} />
+                <BoardOfDirectors directors={currentDirectors} />
+
+                <ClubAdvisors advisors={advisorsList} />
+
+                <PastPresidents pastPresidents={pastPresidentsList || []} />
+              </>
+            )}
           </div>
         </main>
         <Footer />

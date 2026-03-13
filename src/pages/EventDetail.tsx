@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import Navbar from '../components/layout/Navbar';
@@ -13,7 +13,7 @@ import EventGallery from '../components/events/EventGallery';
 import BackToEventsButton from '../components/events/BackToEventsButton';
 import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
-import { fetchEventBySlug, type Event } from '../hooks/events/fetchEvents';
+import { useEventBySlug } from '../hooks/events/useEventBySlug';
 import Lightbox from 'yet-another-react-lightbox';
 import 'yet-another-react-lightbox/styles.css';
 import 'yet-another-react-lightbox/plugins/captions.css';
@@ -24,34 +24,12 @@ import Thumbnails from 'yet-another-react-lightbox/plugins/thumbnails';
 
 const EventDetail = () => {
   const { date, slug } = useParams();
-  const [event, setEvent] = useState<Event | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { data: event, isLoading, isError } = useEventBySlug(slug);
   const [showShareModal, setShowShareModal] = useState(false);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
 
-  useEffect(() => {
-    const loadEvent = async () => {
-      if (!slug) {
-        setLoading(false);
-        return;
-      }
-
-      try {
-        const fetchedEvent = await fetchEventBySlug(slug);
-        setEvent(fetchedEvent);
-      } catch (error) {
-        console.error('Error loading event:', error);
-        setEvent(null);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadEvent();
-  }, [slug]);
-
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="min-h-screen flex flex-col">
         <Navbar />
@@ -66,7 +44,7 @@ const EventDetail = () => {
     );
   }
 
-  if (!event) {
+  if (isError || !event) {
     return <EventNotFound />;
   }
 

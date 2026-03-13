@@ -8,7 +8,8 @@ import ProjectNotFound from '../components/projects/ProjectNotFound';
 import ProjectBreadcrumb from '../components/projects/ProjectBreadcrumb';
 import ProjectMainContent from '../components/projects/ProjectMainContent';
 import ProjectSidebar from '../components/projects/ProjectSidebar';
-import { projects } from '../data/projects';
+import { useProjectBySlug } from '../hooks/projects/useProjectBySlug';
+import { Loader2 } from 'lucide-react';
 
 import 'yet-another-react-lightbox/styles.css';
 import 'yet-another-react-lightbox/plugins/captions.css';
@@ -16,11 +17,25 @@ import 'yet-another-react-lightbox/plugins/thumbnails.css';
 
 const ProjectDetail = () => {
   const { slug } = useParams();
+  const { data: project, isLoading, isError } = useProjectBySlug(slug);
   const [showShareModal, setShowShareModal] = useState(false);
 
-  const project = projects.find(p => p.slug === slug);
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Navbar />
+        <main className="flex-1 flex items-center justify-center">
+          <div className="text-center">
+            <Loader2 className="w-12 h-12 animate-spin text-cranberry-600 mx-auto mb-4" />
+            <p className="text-gray-600">Loading project details...</p>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
-  if (!project) {
+  if (isError || !project) {
     return <ProjectNotFound />;
   }
 
