@@ -54,6 +54,10 @@ const ProjectMainContent: React.FC<ProjectMainContentProps> = ({
     });
   };
 
+  const aboutMarkdown = (project.description?.trim() ?? '')
+    .replace(/\n+/g, '\n\n')
+    .trim();
+
   return (
     <div className="lg:col-span-2">
       <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg">
@@ -114,35 +118,33 @@ const ProjectMainContent: React.FC<ProjectMainContentProps> = ({
             </div>
           </div>
 
-          <div className="mb-8">
-            <h2 className="text-xl font-semibold text-slate-900 mb-4">
-              About This Project
-            </h2>
-            <div className="prose prose-slate max-w-none">
-              {project.description && (
-                <div className="text-slate-700 leading-relaxed prose prose-slate max-w-none prose-p:text-slate-700 prose-p:leading-relaxed prose-strong:text-slate-900 prose-strong:font-semibold prose-ul:my-2 prose-li:my-1">
-                  <ReactMarkdown
-                    remarkPlugins={[remarkGfm]}
-                    components={{
-                      a: ({ node, ...props }) => (
-                        <a
-                          {...props}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-cranberry-600 hover:text-cranberry-700 underline inline-flex items-center gap-1"
-                        >
-                          {props.children}
-                          <ExternalLink className="w-3 h-3" />
-                        </a>
-                      ),
-                    }}
-                  >
-                    {project.richDescription}
-                  </ReactMarkdown>
-                </div>
-              )}
+          {aboutMarkdown ? (
+            <div className="mb-8">
+              <h2 className="text-xl font-semibold text-slate-900 mb-4">
+                About This Project
+              </h2>
+              <div className="text-slate-700 leading-relaxed prose prose-slate max-w-none prose-p:text-slate-700 prose-p:leading-relaxed prose-strong:text-slate-900 prose-strong:font-semibold prose-ul:my-2 prose-li:my-1">
+                <ReactMarkdown
+                  remarkPlugins={[remarkGfm]}
+                  components={{
+                    a: ({ node, ...props }) => (
+                      <a
+                        {...props}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-cranberry-600 hover:text-cranberry-700 underline inline-flex items-center gap-1"
+                      >
+                        {props.children}
+                        <ExternalLink className="w-3 h-3" />
+                      </a>
+                    ),
+                  }}
+                >
+                  {aboutMarkdown}
+                </ReactMarkdown>
+              </div>
             </div>
-          </div>
+          ) : null}
 
           {project.bulletPoints && project.bulletPoints.length > 0 && (
             <div className="mb-8">
