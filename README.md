@@ -5,6 +5,7 @@ Welcome to the official repository for the Rotaract Zamboanga City West website!
 ## Project Info
 
 - **Production Site:** [https://rotaract-zambo-city-west.netlify.app/](https://rotaract-zambo-city-west.netlify.app/)
+- **Page behavior specs:** [openspec/specs/README.md](openspec/specs/README.md) (route index and per-page documentation).
 
 ## Tech Stack
 
