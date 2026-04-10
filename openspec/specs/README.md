@@ -1,4 +1,10 @@
-# Page specs index
+# Specs index
+
+## Site SEO
+
+Cross-cutting search and social metadata rules (Helmet, canonical URLs, JSON-LD, robots): **[seo/spec.md](seo/spec.md)**.
+
+## Pages (per route)
 
 Behavioral documentation for each route template lives under [`pages/`](pages/). Implementation entry points are `src/pages/*.tsx` and `src/App.tsx` routes.
 
