@@ -2,6 +2,10 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 import { format, parseISO } from 'date-fns';
 import { Loader2 } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
+import remarkBreaks from 'remark-breaks';
+import remarkGfm from 'remark-gfm';
+import type { Components } from 'react-markdown';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import { useFoundationGiving } from '../hooks/foundationGiving/useFoundationGiving';
@@ -23,6 +27,77 @@ function formatAsOf(iso: string): string {
   } catch {
     return iso;
   }
+}
+
+const faqMarkdownComponents: Components = {
+  ul: ({ children, ...props }) => (
+    <ul
+      className="my-2 list-disc space-y-1 pl-5 marker:text-slate-500"
+      {...props}
+    >
+      {children}
+    </ul>
+  ),
+  ol: ({ children, ...props }) => (
+    <ol
+      className="my-2 list-decimal space-y-1 pl-5 marker:text-slate-500"
+      {...props}
+    >
+      {children}
+    </ol>
+  ),
+  li: ({ children, ...props }) => (
+    <li className="text-slate-600 leading-relaxed" {...props}>
+      {children}
+    </li>
+  ),
+  h1: ({ children }) => (
+    <h4 className="text-sm font-semibold text-slate-900 mt-3 mb-1 first:mt-0">
+      {children}
+    </h4>
+  ),
+  h2: ({ children }) => (
+    <h4 className="text-sm font-semibold text-slate-900 mt-3 mb-1 first:mt-0">
+      {children}
+    </h4>
+  ),
+  h3: ({ children }) => (
+    <h5 className="text-sm font-medium text-slate-800 mt-2 mb-1 first:mt-0">
+      {children}
+    </h5>
+  ),
+  a: ({ href, children, ...props }) => {
+    const external =
+      typeof href === 'string' &&
+      (href.startsWith('http://') || href.startsWith('https://'));
+    return (
+      <a
+        {...props}
+        href={href}
+        className="text-cranberry-600 hover:text-cranberry-700 underline"
+        {...(external
+          ? { target: '_blank', rel: 'noopener noreferrer' }
+          : {})}
+      >
+        {children}
+      </a>
+    );
+  },
+};
+
+function FaqMarkdownBody({ markdown }: { markdown: string }) {
+  if (!markdown.trim()) return null;
+
+  return (
+    <div className="prose prose-slate prose-sm max-w-none mt-1.5 text-slate-600 prose-p:leading-relaxed prose-strong:text-slate-800 prose-ul:my-2 prose-li:my-0.5 [&>*:first-child]:mt-0">
+      <ReactMarkdown
+        remarkPlugins={[remarkGfm, remarkBreaks]}
+        components={faqMarkdownComponents}
+      >
+        {markdown}
+      </ReactMarkdown>
+    </div>
+  );
 }
 
 function GivingYearCard({
@@ -318,33 +393,25 @@ const FoundationGiving = () => {
                       <h3 className="text-base font-semibold text-slate-900">
                         Annual Fund
                       </h3>
-                      <p className="text-slate-600 text-sm leading-relaxed mt-1.5">
-                        {data.faq.annualFund}
-                      </p>
+                      <FaqMarkdownBody markdown={data.faq.annualFund} />
                     </li>
                     <li>
                       <h3 className="text-base font-semibold text-slate-900">
                         PolioPlus Fund
                       </h3>
-                      <p className="text-slate-600 text-sm leading-relaxed mt-1.5">
-                        {data.faq.polioPlus}
-                      </p>
+                      <FaqMarkdownBody markdown={data.faq.polioPlus} />
                     </li>
                     <li>
                       <h3 className="text-base font-semibold text-slate-900">
                         Other Fund
                       </h3>
-                      <p className="text-slate-600 text-sm leading-relaxed mt-1.5">
-                        {data.faq.other}
-                      </p>
+                      <FaqMarkdownBody markdown={data.faq.other} />
                     </li>
                     <li>
                       <h3 className="text-base font-semibold text-slate-900">
                         Endowment Fund
                       </h3>
-                      <p className="text-slate-600 text-sm leading-relaxed mt-1.5">
-                        {data.faq.endowment}
-                      </p>
+                      <FaqMarkdownBody markdown={data.faq.endowment} />
                     </li>
                   </ul>
                 </section>

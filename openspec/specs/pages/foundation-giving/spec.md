@@ -19,7 +19,7 @@ Publish **The Rotary Foundation** club giving as a multi-year report (USD) with 
 - **Loading:** Centered spinner.
 - **Error:** Red-bordered message consistent with other CMS list-style pages.
 - **Empty:** Message when no report entry exists.
-- **Success:** Report (pink club banner, subtitle; **table on `md+`**, **per-year cards below `md`**) and “About these funds” FAQ as always-visible sections (heading + text per fund; not accordion).
+- **Success:** Report (pink club banner, subtitle; **table on `md+`**, **per-year cards below `md`**) and “About these funds” FAQ as always-visible sections (heading + **Markdown-rendered** body per fund; not accordion).
 
 ## Layout
 
@@ -45,6 +45,8 @@ The page SHALL show an as-of date from content near the report.
 On narrow viewports, the report SHALL use a dedicated mobile layout (not only a horizontally scrolled wide table). On `md` and wider, the columnar table MAY be shown.
 
 Below the report, the page SHALL include an FAQ section with at least one explanation per fund column (Annual, PolioPlus, Other, Endowment). Explanations SHALL be visible without interaction (no accordion or other control that hides copy by default).
+
+Each FAQ field from Contentful SHALL be rendered as **GitHub-flavored Markdown** (inline formatting, lists, links), consistent with other CMS Markdown surfaces. Single newlines in a field SHALL produce line breaks on the page. FAQ rendering SHALL NOT execute raw HTML from editor content. Ordered and unordered lists inside FAQ copy SHALL display with visible markers even when the FAQ block sits inside other list layout on the page.
 
 Report figures, header text, as-of date, and FAQ copy SHALL load from Contentful; failed or missing data SHALL not show fabricated numbers.
 

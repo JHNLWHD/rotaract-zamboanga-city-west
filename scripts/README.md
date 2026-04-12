@@ -66,4 +66,4 @@ Foundation giving uses its **own** setup and migration scripts so the main `setu
    npm run contentful:migrate-foundation-giving
    ```
 
-3. **Edit in Contentful** — update figures, as-of date, or FAQ text in the Foundation Giving Report entry as new Rotary reports arrive.
+3. **Edit in Contentful** — update figures, as-of date, or FAQ text in the Foundation Giving Report entry as new Rotary reports arrive. The four **FAQ** fields (`FAQ — Annual Fund`, etc.) accept **GitHub-flavored Markdown**; the site renders the **exact** field text (no rewriting). **Line breaks** in a field are preserved on the page (single newlines become line breaks). For bullet lists, use a space after the hyphen on each bullet line (e.g. `- Item`) per standard GFM.
