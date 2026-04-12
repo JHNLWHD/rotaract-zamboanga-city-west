@@ -39,6 +39,7 @@ const Navbar = () => {
     { label: 'Projects', path: '/projects' },
     { label: 'Events', path: '/events' },
     { label: 'Officers', path: '/officers' },
+    { label: 'Foundation', path: '/foundation-giving' },
   ];
 
   // Determine navbar styling based on page and scroll state

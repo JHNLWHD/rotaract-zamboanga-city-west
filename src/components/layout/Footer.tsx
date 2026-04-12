@@ -18,6 +18,7 @@ const Footer = () => {
     { label: 'Community Impact', href: '/projects' },
     { label: 'Great West in Action', href: '/events' },
     { label: 'Leadership Team', href: '/officers' },
+    { label: 'Foundation Giving', href: '/foundation-giving' },
     { label: 'Join Us', href: '/#join' },
     { label: 'Contact', href: '/#contact' },
   ];

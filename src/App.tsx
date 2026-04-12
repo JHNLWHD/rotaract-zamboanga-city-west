@@ -10,6 +10,7 @@ import ProjectDetail from './pages/ProjectDetail';
 import Officers from './pages/Officers';
 import Events from './pages/Events';
 import EventDetail from './pages/EventDetail';
+import FoundationGiving from './pages/FoundationGiving';
 import NotFound from './pages/NotFound';
 
 const queryClient = new QueryClient();
@@ -28,6 +29,7 @@ const App = () => (
           <Route path="/officers" element={<Officers />} />
           <Route path="/events" element={<Events />} />
           <Route path="/events/:date/:slug" element={<EventDetail />} />
+          <Route path="/foundation-giving" element={<FoundationGiving />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

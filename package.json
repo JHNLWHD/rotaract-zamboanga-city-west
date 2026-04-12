@@ -26,6 +26,8 @@
     "contentful:migrate-projects": "node scripts/migrate-projects.js",
     "contentful:migrate-events": "node scripts/migrate-events.js",
     "contentful:migrate-officers": "node scripts/migrate-officers.js",
+    "contentful:setup-foundation-giving": "node scripts/setup-foundation-giving-models.js",
+    "contentful:migrate-foundation-giving": "node scripts/migrate-foundation-giving.js",
     "migrate:all": "node scripts/migrate-all.js"
   },
   "dependencies": {

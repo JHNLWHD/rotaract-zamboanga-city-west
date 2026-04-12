@@ -14,6 +14,7 @@ Behavioral documentation for each route template lives under [`pages/`](pages/).
 | `/projects` | [Projects list](pages/projects-list/spec.md) | `Projects.tsx` |
 | `/projects/:slug` | [Project detail](pages/project-detail/spec.md) | `ProjectDetail.tsx` |
 | `/officers` | [Officers](pages/officers/spec.md) | `Officers.tsx` |
+| `/foundation-giving` | [Foundation Giving](pages/foundation-giving/spec.md) | `FoundationGiving.tsx` |
 | `/events` | [Events list](pages/events-list/spec.md) | `Events.tsx` |
 | `/events/:date/:slug` | [Event detail](pages/event-detail/spec.md) | `EventDetail.tsx` |
 

@@ -51,3 +51,19 @@ See `officers-data.template.json` for the complete structure.
 - Keep personal contact information secure
 - Only share the template file in the repository
 - Distribute actual officer data through secure channels
+
+## Rotary Foundation Giving (Contentful)
+
+Foundation giving uses its **own** setup and migration scripts so the main `setup-contentful-models.js` flow (which recreates types) is not required for this feature.
+
+1. **Create content types (additive only)** — creates `foundationGivingRow` and `foundationGivingReport` only if missing; does not delete or alter other models or entries:
+   ```bash
+   npm run contentful:setup-foundation-giving
+   ```
+
+2. **Seed the initial report and rows** — runs once; skips if a report already exists (use `--force` to delete and re-seed only those foundation-giving entries):
+   ```bash
+   npm run contentful:migrate-foundation-giving
+   ```
+
+3. **Edit in Contentful** — update figures, as-of date, or FAQ text in the Foundation Giving Report entry as new Rotary reports arrive.

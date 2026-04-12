@@ -31,7 +31,7 @@ Define how the public site exposes metadata for search engines and social platfo
 
 | Context | `robots` |
 |---------|----------|
-| All primary content routes (home, lists, details, officers) | `index, follow` with snippet/image/video preview directives where set |
+| All primary content routes (home, lists, details, officers, foundation giving) | `index, follow` with snippet/image/video preview directives where set |
 | NotFound (404) | `noindex, nofollow` |
 
 ### Images
@@ -74,6 +74,13 @@ Define how the public site exposes metadata for search engines and social platfo
 
 - **JSON-LD:** `Organization` with `employee` populated from loaded officer data; breadcrumbs Home → leadership.
 
+### Foundation Giving (`/foundation-giving`)
+
+- **Canonical / `og:url`:** `https://rotaract.rotaryzcwest.org/foundation-giving`.
+- **`robots`:** `index, follow` (primary content).
+- **JSON-LD:** `BreadcrumbList` Home → Foundation Giving; avoid asserting financial `Dataset` precision unless product requires it.
+- **Images:** Default site OG image unless a dedicated asset is added later.
+
 ### NotFound
 
 - Title and description for error UX; **`noindex, nofollow`**; canonical `https://rotaract.rotaryzcwest.org/404`.
@@ -89,7 +96,7 @@ Define how the public site exposes metadata for search engines and social platfo
 | `ItemList` | Inside collection pages |
 | `Project` | Project detail; project items in list JSON-LD |
 | `Event` | Event detail; event items in list JSON-LD |
-| `BreadcrumbList` | Projects, events, officers, project detail, event detail |
+| `BreadcrumbList` | Projects, events, officers, foundation giving, project detail, event detail |
 
 ## Requirements (maintenance)
 
@@ -101,3 +108,20 @@ Define how the public site exposes metadata for search engines and social platfo
 
 - [Specs index](../README.md) — route table and NotFound note.
 - Per-route behavior: [`pages/`](../pages/) — each `spec.md` lists Helmet/JSON-LD highlights for that template.
+
+## Additional requirements
+
+### Foundation Giving route metadata
+
+The `/foundation-giving` route SHALL use `react-helmet` with `index, follow` robots, a unique title and meta description, canonical URL `https://rotaract.rotaryzcwest.org/foundation-giving`, and Open Graph / Twitter tags consistent with other indexable inner pages (including absolute `og:url` and a valid image URL).
+
+#### Scenario: Social and crawler signals
+
+- **WHEN** the Foundation Giving page is rendered
+- **THEN** `robots` allows indexing and following, and `link rel="canonical"` points to `/foundation-giving` on the production origin
+
+#### Scenario: Structured data
+
+- **WHEN** the page includes JSON-LD
+- **THEN** it includes at least a `BreadcrumbList` from Home to the current page title, and does not assert unsupported schema types for tabular financial data
+
