@@ -103,7 +103,7 @@ const Join = () => {
   ];
 
   const requirements = [
-    'Age 18-30 years old',
+    'Age 18-35 years old',
     'Passion for community service',
     'Commitment to fellowship and leadership',
     'Ability to participate in monthly meetings',
