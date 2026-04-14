@@ -11,14 +11,12 @@ import {
   Clock,
   Trophy,
 } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
+
+const MEMBERSHIP_APPLICATION_FORM = 'https://forms.gle/niebTPmkAgiHB5WVA';
 
 const Join = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const processRef = useRef<HTMLDivElement>(null);
-
-  // Google Form URL for membership application
-  const MEMBERSHIP_APPLICATION_FORM = 'https://forms.gle/Q2JUyN6QeeqQkdFv5';
 
   useEffect(() => {
     const observer = new IntersectionObserver(
