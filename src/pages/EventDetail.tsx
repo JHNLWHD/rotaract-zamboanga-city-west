@@ -14,6 +14,7 @@ import BackToEventsButton from '../components/events/BackToEventsButton';
 import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useEventBySlug } from '../hooks/events/useEventBySlug';
+import { markdownToPlainText } from '../utils/richText';
 import Lightbox from 'yet-another-react-lightbox';
 import 'yet-another-react-lightbox/styles.css';
 import 'yet-another-react-lightbox/plugins/captions.css';
@@ -56,6 +57,8 @@ const EventDetail = () => {
     setShowShareModal(false);
   };
 
+  const descriptionPlain = markdownToPlainText(event.description);
+
   const downloadInvitation = () => {
     if (event.invitationImage) {
       const link = document.createElement('a');
@@ -81,7 +84,7 @@ const EventDetail = () => {
         />
         <meta
           name="description"
-          content={`${event.description} Join the Great West in Action on ${new Date(event.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })} at ${event.venue}. ${event.status === 'upcoming' ? 'Register now and be part of our dynamic community!' : event.status === 'registration_open' ? 'Registration is open - join us!' : 'See event highlights and photos from this memorable Great West gathering.'}`}
+          content={`${descriptionPlain} Join the Great West in Action on ${new Date(event.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })} at ${event.venue}. ${event.status === 'upcoming' ? 'Register now and be part of our dynamic community!' : event.status === 'registration_open' ? 'Registration is open - join us!' : 'See event highlights and photos from this memorable Great West gathering.'}`}
         />
         <meta
           name="keywords"
@@ -116,7 +119,7 @@ const EventDetail = () => {
         />
         <meta
           property="og:description"
-          content={`${event.description} Join the Great West in Action on ${new Date(event.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })} at ${event.venue}.`}
+          content={`${descriptionPlain} Join the Great West in Action on ${new Date(event.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })} at ${event.venue}.`}
         />
         <meta
           property="og:image"
@@ -154,7 +157,7 @@ const EventDetail = () => {
         />
         <meta
           name="twitter:description"
-          content={`${event.description} Join the Great West in Action on ${new Date(event.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })} at ${event.venue}.`}
+          content={`${descriptionPlain} Join the Great West in Action on ${new Date(event.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })} at ${event.venue}.`}
         />
         <meta
           name="twitter:image"
@@ -199,7 +202,7 @@ const EventDetail = () => {
               '@context': 'https://schema.org',
               '@type': 'Event',
               name: event.title,
-              description: event.description,
+              description: descriptionPlain,
               startDate: `${event.date}T${event.time.split(' - ')[0].replace(/[^0-9:]/g, '')}`,
               endDate: `${event.date}T${event.time.split(' - ')[1]?.replace(/[^0-9:]/g, '') || '23:59'}`,
               eventStatus:
@@ -364,7 +367,7 @@ const EventDetail = () => {
             event
               ? {
                   title: event.title,
-                  description: event.description,
+                  description: descriptionPlain,
                   date: event.date,
                   venue: event.venue,
                   shareableLink: event.shareableLink,

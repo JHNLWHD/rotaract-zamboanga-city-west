@@ -1,6 +1,7 @@
 import contentful from '../contentfulClient';
 import type { EntrySkeletonType, EntryFieldTypes } from 'contentful';
 import { processAsset } from '../../utils/contentful';
+import { richTextToMarkdown, type RichText } from '../../utils/richText';
 
 type EventSkeleton = EntrySkeletonType & {
   contentTypeId: 'event';
@@ -48,29 +49,6 @@ export type Event = {
     category: string;
   }>;
 };
-
-// Helper function to extract text from rich text
-interface RichTextNode {
-  nodeType: string;
-  content?: Array<{ value?: string }>;
-}
-
-interface RichText {
-  content?: RichTextNode[];
-}
-
-function extractTextFromRichText(richText: RichText): string {
-  if (!richText || !richText.content) return '';
-
-  return richText.content
-    .map((node: RichTextNode) => {
-      if (node.nodeType === 'paragraph' && node.content) {
-        return node.content.map(textNode => textNode.value || '').join('');
-      }
-      return '';
-    })
-    .join('\n');
-}
 
 export async function fetchEvents(
   limit?: number,
@@ -158,7 +136,7 @@ export async function fetchEvents(
           id: entry.sys.id,
           title: fields.title || '',
           slug: fields.slug || '',
-          description: extractTextFromRichText(fields.description),
+          description: richTextToMarkdown(fields.description as unknown as RichText),
           date: fields.date || '',
           time: fields.time || '',
           venue: fields.venue || '',
@@ -279,7 +257,7 @@ export async function fetchEventBySlug(slug: string): Promise<Event | null> {
       id: entry.sys.id,
       title: fields.title || '',
       slug: fields.slug || '',
-      description: extractTextFromRichText(fields.description as unknown as RichText),
+      description: richTextToMarkdown(fields.description as unknown as RichText),
       date: fields.date || '',
       time: fields.time || '',
       venue: fields.venue || '',

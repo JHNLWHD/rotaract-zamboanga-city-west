@@ -1,5 +1,8 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ExternalLink } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { type Event } from '../../hooks/events/fetchEvents';
 
 type EventContentProps = {
@@ -16,11 +19,28 @@ const EventContent: React.FC<EventContentProps> = ({ event }) => {
               <CardTitle>About This Event</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="prose max-w-none mb-8">
-                <p className="text-lg text-gray-700 leading-relaxed">
-                  {event.description}
-                </p>
-              </div>
+              {event.description ? (
+                <div className="text-gray-700 leading-relaxed prose prose-slate max-w-none prose-p:text-gray-700 prose-p:text-lg prose-p:leading-relaxed prose-strong:text-gray-900 prose-strong:font-semibold prose-ul:my-2 prose-li:my-1 mb-8">
+                  <ReactMarkdown
+                    remarkPlugins={[remarkGfm]}
+                    components={{
+                      a: ({ node, ...props }) => (
+                        <a
+                          {...props}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-cranberry-600 hover:text-cranberry-700 underline inline-flex items-center gap-1"
+                        >
+                          {props.children}
+                          <ExternalLink className="w-3 h-3" />
+                        </a>
+                      ),
+                    }}
+                  >
+                    {event.description}
+                  </ReactMarkdown>
+                </div>
+              ) : null}
             </CardContent>
           </Card>
 

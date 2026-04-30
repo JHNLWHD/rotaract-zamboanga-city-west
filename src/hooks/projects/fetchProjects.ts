@@ -1,6 +1,7 @@
 import contentful from '../contentfulClient';
 import type { EntrySkeletonType, EntryFieldTypes } from 'contentful';
 import { processAsset } from '../../utils/contentful';
+import { richTextToMarkdown, type RichText } from '../../utils/richText';
 
 type ProjectSkeleton = EntrySkeletonType & {
   contentTypeId: 'project';
@@ -57,29 +58,6 @@ export type Project = {
   bulletPoints: string[];
   partnerLinks?: ProjectPartnerLinks;
 };
-
-// Helper function to extract text from rich text
-interface RichTextNode {
-  nodeType: string;
-  content?: Array<{ value?: string }>;
-}
-
-interface RichText {
-  content?: RichTextNode[];
-}
-
-function extractTextFromRichText(richText: RichText): string {
-  if (!richText || !richText.content) return '';
-
-  return richText.content
-    .map((node: RichTextNode) => {
-      if (node.nodeType === 'paragraph' && node.content) {
-        return node.content.map(textNode => textNode.value || '').join('');
-      }
-      return '';
-    })
-    .join('\n');
-}
 
 export async function fetchProjects(
   limit?: number,
@@ -164,7 +142,7 @@ export async function fetchProjects(
           title: fields.title || '',
           slug: fields.slug || '',
           shortDescription: fields.shortDescription || '',
-          description: extractTextFromRichText(
+          description: richTextToMarkdown(
             fields.description as unknown as RichText
           ),
           date: fields.date || '',

@@ -54,10 +54,6 @@ const ProjectMainContent: React.FC<ProjectMainContentProps> = ({
     });
   };
 
-  const aboutMarkdown = (project.description?.trim() ?? '')
-    .replace(/\n+/g, '\n\n')
-    .trim();
-
   return (
     <div className="lg:col-span-2">
       <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg">
@@ -118,7 +114,7 @@ const ProjectMainContent: React.FC<ProjectMainContentProps> = ({
             </div>
           </div>
 
-          {aboutMarkdown ? (
+          {project.description ? (
             <div className="mb-8">
               <h2 className="text-xl font-semibold text-slate-900 mb-4">
                 About This Project
@@ -140,7 +136,7 @@ const ProjectMainContent: React.FC<ProjectMainContentProps> = ({
                     ),
                   }}
                 >
-                  {aboutMarkdown}
+                  {project.description}
                 </ReactMarkdown>
               </div>
             </div>
