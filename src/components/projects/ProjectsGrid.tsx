@@ -2,10 +2,10 @@ import React from 'react';
 import { Users } from 'lucide-react';
 import ProjectCard from './ProjectCard';
 import EmptyState from '../ui/EmptyState';
-import { type Project } from '../../hooks/projects/fetchProjects';
+import { type ProjectListItem } from '../../hooks/projects/fetchProjects';
 
 type ProjectsGridProps = {
-  projects: Project[] | undefined;
+  projects: ProjectListItem[] | undefined;
 };
 
 const ProjectsGrid: React.FC<ProjectsGridProps> = ({ projects }) => {

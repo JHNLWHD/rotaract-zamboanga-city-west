@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ExternalLink } from 'lucide-react';
-import { type Project } from '../../data/projects';
+import { type Project } from '../../hooks/projects/fetchProjects';
 
 type ProjectSidebarProps = {
   project: Project;

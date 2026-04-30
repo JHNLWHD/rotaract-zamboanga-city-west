@@ -26,27 +26,28 @@ type ProjectSkeleton = EntrySkeletonType & {
   };
 };
 
-export type ProjectPartnerLinks =
-  | Record<string, string>
-  | Array<{
-      name: string;
-      url?: string;
-    }>;
+export type ProjectPartnerLinks = Array<{
+  name: string;
+  url?: string;
+}>;
 
-export type Project = {
+export type ProjectListItem = {
   id: string;
   title: string;
   slug: string;
   shortDescription: string;
-  description: string;
   date: string;
   venue: string;
   impact: string;
   partners: string[];
+  category: string;
+  image: string;
+};
+
+export type Project = ProjectListItem & {
+  description: string;
   facebookLink?: string;
   shareableLink: string;
-  image: string;
-  category: string;
   hashtags: string[];
   highlights: string[];
   gallery: Array<{
@@ -62,7 +63,7 @@ export type Project = {
 export async function fetchProjects(
   limit?: number,
   category?: string
-): Promise<Project[] | null> {
+): Promise<ProjectListItem[] | null> {
   try {
     const query: Record<string, string | number> = {
       content_type: 'project',
@@ -79,11 +80,10 @@ export async function fetchProjects(
 
     const entries = await contentful.client.getEntries<ProjectSkeleton>(query);
 
-    const projects: Project[] = await Promise.all(
+    const projects: ProjectListItem[] = await Promise.all(
       entries.items.map(async entry => {
         const fields = entry.fields;
 
-        // Process featured image
         let featuredImageUrl = '';
         if (fields.featuredImage) {
           try {
@@ -99,65 +99,17 @@ export async function fetchProjects(
           }
         }
 
-        // Process gallery
-        const gallery: Project['gallery'] = [];
-        if (fields.gallery && fields.gallery.length > 0) {
-          for (const galleryLink of fields.gallery) {
-            try {
-              const asset = await contentful.client.getAsset(
-                galleryLink.sys.id
-              );
-              const url = processAsset(asset);
-              if (url) {
-                gallery.push({
-                  id: asset.sys.id,
-                  url,
-                  caption: asset.fields.description || asset.fields.title || '',
-                  category: fields.category || 'General',
-                });
-              }
-            } catch (error) {
-              console.warn(
-                `Could not fetch gallery image for project ${fields.title}:`,
-                error
-              );
-            }
-          }
-        }
-
-        // Process partner links
-        let partnerLinks: ProjectPartnerLinks | undefined;
-        if (
-          fields.partnerLinks &&
-          typeof fields.partnerLinks === 'object' &&
-          'en-US' in fields.partnerLinks
-        ) {
-          partnerLinks = fields.partnerLinks[
-            'en-US'
-          ] as unknown as ProjectPartnerLinks;
-        }
-
         return {
           id: entry.sys.id,
           title: fields.title || '',
           slug: fields.slug || '',
           shortDescription: fields.shortDescription || '',
-          description: richTextToMarkdown(
-            fields.description as unknown as RichText
-          ),
           date: fields.date || '',
           venue: fields.venue || '',
           impact: fields.impact || '',
           partners: fields.partners || [],
-          facebookLink: fields.facebookLink,
-          shareableLink: fields.shareableLink || '',
-          image: featuredImageUrl,
           category: fields.category || '',
-          hashtags: fields.hashtags || [],
-          highlights: fields.highlights || [],
-          gallery,
-          bulletPoints: fields.bulletPoints || [],
-          partnerLinks,
+          image: featuredImageUrl,
         };
       })
     );
@@ -183,10 +135,80 @@ export async function fetchProjectBySlug(
       return null;
     }
 
-    const projects = await fetchProjects();
-    if (!projects) return null;
+    const entry = entries.items[0];
+    const fields = entry.fields;
 
-    return projects.find(project => project.slug === slug) || null;
+    let featuredImageUrl = '';
+    if (fields.featuredImage) {
+      try {
+        const asset = await contentful.client.getAsset(
+          fields.featuredImage.sys.id
+        );
+        featuredImageUrl = processAsset(asset);
+      } catch (error) {
+        console.warn(
+          `Could not fetch featured image for project ${fields.title}:`,
+          error
+        );
+      }
+    }
+
+    const gallery: Project['gallery'] = [];
+    if (fields.gallery && fields.gallery.length > 0) {
+      for (const galleryLink of fields.gallery) {
+        try {
+          const asset = await contentful.client.getAsset(galleryLink.sys.id);
+          const url = processAsset(asset);
+          if (url) {
+            gallery.push({
+              id: asset.sys.id,
+              url,
+              caption: asset.fields.description || asset.fields.title || '',
+              category: fields.category || 'General',
+            });
+          }
+        } catch (error) {
+          console.warn(
+            `Could not fetch gallery image for project ${fields.title}:`,
+            error
+          );
+        }
+      }
+    }
+
+    let partnerLinks: ProjectPartnerLinks | undefined;
+    if (
+      fields.partnerLinks &&
+      typeof fields.partnerLinks === 'object' &&
+      'en-US' in fields.partnerLinks
+    ) {
+      partnerLinks = fields.partnerLinks[
+        'en-US'
+      ] as unknown as ProjectPartnerLinks;
+    }
+
+    return {
+      id: entry.sys.id,
+      title: fields.title || '',
+      slug: fields.slug || '',
+      shortDescription: fields.shortDescription || '',
+      description: richTextToMarkdown(
+        fields.description as unknown as RichText
+      ),
+      date: fields.date || '',
+      venue: fields.venue || '',
+      impact: fields.impact || '',
+      partners: fields.partners || [],
+      facebookLink: fields.facebookLink,
+      shareableLink: fields.shareableLink || '',
+      image: featuredImageUrl,
+      category: fields.category || '',
+      hashtags: fields.hashtags || [],
+      highlights: fields.highlights || [],
+      gallery,
+      bulletPoints: fields.bulletPoints || [],
+      partnerLinks,
+    };
   } catch (error) {
     console.error('Error fetching project by slug:', error);
     return null;

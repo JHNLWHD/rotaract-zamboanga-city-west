@@ -144,7 +144,7 @@ const Projects = () => {
                 '@type': 'Project',
                 position: index + 1,
                 name: project.title,
-                description: project.description,
+                description: project.shortDescription,
                 location: {
                   '@type': 'Place',
                   name: project.venue,

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ImageIcon, ZoomIn } from 'lucide-react';
-import { type Project } from '../../data/projects';
+import { type Project } from '../../hooks/projects/fetchProjects';
 
 type ProjectGallerySectionProps = {
   project: Project;

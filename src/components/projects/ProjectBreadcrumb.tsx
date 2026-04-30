@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { type Project } from '../../data/projects';
+import { type Project } from '../../hooks/projects/fetchProjects';
 
 type ProjectBreadcrumbProps = {
   project: Project;

@@ -4,10 +4,10 @@ import { Card, CardContent, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Calendar, MapPin } from 'lucide-react';
-import { type Project } from '../../hooks/projects/fetchProjects';
+import { type ProjectListItem } from '../../hooks/projects/fetchProjects';
 
 type ProjectCardProps = {
-  project: Project;
+  project: ProjectListItem;
 };
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {

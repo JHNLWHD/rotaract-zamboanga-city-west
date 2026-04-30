@@ -2,7 +2,7 @@ import React from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Calendar, MapPin, Share2 } from 'lucide-react';
-import { type Project } from '../../data/projects';
+import { type Project } from '../../hooks/projects/fetchProjects';
 
 type ProjectDetailHeaderProps = {
   project: Project;

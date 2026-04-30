@@ -15,7 +15,7 @@ import Lightbox from 'yet-another-react-lightbox';
 import Captions from 'yet-another-react-lightbox/plugins/captions';
 import DownloadPlugin from 'yet-another-react-lightbox/plugins/download';
 import Thumbnails from 'yet-another-react-lightbox/plugins/thumbnails';
-import { type Project } from '../../data/projects';
+import { type Project } from '../../hooks/projects/fetchProjects';
 
 type ProjectMainContentProps = {
   project: Project;
