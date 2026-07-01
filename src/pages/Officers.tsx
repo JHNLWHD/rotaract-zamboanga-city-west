@@ -45,11 +45,11 @@ const Officers = () => {
         />
         <meta
           name="description"
-          content="Meet the dedicated Great West leadership team driving positive change in Zamboanga City. Learn about our Executive Board, Directors, and Advisors for 2025-2026 who embody our values of fellowship, service, and leadership."
+          content="Meet the dedicated Great West leadership team driving positive change in Zamboanga City. Learn about our Executive Board, Directors, and Advisors for 2026-2027 who embody our values of fellowship, service, and leadership."
         />
         <meta
           name="keywords"
-          content="Rotaract officers Zamboanga City West, Great West leadership team, club president, directors, advisors, Rotaract board members, youth leadership Philippines, club officers 2025-2026"
+          content="Rotaract officers Zamboanga City West, Great West leadership team, club president, directors, advisors, Rotaract board members, youth leadership Philippines, club officers 2026-2027"
         />
         <meta name="author" content="Rotaract Club of Zamboanga City West" />
         <meta
@@ -72,7 +72,7 @@ const Officers = () => {
         />
         <meta
           property="og:description"
-          content="Meet the dedicated Great West leadership team driving positive change in Zamboanga City. Learn about our Executive Board, Directors, and Advisors for 2025-2026 who embody our values of fellowship, service, and leadership."
+          content="Meet the dedicated Great West leadership team driving positive change in Zamboanga City. Learn about our Executive Board, Directors, and Advisors for 2026-2027 who embody our values of fellowship, service, and leadership."
         />
         <meta
           property="og:image"
@@ -101,7 +101,7 @@ const Officers = () => {
         />
         <meta
           property="twitter:description"
-          content="Meet the dedicated Great West leadership team driving positive change in Zamboanga City. Learn about our Executive Board, Directors, and Advisors for 2025-2026 who embody our values of fellowship, service, and leadership."
+          content="Meet the dedicated Great West leadership team driving positive change in Zamboanga City. Learn about our Executive Board, Directors, and Advisors for 2026-2027 who embody our values of fellowship, service, and leadership."
         />
         <meta
           property="twitter:image"

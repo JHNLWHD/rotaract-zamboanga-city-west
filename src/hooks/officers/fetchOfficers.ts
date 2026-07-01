@@ -175,7 +175,7 @@ export async function fetchAdvisors(term?: string): Promise<Officer[] | null> {
 }
 
 export async function fetchCurrentOfficers(): Promise<Officer[] | null> {
-  return fetchOfficers('2025-2026');
+  return fetchOfficers('2026-2027');
 }
 
 export async function fetchAllOfficers(term?: string): Promise<{
