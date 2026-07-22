@@ -25,8 +25,8 @@ const EventCard: React.FC<EventCardProps> = ({ event, onShare }) => {
         aria-hidden="true"
       >
         <img
-          src={event.invitationImage || '/placeholder.svg'}
-          alt={`${event.title} invitation`}
+          src={event.image || event.invitationImage || '/placeholder.svg'}
+          alt={`${event.title} featured image`}
           className="w-full h-full object-cover"
           onError={e => {
             const target = e.target as HTMLImageElement;
@@ -98,7 +98,9 @@ const EventCard: React.FC<EventCardProps> = ({ event, onShare }) => {
           <Button
             variant="outline"
             className="w-full"
-            onClick={() => navigate(`/events/${event.date}/${event.slug}`)}
+            onClick={() =>
+              navigate(`/events/${event.date.split('T')[0]}/${event.slug}`)
+            }
             aria-label={`View detailed information about ${event.title}`}
           >
             View Event Details
