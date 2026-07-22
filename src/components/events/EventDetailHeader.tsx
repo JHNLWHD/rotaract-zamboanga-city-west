@@ -84,7 +84,7 @@ const EventDetailHeader: React.FC<EventDetailHeaderProps> = ({
           <div>
             <div className="font-medium">{event.venue}</div>
             <a
-              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+              href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
                 event.venue
               )}`}
               target="_blank"
