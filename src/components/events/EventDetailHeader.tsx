@@ -83,6 +83,16 @@ const EventDetailHeader: React.FC<EventDetailHeaderProps> = ({
           <MapPin className="w-5 h-5 mr-3 text-cranberry-500" />
           <div>
             <div className="font-medium">{event.venue}</div>
+            <a
+              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                event.venue
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-cranberry-500 hover:underline"
+            >
+              Get directions
+            </a>
           </div>
         </div>
       </div>
