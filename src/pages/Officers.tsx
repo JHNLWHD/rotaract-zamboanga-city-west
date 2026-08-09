@@ -191,7 +191,10 @@ const Officers = () => {
       </Helmet>
       <div className="min-h-screen flex flex-col">
         <Navbar />
-        <main className="flex-1 bg-gradient-to-br from-cranberry-50 via-white to-pink-50 pt-32 pb-12">
+        <main
+          id="main-content"
+          className="flex-1 bg-gradient-to-br from-cranberry-50 via-white to-pink-50 pt-32 pb-12"
+        >
           <div className="max-w-7xl mx-auto px-6">
             <div className="text-center mb-12">
               <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">

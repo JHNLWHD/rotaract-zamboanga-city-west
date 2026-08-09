@@ -17,7 +17,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
     <Card
       className="group overflow-hidden hover:shadow-xl transition-all duration-500 transform hover:-translate-y-1 flex flex-col h-full"
       itemScope
-      itemType="https://schema.org/Event"
+      itemType="https://schema.org/Project"
     >
       <div className="relative aspect-[4/3] overflow-hidden bg-gradient-to-br from-cranberry-100 to-cranberry-200">
         <img
@@ -33,9 +33,14 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
           <CardTitle
             className="text-xl text-slate-900 mb-3 group-hover:text-cranberry-700 transition-colors cursor-pointer"
             itemProp="name"
-            onClick={() => navigate(`/projects/${project.slug}`)}
           >
-            {project.title}
+            <button
+              type="button"
+              className="text-left"
+              onClick={() => navigate(`/projects/${project.slug}`)}
+            >
+              {project.title}
+            </button>
           </CardTitle>
         </header>
 

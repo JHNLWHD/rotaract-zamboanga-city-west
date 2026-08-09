@@ -28,6 +28,10 @@ const Navbar = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
 
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [location.pathname]);
+
   const isActiveRoute = (path: string) => {
     if (path === '/' && location.pathname === '/') return true;
     if (path !== '/' && location.pathname.startsWith(path)) return true;
@@ -144,6 +148,12 @@ const Navbar = () => {
               {item.label}
             </Link>
           ))}
+          <a
+            href="/#join"
+            className="ml-3 rounded-full bg-cranberry-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-cranberry-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cranberry-500 focus-visible:ring-offset-2"
+          >
+            Join the Great West
+          </a>
         </nav>
 
         <button
@@ -153,6 +163,8 @@ const Navbar = () => {
           )}
           onClick={toggleMobileMenu}
           aria-label="Toggle menu"
+          aria-expanded={mobileMenuOpen}
+          aria-controls="mobile-navigation"
         >
           {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
@@ -165,6 +177,8 @@ const Navbar = () => {
             ? 'translate-x-0 opacity-100'
             : 'translate-x-full opacity-0'
         )}
+        id="mobile-navigation"
+        aria-hidden={!mobileMenuOpen}
       >
         <div className="h-full flex flex-col">
           <div className="flex items-center justify-between p-6 border-b border-gray-200 bg-white shadow-sm">
@@ -220,12 +234,11 @@ const Navbar = () => {
                   Join us in making a difference in our community
                 </p>
                 <a
-                  href="https://www.facebook.com/RotaractClubZamboWest"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href="/#join"
+                  onClick={toggleMobileMenu}
                   className="block w-full bg-cranberry-600 text-white px-4 py-3 rounded-lg font-medium hover:bg-cranberry-700 transition-colors text-center"
                 >
-                  Visit us on our Facebook Page
+                  Join the Great West
                 </a>
               </div>
             </div>

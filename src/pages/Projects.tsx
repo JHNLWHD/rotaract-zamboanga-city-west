@@ -193,7 +193,10 @@ const Projects = () => {
       </Helmet>
       <div className="min-h-screen flex flex-col">
         <Navbar />
-        <main className="flex-1 bg-gradient-to-br from-cranberry-50 via-white to-pink-50 pt-20">
+        <main
+          id="main-content"
+          className="flex-1 bg-gradient-to-br from-cranberry-50 via-white to-pink-50 pt-20"
+        >
           <div className="container mx-auto px-6 py-16">
             <div className="text-center mb-16">
               <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">
