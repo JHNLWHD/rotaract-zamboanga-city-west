@@ -136,7 +136,9 @@ export async function fetchEvents(
           id: entry.sys.id,
           title: fields.title || '',
           slug: fields.slug || '',
-          description: richTextToMarkdown(fields.description as unknown as RichText),
+          description: richTextToMarkdown(
+            fields.description as unknown as RichText
+          ),
           date: fields.date || '',
           time: fields.time || '',
           venue: fields.venue || '',
@@ -178,7 +180,7 @@ export async function fetchEvents(
     return sortedEvents;
   } catch (error) {
     console.error('Error fetching events:', error);
-    return null;
+    throw error;
   }
 }
 
@@ -257,7 +259,9 @@ export async function fetchEventBySlug(slug: string): Promise<Event | null> {
       id: entry.sys.id,
       title: fields.title || '',
       slug: fields.slug || '',
-      description: richTextToMarkdown(fields.description as unknown as RichText),
+      description: richTextToMarkdown(
+        fields.description as unknown as RichText
+      ),
       date: fields.date || '',
       time: fields.time || '',
       venue: fields.venue || '',
@@ -274,7 +278,7 @@ export async function fetchEventBySlug(slug: string): Promise<Event | null> {
     };
   } catch (error) {
     console.error('Error fetching event by slug:', error);
-    return null;
+    throw error;
   }
 }
 

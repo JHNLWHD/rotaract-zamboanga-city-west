@@ -117,7 +117,7 @@ export async function fetchProjects(
     return projects;
   } catch (error) {
     console.error('Error fetching projects:', error);
-    return null;
+    throw error;
   }
 }
 
@@ -211,6 +211,6 @@ export async function fetchProjectBySlug(
     };
   } catch (error) {
     console.error('Error fetching project by slug:', error);
-    return null;
+    throw error;
   }
 }

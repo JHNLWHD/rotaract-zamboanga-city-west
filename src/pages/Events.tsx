@@ -23,6 +23,8 @@ const Events = () => {
     isLoading,
     isError,
     error,
+    refetch,
+    isFetching,
   } = useQuery({
     queryKey: ['events'],
     queryFn: () => fetchEvents(),
@@ -38,6 +40,11 @@ const Events = () => {
     setShowShareModal(false);
     setCurrentShareEvent(null);
   };
+
+  const upcomingEvents =
+    events?.filter(event => new Date(event.date).getTime() >= Date.now()) || [];
+  const pastEvents =
+    events?.filter(event => new Date(event.date).getTime() < Date.now()) || [];
 
   return (
     <>
@@ -263,10 +270,65 @@ const Events = () => {
 
               {isLoading && <LoadingState />}
 
-              {isError && <ErrorState error={error} />}
+              {isError && (
+                <ErrorState
+                  error={error}
+                  onRetry={() => refetch()}
+                  isRetrying={isFetching}
+                />
+              )}
 
               {!isLoading && !isError && (
-                <EventsGrid events={events} onShareEvent={handleShareEvent} />
+                <>
+                  <section aria-labelledby="upcoming-events-heading">
+                    <div className="text-center mb-8">
+                      <h3
+                        id="upcoming-events-heading"
+                        className="text-2xl md:text-3xl font-bold text-gray-900 mb-3"
+                      >
+                        Upcoming events
+                      </h3>
+                      <p className="text-gray-600 max-w-2xl mx-auto">
+                        See what the club is doing next.
+                      </p>
+                    </div>
+                    {upcomingEvents.length > 0 ? (
+                      <EventsGrid
+                        events={upcomingEvents}
+                        onShareEvent={handleShareEvent}
+                      />
+                    ) : (
+                      <p className="text-center text-gray-600 mb-16">
+                        No upcoming events are scheduled yet. Browse our past
+                        activities below.
+                      </p>
+                    )}
+                  </section>
+
+                  {pastEvents.length > 0 && (
+                    <section
+                      className="mt-20"
+                      aria-labelledby="past-events-heading"
+                    >
+                      <div className="text-center mb-8">
+                        <h3
+                          id="past-events-heading"
+                          className="text-2xl md:text-3xl font-bold text-gray-900 mb-3"
+                        >
+                          Past events archive
+                        </h3>
+                        <p className="text-gray-600 max-w-2xl mx-auto">
+                          Recent activity and historical proof of the club’s
+                          work.
+                        </p>
+                      </div>
+                      <EventsGrid
+                        events={pastEvents}
+                        onShareEvent={handleShareEvent}
+                      />
+                    </section>
+                  )}
+                </>
               )}
             </div>
           </section>

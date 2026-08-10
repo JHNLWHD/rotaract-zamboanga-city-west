@@ -129,7 +129,7 @@ export async function fetchOfficers(
     return officers;
   } catch (error) {
     console.error('Error fetching officers:', error);
-    return null;
+    throw error;
   }
 }
 
@@ -155,7 +155,7 @@ export async function fetchPastPresidents(): Promise<PastPresident[] | null> {
     return pastPresidents;
   } catch (error) {
     console.error('Error fetching past presidents:', error);
-    return null;
+    throw error;
   }
 }
 
@@ -201,6 +201,6 @@ export async function fetchAllOfficers(term?: string): Promise<{
     };
   } catch (error) {
     console.error('Error fetching all officers:', error);
-    return null;
+    throw error;
   }
 }

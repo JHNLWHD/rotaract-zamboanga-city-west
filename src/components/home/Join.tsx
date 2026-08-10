@@ -13,6 +13,10 @@ import {
 } from 'lucide-react';
 
 const MEMBERSHIP_APPLICATION_FORM = 'https://forms.gle/niebTPmkAgiHB5WVA';
+const MEMBERSHIP_INTEREST_FORM =
+  import.meta.env.VITE_MEMBERSHIP_INTEREST_FORM_URL || '';
+const APPLICATIONS_OPEN =
+  import.meta.env.VITE_MEMBERSHIP_APPLICATIONS_OPEN === 'true';
 
 const Join = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -222,23 +226,43 @@ const Join = () => {
         <div className="text-center reveal-on-scroll">
           <div className="modern-card p-12 bg-gradient-to-r from-cranberry-600 to-cranberry-500 text-white">
             <h3 className="text-3xl font-bold mb-6">
-              Ready to Make an Impact?
+              {APPLICATIONS_OPEN
+                ? 'Applications open'
+                : 'Applications closed — get notified next cycle'}
             </h3>
             <p className="text-cranberry-100 text-lg mb-8 max-w-2xl mx-auto">
-              Join fellow young leaders of the Great West who are passionate
-              about creating positive change in our community and around the
-              world.
+              {APPLICATIONS_OPEN
+                ? 'Join fellow young leaders of the Great West who are passionate about creating positive change in our community and around the world.'
+                : 'Applications are currently closed. Leave your details to hear when the next intake opens.'}
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <a
-                href={MEMBERSHIP_APPLICATION_FORM}
-                target="_blank"
+                href={
+                  APPLICATIONS_OPEN
+                    ? MEMBERSHIP_APPLICATION_FORM
+                    : MEMBERSHIP_INTEREST_FORM || '#contact'
+                }
+                target={
+                  APPLICATIONS_OPEN || MEMBERSHIP_INTEREST_FORM
+                    ? '_blank'
+                    : undefined
+                }
                 rel="noopener noreferrer"
                 className="bg-white text-cranberry-600 px-8 py-4 rounded-full font-semibold hover:bg-gray-50 transition-colors shadow-lg hover:shadow-xl inline-flex items-center"
               >
-                <span>Apply Now</span>
+                <span>
+                  {APPLICATIONS_OPEN
+                    ? 'Applications open'
+                    : 'Get notified next cycle'}
+                </span>
                 <ArrowRight className="w-4 h-4 ml-2" />
               </a>
+              {!APPLICATIONS_OPEN && !MEMBERSHIP_INTEREST_FORM && (
+                <p className="text-sm text-cranberry-100 max-w-xs">
+                  The next-cycle interest form will be published before the next
+                  intake.
+                </p>
+              )}
               <a
                 href="https://www.facebook.com/RotaractClubZamboWest"
                 target="_blank"

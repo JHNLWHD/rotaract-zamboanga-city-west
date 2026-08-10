@@ -10,6 +10,7 @@ import Officers from './pages/Officers';
 import Events from './pages/Events';
 import EventDetail from './pages/EventDetail';
 import FoundationGiving from './pages/FoundationGiving';
+import Recognition from './pages/Recognition';
 import NotFound from './pages/NotFound';
 
 const App = () => (
@@ -26,6 +27,7 @@ const App = () => (
         <Route path="/events" element={<Events />} />
         <Route path="/events/:date/:slug" element={<EventDetail />} />
         <Route path="/foundation-giving" element={<FoundationGiving />} />
+        <Route path="/recognition" element={<Recognition />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

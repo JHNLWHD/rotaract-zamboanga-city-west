@@ -8,6 +8,7 @@ import remarkGfm from 'remark-gfm';
 import type { Components } from 'react-markdown';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
+import { Button } from '../components/ui/button';
 import { useFoundationGiving } from '../hooks/foundationGiving/useFoundationGiving';
 import type { FoundationGivingRow } from '../hooks/foundationGiving/fetchFoundationGiving';
 
@@ -149,7 +150,8 @@ function GivingYearCard({
 }
 
 const FoundationGiving = () => {
-  const { data, isLoading, isError, error } = useFoundationGiving();
+  const { data, isLoading, isError, error, refetch, isFetching } =
+    useFoundationGiving();
 
   const jsonLd =
     data &&
@@ -272,7 +274,7 @@ const FoundationGiving = () => {
               )}
 
               {isError && (
-                <div className="text-center py-16">
+                <div className="text-center py-16" role="alert">
                   <div className="bg-red-50 border border-red-200 rounded-lg p-6 max-w-md mx-auto">
                     <p className="text-red-800 font-medium mb-2">
                       Failed to load foundation giving
@@ -282,6 +284,15 @@ const FoundationGiving = () => {
                         ? error.message
                         : 'Please try again later.'}
                     </p>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="mt-4"
+                      onClick={() => refetch()}
+                      disabled={isFetching}
+                    >
+                      {isFetching ? 'Trying again…' : 'Try again'}
+                    </Button>
                   </div>
                 </div>
               )}

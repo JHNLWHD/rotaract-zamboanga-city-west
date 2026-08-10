@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
 import ExecutiveBoard from '../components/officers/ExecutiveBoard';
 import BoardOfDirectors from '../components/officers/BoardOfDirectors';
@@ -17,11 +18,15 @@ const Officers = () => {
     data: officers,
     isLoading: isLoadingOfficers,
     isError: isErrorOfficers,
+    refetch: refetchOfficers,
+    isFetching: isFetchingOfficers,
   } = useOfficers(currentTerm);
   const {
     data: pastPresidentsList,
     isLoading: isLoadingPastPresidents,
     isError: isErrorPastPresidents,
+    refetch: refetchPastPresidents,
+    isFetching: isFetchingPastPresidents,
   } = usePastPresidents();
 
   const isLoading = isLoadingOfficers || isLoadingPastPresidents;
@@ -31,6 +36,11 @@ const Officers = () => {
   const currentDirectors = officers?.directors || [];
   const advisorsList = officers?.advisors || [];
   const allOfficers = [...executiveBoard, ...currentDirectors, ...advisorsList];
+  const isRetrying = isFetchingOfficers || isFetchingPastPresidents;
+
+  const retry = () => {
+    void Promise.all([refetchOfficers(), refetchPastPresidents()]);
+  };
 
   return (
     <>
@@ -222,11 +232,22 @@ const Officers = () => {
             )}
 
             {isError && (
-              <div className="flex items-center justify-center py-16">
+              <div
+                className="flex items-center justify-center py-16"
+                role="alert"
+              >
                 <div className="text-center">
                   <p className="text-red-600 mb-4">
                     Failed to load officers. Please try again later.
                   </p>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={retry}
+                    disabled={isRetrying}
+                  >
+                    {isRetrying ? 'Trying again…' : 'Try again'}
+                  </Button>
                 </div>
               </div>
             )}

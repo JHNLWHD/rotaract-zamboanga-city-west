@@ -617,6 +617,20 @@ const contentTypes = [
         validations: [{ size: { max: 20 } }],
       },
       {
+        id: 'issuingOrganization',
+        name: 'Issuing Organization',
+        type: 'Symbol',
+        required: false,
+        validations: [{ size: { max: 120 } }],
+      },
+      {
+        id: 'sourceUrl',
+        name: 'Official Citation URL',
+        type: 'Symbol',
+        required: false,
+        validations: [{ size: { max: 500 } }],
+      },
+      {
         id: 'dateReceived',
         name: 'Date Received',
         type: 'Date',

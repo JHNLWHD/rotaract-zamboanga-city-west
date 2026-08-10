@@ -5,6 +5,12 @@ import { ArrowDown, Sparkles, Users, Target } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { cacheConfig } from '../../config/cache';
 
+const ROTARY_SPONSOR_URL = 'https://rotaryzcwest.org/';
+const FALLBACK_STATS = [
+  { value: '14', description: 'Years of Impact' },
+  { value: '50', description: 'Active Members' },
+];
+
 const Hero = () => {
   const heroRef = useRef<HTMLDivElement>(null);
 
@@ -23,11 +29,16 @@ const Hero = () => {
     loadModernAnimation();
   }, []);
 
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['heroContent'],
     queryFn: () => fetchHeroContent(),
     ...cacheConfig.yearly,
   });
+
+  const stats =
+    data?.stats && data.stats.length >= 2
+      ? data.stats.slice(0, 2)
+      : FALLBACK_STATS;
 
   return (
     <section
@@ -90,9 +101,7 @@ const Hero = () => {
               <Sparkles className="w-4 h-4 mr-2" />
               {isLoading
                 ? 'Loading...'
-                : isError
-                  ? 'Error loading content'
-                  : (data?.badgeText ?? 'Welcome to Rotaract')}
+                : (data?.badgeText ?? 'Empowering Young Leaders Since 2010')}
             </span>
           </div>
 
@@ -108,71 +117,69 @@ const Hero = () => {
             </span>
           </h1>
 
+          <a
+            href={ROTARY_SPONSOR_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center text-sm md:text-base text-white/90 underline decoration-cranberry-300 underline-offset-4 hover:text-white"
+          >
+            Sponsored by Rotary Club of Zamboanga City West
+          </a>
+
           <div className="text-xl md:text-2xl text-white/80 max-w-3xl mx-auto opacity-0 animate-on-load leading-relaxed prose prose-invert">
-            {isLoading ? (
-              <p> Loading subtitle...</p>
-            ) : isError ? (
-              <p> Error loading subtitle </p>
-            ) : (
-              <ReactMarkdown
-                components={{
-                  p: ({ children }) => (
-                    <p className="text-2xl md:text-2xl font-medium text-white/90 leading-snug text-center max-w-4xl mx-auto">
-                      {children}
-                    </p>
-                  ),
-                  strong: ({ children }) => (
-                    <strong className="text-[#F7ABC9] font-semibold">
-                      {children}
-                    </strong>
-                  ),
-                  em: ({ children }) => (
-                    <em className="text-[#F7ABC9] font-semibold not-italic">
-                      {children}
-                    </em>
-                  ),
-                }}
-              >
-                {data?.subTitle ??
-                  'Where **fellowship**, **service**, and **leadership** unite to create lasting impact in our community.'}
-              </ReactMarkdown>
-            )}
+            <ReactMarkdown
+              components={{
+                p: ({ children }) => (
+                  <p className="text-2xl md:text-2xl font-medium text-white/90 leading-snug text-center max-w-4xl mx-auto">
+                    {children}
+                  </p>
+                ),
+                strong: ({ children }) => (
+                  <strong className="text-[#F7ABC9] font-semibold">
+                    {children}
+                  </strong>
+                ),
+                em: ({ children }) => (
+                  <em className="text-[#F7ABC9] font-semibold not-italic">
+                    {children}
+                  </em>
+                ),
+              }}
+            >
+              {data?.subTitle ??
+                'Where **fellowship**, **service**, and **leadership** unite to create lasting impact in our community.'}
+            </ReactMarkdown>
           </div>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6 opacity-0 animate-on-load">
-            <a href="#join" className="primary-button group">
-              Join our movement
+            <a href="#credentials" className="primary-button group">
+              Get to Know Great West
               <ArrowDown className="w-4 h-4 ml-2 group-hover:translate-y-1 transition-transform" />
             </a>
-            <a href="#programs" className="secondary-button group">
-              Explore our programs
+            <a href="/projects" className="secondary-button group">
+              View Our Projects
               <Users className="w-4 h-4 ml-2 group-hover:scale-110 transition-transform" />
             </a>
           </div>
 
-          {!isLoading && !isError && data?.stats && data.stats.length > 0 && (
-            <div
-              className={`grid grid-cols-1 ${
-                data.stats.length === 2
-                  ? 'md:grid-cols-2'
-                  : data.stats.length >= 3
-                    ? 'md:grid-cols-3'
-                    : 'md:grid-cols-1'
-              } gap-8 max-w-2xl mx-auto mt-16 py-4 animate-fade-in-up italic`}
-            >
-              {data.stats.map((stat, index) => (
+          {!isLoading && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-2xl mx-auto mt-16 py-4 animate-fade-in-up italic">
+              {stats.map((stat, index) => (
                 <div
                   key={index}
                   className="bg-slate-900/90 backdrop-blur-xl border border-cranberry-400/30 rounded-2xl p-6 text-center shadow-xl"
                 >
                   <div className="text-3xl font-bold text-cranberry-400 mb-2">
-                    {stat.value} <span>+</span>
+                    {stat.value.replace(/\+$/, '')} <span>+</span>
                   </div>
                   <div className="text-white/90 text-sm font-medium">
                     {stat.description}
                   </div>
                 </div>
               ))}
+              <p className="md:col-span-2 text-xs text-white/70 not-italic">
+                Figures as of 2026.
+              </p>
             </div>
           )}
         </div>

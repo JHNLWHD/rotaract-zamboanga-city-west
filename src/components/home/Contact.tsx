@@ -364,7 +364,11 @@ const Contact = () => {
       </div>
 
       {showToast && (
-        <div className="fixed bottom-4 right-4 z-50 animate-in slide-in-from-bottom-2 duration-300">
+        <div
+          className="fixed bottom-4 right-4 z-50 animate-in slide-in-from-bottom-2 duration-300"
+          role={submitStatus === 'error' ? 'alert' : 'status'}
+          aria-live="polite"
+        >
           <div
             className={`flex items-center space-x-3 px-6 py-4 rounded-xl shadow-lg transition-all duration-200 hover:shadow-xl hover:-translate-y-1 ${
               submitStatus === 'success'
@@ -379,8 +383,8 @@ const Contact = () => {
             )}
             <span className="font-medium">
               {submitStatus === 'success'
-                ? "Message sent successfully! We'll get back to you soon."
-                : 'There was an error sending your message. Please try again.'}
+                ? "Message sent—we'll respond within 24–48 hours."
+                : "We couldn't send your message. Please try again or email us directly."}
             </span>
             <button
               onClick={closeToast}

@@ -42,6 +42,7 @@ const Navbar = () => {
     { label: 'Home', path: '/' },
     { label: 'Projects', path: '/projects' },
     { label: 'Events', path: '/events' },
+    { label: 'Recognition', path: '/recognition' },
     { label: 'Officers', path: '/officers' },
     { label: 'Foundation', path: '/foundation-giving' },
   ];
@@ -111,7 +112,7 @@ const Navbar = () => {
               <div className="absolute inset-0 bg-cranberry-500/10 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl"></div>
             </div>
             <div className="hidden md:block">
-              <h1 className="font-display font-bold text-base leading-tight uppercase tracking-wider">
+              <div className="font-display font-bold text-base leading-tight uppercase tracking-wider">
                 <span
                   className={cn(
                     'transition-colors duration-300',
@@ -129,7 +130,7 @@ const Navbar = () => {
                 >
                   Zamboanga City West
                 </span>
-              </h1>
+              </div>
             </div>
           </Link>
         </div>

@@ -18,6 +18,8 @@ const Projects = () => {
     isLoading,
     isError,
     error,
+    refetch,
+    isFetching,
   } = useQuery({
     queryKey: ['projects'],
     queryFn: () => fetchProjects(),
@@ -231,9 +233,57 @@ const Projects = () => {
 
             {isLoading && <ProjectsLoadingState />}
 
-            {isError && <ProjectsErrorState error={error} />}
+            {isError && (
+              <ProjectsErrorState
+                error={error}
+                onRetry={() => refetch()}
+                isRetrying={isFetching}
+              />
+            )}
 
-            {!isLoading && !isError && <ProjectsGrid projects={projects} />}
+            {!isLoading && !isError && projects && projects.length > 0 && (
+              <>
+                <section aria-labelledby="featured-projects-heading">
+                  <div className="text-center mb-8">
+                    <h2
+                      id="featured-projects-heading"
+                      className="text-3xl font-bold text-slate-900 mb-3"
+                    >
+                      Featured project evidence
+                    </h2>
+                    <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+                      Start with recent projects, outcomes, partners, and
+                      supporting records.
+                    </p>
+                  </div>
+                  <ProjectsGrid projects={projects.slice(0, 5)} />
+                </section>
+
+                {projects.length > 5 && (
+                  <section
+                    className="mt-20"
+                    aria-labelledby="project-archive-heading"
+                  >
+                    <div className="text-center mb-8">
+                      <h2
+                        id="project-archive-heading"
+                        className="text-3xl font-bold text-slate-900 mb-3"
+                      >
+                        Project archive
+                      </h2>
+                      <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+                        Browse the club’s complete record of community impact.
+                      </p>
+                    </div>
+                    <ProjectsGrid projects={projects.slice(5)} />
+                  </section>
+                )}
+              </>
+            )}
+
+            {!isLoading && !isError && (!projects || projects.length === 0) && (
+              <ProjectsGrid projects={projects} />
+            )}
           </div>
         </main>
         <Footer />

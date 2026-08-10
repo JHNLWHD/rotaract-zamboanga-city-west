@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import Hero from '../components/home/Hero';
+import Credentials from '../components/home/Credentials';
 import About from '../components/home/About';
 import Programs from '../components/home/Programs';
 import Awards from '../components/home/Awards';
@@ -257,6 +258,7 @@ const Index = () => {
         <Navbar />
         <main id="main-content" role="main">
           <Hero />
+          <Credentials />
           <About />
           <Programs />
           <Awards />

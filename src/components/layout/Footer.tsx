@@ -17,6 +17,7 @@ const Footer = () => {
     { label: 'Our Programs', href: '/#programs' },
     { label: 'Community Impact', href: '/projects' },
     { label: 'Great West in Action', href: '/events' },
+    { label: 'Recognition', href: '/recognition' },
     { label: 'Leadership Team', href: '/officers' },
     { label: 'Foundation Giving', href: '/foundation-giving' },
     { label: 'Join Us', href: '/#join' },
