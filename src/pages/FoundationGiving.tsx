@@ -8,7 +8,7 @@ import remarkGfm from 'remark-gfm';
 import type { Components } from 'react-markdown';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
-import { Button } from '../components/ui/button';
+import PageHeader from '../components/layout/PageHeader';
 import { useFoundationGiving } from '../hooks/foundationGiving/useFoundationGiving';
 import type { FoundationGivingRow } from '../hooks/foundationGiving/fetchFoundationGiving';
 
@@ -249,23 +249,20 @@ const FoundationGiving = () => {
         {jsonLd && <script type="application/ld+json">{jsonLd}</script>}
       </Helmet>
 
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-screen bg-[#faf9f7]">
         <Navbar />
-        <main
-          id="main-content"
-          className="flex-1 bg-gradient-to-br from-cranberry-50 via-white to-pink-50 pt-32 pb-12"
-        >
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="text-center mb-12 max-w-5xl mx-auto">
-              <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4 font-display">
-                The <span className="text-gradient">Rotary Foundation</span>{' '}
-                Giving
-              </h1>
-              <p className="text-lg text-slate-600 max-w-3xl mx-auto">
-                Transparency in how our club supports The Rotary Foundation
-              </p>
-            </div>
-
+        <main id="main-content">
+          <PageHeader
+            eyebrow="Financial record"
+            title="The Rotary Foundation giving"
+            description="The club’s published giving record by Rotary Year and fund, presented without estimates or aggregate claims beyond the report."
+            asOf={
+              data?.asOfDate
+                ? `Report as of ${formatAsOf(data.asOfDate)}`
+                : undefined
+            }
+          />
+          <div className="editorial-shell py-10 md:py-14">
             <div className="max-w-5xl mx-auto">
               {isLoading && (
                 <div className="flex justify-center py-24">
@@ -274,8 +271,8 @@ const FoundationGiving = () => {
               )}
 
               {isError && (
-                <div className="text-center py-16" role="alert">
-                  <div className="bg-red-50 border border-red-200 rounded-lg p-6 max-w-md mx-auto">
+                <div className="border-y border-slate-300 py-9" role="alert">
+                  <div>
                     <p className="text-red-800 font-medium mb-2">
                       Failed to load foundation giving
                     </p>
@@ -284,29 +281,28 @@ const FoundationGiving = () => {
                         ? error.message
                         : 'Please try again later.'}
                     </p>
-                    <Button
+                    <button
                       type="button"
-                      variant="outline"
-                      className="mt-4"
+                      className="editorial-link mt-4 disabled:opacity-50"
                       onClick={() => refetch()}
                       disabled={isFetching}
                     >
                       {isFetching ? 'Trying again…' : 'Try again'}
-                    </Button>
+                    </button>
                   </div>
                 </div>
               )}
 
               {!isLoading && !isError && !data && (
-                <div className="text-center py-16 text-slate-600">
+                <div className="border-y border-slate-300 py-9 text-slate-600">
                   <p>No foundation giving report is published yet.</p>
                 </div>
               )}
 
               {data && (
                 <>
-                  <div className="rounded-lg border border-slate-200 bg-white shadow-sm overflow-hidden mb-10">
-                    <div className="bg-pink-100/90 border-b border-pink-200 px-4 py-3 text-center">
+                  <div className="border-y border-slate-300 bg-white overflow-hidden mb-12">
+                    <div className="bg-[#f4f1ec] border-b border-slate-300 px-4 py-3 text-center">
                       <p className="font-semibold text-slate-900">
                         Rotaract Club of Zamboanga City West
                       </p>
@@ -401,13 +397,13 @@ const FoundationGiving = () => {
                   </div>
 
                   <section
-                    className="space-y-6 border border-slate-200 rounded-lg bg-white/80 p-5 sm:p-6"
+                    className="border-t border-slate-300 pt-8"
                     aria-labelledby="faq-heading"
                   >
                     <div>
                       <h2
                         id="faq-heading"
-                        className="text-xl font-bold text-slate-900 font-display"
+                        className="text-3xl font-semibold text-slate-950"
                       >
                         About these funds
                       </h2>
@@ -415,26 +411,26 @@ const FoundationGiving = () => {
                         What each column in the report refers to.
                       </p>
                     </div>
-                    <ul className="space-y-5 list-none m-0 p-0">
-                      <li>
+                    <ul className="mt-6 grid list-none gap-x-10 gap-y-8 p-0 md:grid-cols-2">
+                      <li className="border-t border-slate-300 pt-4">
                         <h3 className="text-base font-semibold text-slate-900">
                           Annual Fund
                         </h3>
                         <FaqMarkdownBody markdown={data.faq.annualFund} />
                       </li>
-                      <li>
+                      <li className="border-t border-slate-300 pt-4">
                         <h3 className="text-base font-semibold text-slate-900">
                           PolioPlus Fund
                         </h3>
                         <FaqMarkdownBody markdown={data.faq.polioPlus} />
                       </li>
-                      <li>
+                      <li className="border-t border-slate-300 pt-4">
                         <h3 className="text-base font-semibold text-slate-900">
                           Other Fund
                         </h3>
                         <FaqMarkdownBody markdown={data.faq.other} />
                       </li>
-                      <li>
+                      <li className="border-t border-slate-300 pt-4">
                         <h3 className="text-base font-semibold text-slate-900">
                           Endowment Fund
                         </h3>

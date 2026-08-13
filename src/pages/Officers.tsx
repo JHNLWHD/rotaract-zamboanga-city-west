@@ -1,16 +1,73 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
+import { Loader2 } from 'lucide-react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Loader2 } from 'lucide-react';
-import ExecutiveBoard from '../components/officers/ExecutiveBoard';
-import BoardOfDirectors from '../components/officers/BoardOfDirectors';
-import ClubAdvisors from '../components/officers/ClubAdvisors';
-import PastPresidents from '../components/officers/PastPresidents';
+import PageHeader from '../components/layout/PageHeader';
 import { useOfficers, usePastPresidents } from '../hooks/officers/useOfficers';
-import { getCurrentTerm } from '@/data/officers';
+import { type Officer } from '../hooks/officers/fetchOfficers';
+import { getCurrentTerm } from '../data/officers';
+
+type OfficerGroupProps = {
+  title: string;
+  officers: Officer[];
+};
+
+const OfficerGroup: React.FC<OfficerGroupProps> = ({ title, officers }) => {
+  if (!officers.length) return null;
+
+  return (
+    <section
+      aria-labelledby={`${title.replace(/\s/g, '-').toLowerCase()}-heading`}
+    >
+      <div className="mb-5 flex items-end justify-between gap-5">
+        <h2
+          id={`${title.replace(/\s/g, '-').toLowerCase()}-heading`}
+          className="text-3xl font-semibold text-slate-950"
+        >
+          {title}
+        </h2>
+        <p className="text-sm text-slate-500">
+          {officers.length} {officers.length === 1 ? 'officer' : 'officers'}
+        </p>
+      </div>
+      <div className="grid gap-x-8 md:grid-cols-2">
+        {officers.map(officer => (
+          <article
+            key={officer.id}
+            className="flex min-h-28 gap-4 border-t border-slate-300 py-5"
+          >
+            {officer.profileImage && (
+              <img
+                src={officer.profileImage}
+                alt={`${officer.name}, ${officer.position}`}
+                className="h-20 w-20 shrink-0 object-cover"
+                loading="lazy"
+              />
+            )}
+            <div>
+              <h3 className="text-xl font-semibold leading-tight text-slate-950">
+                {officer.name}
+              </h3>
+              <p className="mt-2 text-sm font-semibold text-cranberry-700">
+                {officer.position}
+              </p>
+              <p className="mt-1 text-xs text-slate-500">
+                Rotary Year {officer.term}
+              </p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+};
+
+const statusLabel = {
+  current: 'Current term',
+  president_elect: 'President-elect',
+  future: 'President-nominee',
+};
 
 const Officers = () => {
   const currentTerm = getCurrentTerm();
@@ -22,55 +79,27 @@ const Officers = () => {
     isFetching: isFetchingOfficers,
   } = useOfficers(currentTerm);
   const {
-    data: pastPresidentsList,
-    isLoading: isLoadingPastPresidents,
-    isError: isErrorPastPresidents,
-    refetch: refetchPastPresidents,
-    isFetching: isFetchingPastPresidents,
+    data: presidents,
+    isLoading: isLoadingPresidents,
+    isError: isErrorPresidents,
+    refetch: refetchPresidents,
+    isFetching: isFetchingPresidents,
   } = usePastPresidents();
 
-  const isLoading = isLoadingOfficers || isLoadingPastPresidents;
-  const isError = isErrorOfficers || isErrorPastPresidents;
-
-  const executiveBoard = officers?.executive || [];
-  const currentDirectors = officers?.directors || [];
-  const advisorsList = officers?.advisors || [];
-  const allOfficers = [...executiveBoard, ...currentDirectors, ...advisorsList];
-  const isRetrying = isFetchingOfficers || isFetchingPastPresidents;
-
-  const retry = () => {
-    void Promise.all([refetchOfficers(), refetchPastPresidents()]);
-  };
+  const executive = officers?.executive || [];
+  const directors = officers?.directors || [];
+  const advisors = officers?.advisors || [];
+  const allOfficers = [...executive, ...directors, ...advisors];
+  const isLoading = isLoadingOfficers || isLoadingPresidents;
+  const isError = isErrorOfficers || isErrorPresidents;
+  const isRetrying = isFetchingOfficers || isFetchingPresidents;
+  const description = `The published officer directory of the Rotaract Club of Zamboanga City West for Rotary Year ${currentTerm}.`;
 
   return (
     <>
       <Helmet>
-        <title>
-          Great West Leadership Team & Officers - Rotaract Club of Zamboanga
-          City West
-        </title>
-        <meta
-          name="title"
-          content="Great West Leadership Team & Officers - Rotaract Club of Zamboanga City West"
-        />
-        <meta
-          name="description"
-          content="Meet the dedicated Great West leadership team driving positive change in Zamboanga City. Learn about our Executive Board, Directors, and Advisors for 2026-2027 who embody our values of fellowship, service, and leadership."
-        />
-        <meta
-          name="keywords"
-          content="Rotaract officers Zamboanga City West, Great West leadership team, club president, directors, advisors, Rotaract board members, youth leadership Philippines, club officers 2026-2027"
-        />
-        <meta name="author" content="Rotaract Club of Zamboanga City West" />
-        <meta
-          name="robots"
-          content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
-        />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta httpEquiv="Content-Language" content="en" />
-        <meta name="geo.region" content="PH-ZAM" />
-        <meta name="geo.placename" content="Zamboanga City" />
-
+        <title>Officers | Rotaract Club of Zamboanga City West</title>
+        <meta name="description" content={description} />
         <meta property="og:type" content="website" />
         <meta
           property="og:url"
@@ -78,190 +107,128 @@ const Officers = () => {
         />
         <meta
           property="og:title"
-          content="Great West Leadership Team & Officers - Rotaract Club of Zamboanga City West"
+          content="Officers | Rotaract Club of Zamboanga City West"
         />
-        <meta
-          property="og:description"
-          content="Meet the dedicated Great West leadership team driving positive change in Zamboanga City. Learn about our Executive Board, Directors, and Advisors for 2026-2027 who embody our values of fellowship, service, and leadership."
-        />
+        <meta property="og:description" content={description} />
         <meta
           property="og:image"
           content="https://rotaract.rotaryzcwest.org/og-image.png"
         />
-        <meta
-          property="og:image:alt"
-          content="Great West Leadership Team - Rotaract Club of Zamboanga City West"
-        />
-        <meta
-          property="og:site_name"
-          content="Rotaract Club of Zamboanga City West"
-        />
-        <meta property="og:locale" content="en_PH" />
-
-        <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:site" content="@RotaractZCWest" />
-        <meta property="twitter:creator" content="@RotaractZCWest" />
-        <meta
-          property="twitter:url"
-          content="https://rotaract.rotaryzcwest.org/officers"
-        />
-        <meta
-          property="twitter:title"
-          content="Great West Leadership Team & Officers - Rotaract Club of Zamboanga City West"
-        />
-        <meta
-          property="twitter:description"
-          content="Meet the dedicated Great West leadership team driving positive change in Zamboanga City. Learn about our Executive Board, Directors, and Advisors for 2026-2027 who embody our values of fellowship, service, and leadership."
-        />
-        <meta
-          property="twitter:image"
-          content="https://rotaract.rotaryzcwest.org/og-image.png"
-        />
-        <meta
-          property="twitter:image:alt"
-          content="Great West Leadership Team - Rotaract Club of Zamboanga City West"
-        />
-
-        <meta name="theme-color" content="#BE185D" />
-        <meta name="msapplication-TileColor" content="#BE185D" />
-        <meta name="application-name" content="Rotaract ZC West" />
-
+        <meta name="twitter:card" content="summary_large_image" />
         <link
           rel="canonical"
           href="https://rotaract.rotaryzcwest.org/officers"
         />
-
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-
         <script type="application/ld+json">
           {JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'Organization',
             name: 'Rotaract Club of Zamboanga City West',
-            alternateName: 'Great West',
             url: 'https://rotaract.rotaryzcwest.org',
             employee: allOfficers.map(officer => ({
               '@type': 'Person',
               name: officer.name,
               jobTitle: officer.position,
-              worksFor: {
-                '@type': 'Organization',
-                name: 'Rotaract Club of Zamboanga City West',
-                alternateName: 'Great West',
-              },
-              description: officer.responsibilities,
             })),
-            department: [
-              {
-                '@type': 'Organization',
-                name: 'Executive Board',
-                description: 'Senior leadership team of the Rotaract Club',
-              },
-              {
-                '@type': 'Organization',
-                name: 'Board of Directors',
-                description:
-                  'Directors responsible for specific areas of focus',
-              },
-              {
-                '@type': 'Organization',
-                name: 'Club Advisors',
-                description:
-                  'Experienced advisors providing guidance and support',
-              },
-            ],
-          })}
-        </script>
-
-        <script type="application/ld+json">
-          {JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'BreadcrumbList',
-            itemListElement: [
-              {
-                '@type': 'ListItem',
-                position: 1,
-                name: 'Home',
-                item: 'https://rotaract.rotaryzcwest.org',
-              },
-              {
-                '@type': 'ListItem',
-                position: 2,
-                name: 'Great West Leadership',
-                item: 'https://rotaract.rotaryzcwest.org/officers',
-              },
-            ],
           })}
         </script>
       </Helmet>
-      <div className="min-h-screen flex flex-col">
-        <Navbar />
-        <main
-          id="main-content"
-          className="flex-1 bg-gradient-to-br from-cranberry-50 via-white to-pink-50 pt-32 pb-12"
-        >
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="text-center mb-12">
-              <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">
-                Our <span className="text-gradient">Leadership</span>
-              </h1>
-              <p className="text-lg text-slate-600 max-w-3xl mx-auto mb-2">
-                Meet the dedicated leaders and members who make our club's
-                mission possible.
-              </p>
-              <Badge
-                variant="outline"
-                className="text-slate-700 border-slate-300 mt-4"
-              >
-                Rotary Year {getCurrentTerm()}
-              </Badge>
-            </div>
 
+      <div className="min-h-screen bg-[#faf9f7]">
+        <Navbar />
+        <main id="main-content">
+          <PageHeader
+            eyebrow="Leadership record"
+            title="Current club officers"
+            description="A practical directory of the people currently responsible for club leadership, with names, roles, and terms shown as published in the club roster."
+            asOf={`Rotary Year ${currentTerm}`}
+          />
+
+          <div className="editorial-shell py-10 md:py-14">
             {isLoading && (
-              <div className="flex items-center justify-center py-16">
-                <div className="text-center">
-                  <Loader2 className="w-12 h-12 animate-spin text-cranberry-600 mx-auto mb-4" />
-                  <p className="text-gray-600">Loading officers...</p>
-                </div>
+              <div className="flex items-center gap-3 border-y border-slate-300 py-10 text-sm text-slate-600">
+                <Loader2
+                  className="h-5 w-5 animate-spin text-cranberry-700"
+                  aria-hidden="true"
+                />
+                Loading officer records…
               </div>
             )}
 
             {isError && (
-              <div
-                className="flex items-center justify-center py-16"
-                role="alert"
-              >
-                <div className="text-center">
-                  <p className="text-red-600 mb-4">
-                    Failed to load officers. Please try again later.
-                  </p>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={retry}
-                    disabled={isRetrying}
-                  >
-                    {isRetrying ? 'Trying again…' : 'Try again'}
-                  </Button>
-                </div>
+              <div className="border-y border-slate-300 py-9" role="alert">
+                <p className="text-sm text-slate-700">
+                  Officer records are temporarily unavailable.
+                </p>
+                <button
+                  type="button"
+                  onClick={() =>
+                    void Promise.all([refetchOfficers(), refetchPresidents()])
+                  }
+                  disabled={isRetrying}
+                  className="editorial-link mt-3 disabled:opacity-50"
+                >
+                  {isRetrying ? 'Trying again…' : 'Try again'}
+                </button>
               </div>
             )}
 
             {!isLoading && !isError && (
-              <>
-                <ExecutiveBoard executives={executiveBoard} />
+              <div className="space-y-14">
+                {allOfficers.length > 0 ? (
+                  <>
+                    <OfficerGroup
+                      title="Executive board"
+                      officers={executive}
+                    />
+                    <OfficerGroup title="Directors" officers={directors} />
+                    <OfficerGroup title="Club advisors" officers={advisors} />
+                  </>
+                ) : (
+                  <p className="border-y border-slate-300 py-9 text-sm text-slate-600">
+                    No current officer records have been published yet.
+                  </p>
+                )}
 
-                <BoardOfDirectors directors={currentDirectors} />
-
-                <ClubAdvisors advisors={advisorsList} />
-
-                <PastPresidents pastPresidents={pastPresidentsList || []} />
-              </>
+                {presidents && presidents.length > 0 && (
+                  <section aria-labelledby="presidential-record-heading">
+                    <div className="mb-5 flex items-end justify-between gap-5">
+                      <div>
+                        <p className="editorial-kicker">Leadership archive</p>
+                        <h2
+                          id="presidential-record-heading"
+                          className="mt-2 text-3xl font-semibold text-slate-950"
+                        >
+                          Presidential record
+                        </h2>
+                      </div>
+                      <p className="text-sm text-slate-500">
+                        {presidents.length} terms
+                      </p>
+                    </div>
+                    <ol className="border-y border-slate-300">
+                      {presidents.map(president => (
+                        <li
+                          key={president.id}
+                          className="grid gap-1 border-b border-slate-200 py-3.5 last:border-b-0 sm:grid-cols-[8rem_1fr_auto] sm:items-center sm:gap-5"
+                        >
+                          <span className="text-sm tabular-nums text-slate-500">
+                            {president.term}
+                          </span>
+                          <span className="font-semibold text-slate-900">
+                            {president.name}
+                          </span>
+                          {president.status && (
+                            <span className="text-xs font-semibold text-cranberry-700">
+                              {statusLabel[president.status]}
+                            </span>
+                          )}
+                        </li>
+                      ))}
+                    </ol>
+                  </section>
+                )}
+              </div>
             )}
           </div>
         </main>

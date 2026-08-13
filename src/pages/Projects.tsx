@@ -1,18 +1,25 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import { useQuery } from '@tanstack/react-query';
+import { ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
+import PageHeader from '../components/layout/PageHeader';
 import ProjectsGrid from '../components/projects/ProjectsGrid';
 import ProjectsLoadingState from '../components/projects/ProjectsLoadingState';
 import ProjectsErrorState from '../components/projects/ProjectsErrorState';
-import { Button } from '../components/ui/button';
-import { Users } from 'lucide-react';
 import { fetchProjects } from '../hooks/projects/fetchProjects';
 import { cacheConfig } from '../config/cache';
 
+const formatDate = (value: string) =>
+  new Date(value).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+
 const Projects = () => {
-  // Fetch projects from Contentful
   const {
     data: projects,
     isLoading,
@@ -26,35 +33,15 @@ const Projects = () => {
     ...cacheConfig.monthly,
   });
 
+  const [featuredProject, ...archive] = projects || [];
+  const description =
+    'A dated archive of community projects published by the Rotaract Club of Zamboanga City West, including locations, partners, outcomes, and supporting records.';
+
   return (
     <>
       <Helmet>
-        <title>
-          Community Impact & Award-Winning Projects - Rotaract Club of Zamboanga
-          City West
-        </title>
-        <meta
-          name="title"
-          content="Community Impact & Award-Winning Projects - Rotaract Club of Zamboanga City West"
-        />
-        <meta
-          name="description"
-          content="Discover our award-winning community service projects including hydroponics farming, mangrove conservation, education support, and health initiatives. See how the Great West is making lasting impact in Zamboanga City with 1,820+ lives transformed."
-        />
-        <meta
-          name="keywords"
-          content="community projects Zamboanga City, award-winning Rotaract projects, hydroponics farming Philippines, mangrove conservation, education support programs, health initiatives, community service impact, Great West projects, volunteer projects Philippines"
-        />
-        <meta name="author" content="Rotaract Club of Zamboanga City West" />
-        <meta
-          name="robots"
-          content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
-        />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta httpEquiv="Content-Language" content="en" />
-        <meta name="geo.region" content="PH-ZAM" />
-        <meta name="geo.placename" content="Zamboanga City" />
-
+        <title>Projects | Rotaract Club of Zamboanga City West</title>
+        <meta name="description" content={description} />
         <meta property="og:type" content="website" />
         <meta
           property="og:url"
@@ -62,175 +49,59 @@ const Projects = () => {
         />
         <meta
           property="og:title"
-          content="Community Impact & Award-Winning Projects - Rotaract Club of Zamboanga City West"
+          content="Projects | Rotaract Club of Zamboanga City West"
         />
-        <meta
-          property="og:description"
-          content="Discover our award-winning community service projects including hydroponics farming, mangrove conservation, education support, and health initiatives. See how the Great West is making lasting impact in Zamboanga City with 1,820+ lives transformed."
-        />
+        <meta property="og:description" content={description} />
         <meta
           property="og:image"
           content="https://rotaract.rotaryzcwest.org/og-image.png"
         />
+        <meta name="twitter:card" content="summary_large_image" />
         <meta
-          property="og:image:alt"
-          content="Community Impact Projects - Rotaract Club of Zamboanga City West"
+          name="twitter:title"
+          content="Projects | Rotaract Club of Zamboanga City West"
         />
-        <meta
-          property="og:site_name"
-          content="Rotaract Club of Zamboanga City West"
-        />
-        <meta property="og:locale" content="en_PH" />
-
-        <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:site" content="@RotaractZCWest" />
-        <meta property="twitter:creator" content="@RotaractZCWest" />
-        <meta
-          property="twitter:url"
-          content="https://rotaract.rotaryzcwest.org/projects"
-        />
-        <meta
-          property="twitter:title"
-          content="Community Impact & Award-Winning Projects - Rotaract Club of Zamboanga City West"
-        />
-        <meta
-          property="twitter:description"
-          content="Discover our award-winning community service projects including hydroponics farming, mangrove conservation, education support, and health initiatives. See how the Great West is making lasting impact in Zamboanga City with 1,820+ lives transformed."
-        />
-        <meta
-          property="twitter:image"
-          content="https://rotaract.rotaryzcwest.org/og-image.png"
-        />
-        <meta
-          property="twitter:image:alt"
-          content="Community Impact Projects - Rotaract Club of Zamboanga City West"
-        />
-
-        <meta name="theme-color" content="#BE185D" />
-        <meta name="msapplication-TileColor" content="#BE185D" />
-        <meta name="application-name" content="Rotaract ZC West" />
-
+        <meta name="twitter:description" content={description} />
         <link
           rel="canonical"
           href="https://rotaract.rotaryzcwest.org/projects"
         />
-
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-
         <script type="application/ld+json">
           {JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'CollectionPage',
-            name: 'Community Impact & Award-Winning Projects',
-            description:
-              'Award-winning community service projects making positive impact in Zamboanga City with 1,820+ lives transformed',
+            name: 'Projects of the Rotaract Club of Zamboanga City West',
+            description,
             url: 'https://rotaract.rotaryzcwest.org/projects',
-            publisher: {
-              '@type': 'Organization',
-              name: 'Rotaract Club of Zamboanga City West',
-              alternateName: 'Great West',
-              url: 'https://rotaract.rotaryzcwest.org',
-            },
             mainEntity: {
               '@type': 'ItemList',
-              name: 'Community Service Projects',
-              description:
-                'Award-winning projects including hydroponics farming, mangrove conservation, education support, and health initiatives',
               numberOfItems: projects?.length || 0,
               itemListElement: (projects || []).map((project, index) => ({
-                '@type': 'Project',
+                '@type': 'ListItem',
                 position: index + 1,
+                url: `https://rotaract.rotaryzcwest.org/projects/${project.slug}`,
                 name: project.title,
-                description: project.shortDescription,
-                location: {
-                  '@type': 'Place',
-                  name: project.venue,
-                  address: {
-                    '@type': 'PostalAddress',
-                    addressLocality: 'Zamboanga City',
-                    addressRegion: 'Zamboanga Peninsula',
-                    addressCountry: 'PH',
-                  },
-                },
-                startDate: project.date,
-                organizer: {
-                  '@type': 'Organization',
-                  name: 'Rotaract Club of Zamboanga City West',
-                  alternateName: 'Great West',
-                },
-                funder: project.partners
-                  ? project.partners.map(partner => ({
-                      '@type': 'Organization',
-                      name: partner,
-                    }))
-                  : undefined,
-                category: project.category,
-                impact: project.impact,
               })),
-            },
-            breadcrumb: {
-              '@type': 'BreadcrumbList',
-              itemListElement: [
-                {
-                  '@type': 'ListItem',
-                  position: 1,
-                  name: 'Home',
-                  item: 'https://rotaract.rotaryzcwest.org',
-                },
-                {
-                  '@type': 'ListItem',
-                  position: 2,
-                  name: 'Community Impact',
-                  item: 'https://rotaract.rotaryzcwest.org/projects',
-                },
-              ],
             },
           })}
         </script>
       </Helmet>
-      <div className="min-h-screen flex flex-col">
-        <Navbar />
-        <main
-          id="main-content"
-          className="flex-1 bg-gradient-to-br from-cranberry-50 via-white to-pink-50 pt-20"
-        >
-          <div className="container mx-auto px-6 py-16">
-            <div className="text-center mb-16">
-              <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">
-                Our Community <span className="text-gradient">Impact</span>
-              </h1>
-              <p className="text-xl text-slate-600 max-w-3xl mx-auto mb-6">
-                Upholding Rotary’s mission, we pursue innovative service
-                projects that make a real difference and promote sustainable
-                change throughout Zamboanga City and beyond.
-              </p>
-              <div className="flex flex-wrap justify-center gap-4 text-sm">
-                <div className="bg-white/80 backdrop-blur-sm rounded-full px-4 py-2 border border-cranberry-100">
-                  <span className="font-semibold text-cranberry-700">
-                    1,820+
-                  </span>
-                  <span className="text-slate-600 ml-1">Lives Impacted</span>
-                </div>
-                <div className="bg-white/80 backdrop-blur-sm rounded-full px-4 py-2 border border-cranberry-100">
-                  <span className="font-semibold text-cranberry-700">15+</span>
-                  <span className="text-slate-600 ml-1">
-                    Partner Organizations
-                  </span>
-                </div>
-                <div className="bg-white/80 backdrop-blur-sm rounded-full px-4 py-2 border border-cranberry-100">
-                  <span className="font-semibold text-cranberry-700">
-                    Award-Winning
-                  </span>
-                  <span className="text-slate-600 ml-1">Projects</span>
-                </div>
-              </div>
-            </div>
 
+      <div className="min-h-screen bg-[#faf9f7]">
+        <Navbar />
+        <main id="main-content">
+          <PageHeader
+            eyebrow="Community record"
+            title="Projects and community work"
+            description="Published project records, newest first. Each entry preserves the dates, places, partners, and outcomes supplied by the club."
+            asOf={
+              featuredProject
+                ? `Latest record · ${formatDate(featuredProject.date)}`
+                : undefined
+            }
+          />
+
+          <div className="editorial-shell py-10 md:py-14">
             {isLoading && <ProjectsLoadingState />}
 
             {isError && (
@@ -241,48 +112,101 @@ const Projects = () => {
               />
             )}
 
-            {!isLoading && !isError && projects && projects.length > 0 && (
+            {!isLoading && !isError && featuredProject && (
               <>
-                <section aria-labelledby="featured-projects-heading">
-                  <div className="text-center mb-8">
-                    <h2
-                      id="featured-projects-heading"
-                      className="text-3xl font-bold text-slate-900 mb-3"
-                    >
-                      Featured project evidence
-                    </h2>
-                    <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-                      Start with recent projects, outcomes, partners, and
-                      supporting records.
-                    </p>
-                  </div>
-                  <ProjectsGrid projects={projects.slice(0, 5)} />
+                <section aria-labelledby="featured-project-heading">
+                  <p className="editorial-kicker">Featured record</p>
+                  <article className="mt-4 grid gap-7 border-y border-slate-300 py-7 lg:grid-cols-[1.15fr_0.85fr] lg:items-start lg:gap-12">
+                    {featuredProject.image && (
+                      <img
+                        src={featuredProject.image}
+                        alt={`${featuredProject.title} project record`}
+                        className="aspect-[16/10] w-full object-cover"
+                      />
+                    )}
+                    <div>
+                      <p className="text-xs font-bold uppercase tracking-[0.14em] text-slate-500">
+                        {formatDate(featuredProject.date)}
+                        {featuredProject.category &&
+                          ` · ${featuredProject.category}`}
+                      </p>
+                      <h2
+                        id="featured-project-heading"
+                        className="mt-3 text-4xl font-semibold leading-tight text-slate-950"
+                      >
+                        {featuredProject.title}
+                      </h2>
+                      {featuredProject.venue && (
+                        <p className="mt-3 text-sm font-semibold text-slate-700">
+                          {featuredProject.venue}
+                        </p>
+                      )}
+                      {featuredProject.shortDescription &&
+                        featuredProject.shortDescription.trim() !==
+                          featuredProject.title.trim() && (
+                          <p className="mt-5 text-base leading-7 text-slate-600">
+                            {featuredProject.shortDescription}
+                          </p>
+                        )}
+                      {featuredProject.impact && (
+                        <div className="mt-6 border-l-2 border-cranberry-600 pl-4">
+                          <p className="text-xs font-bold uppercase tracking-[0.14em] text-slate-500">
+                            Reported outcome
+                          </p>
+                          <p className="mt-2 text-sm leading-6 text-slate-700">
+                            {featuredProject.impact}
+                          </p>
+                        </div>
+                      )}
+                      {featuredProject.partners.length > 0 && (
+                        <p className="mt-5 text-sm leading-6 text-slate-600">
+                          <span className="font-semibold text-slate-900">
+                            Partners:
+                          </span>{' '}
+                          {featuredProject.partners.join(', ')}
+                        </p>
+                      )}
+                      <Link
+                        to={`/projects/${featuredProject.slug}`}
+                        className="editorial-link mt-6"
+                      >
+                        Open the full record
+                        <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                      </Link>
+                    </div>
+                  </article>
                 </section>
 
-                {projects.length > 5 && (
+                {archive.length > 0 && (
                   <section
-                    className="mt-20"
+                    className="mt-14"
                     aria-labelledby="project-archive-heading"
                   >
-                    <div className="text-center mb-8">
-                      <h2
-                        id="project-archive-heading"
-                        className="text-3xl font-bold text-slate-900 mb-3"
-                      >
-                        Project archive
-                      </h2>
-                      <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-                        Browse the club’s complete record of community impact.
+                    <div className="mb-6 flex items-end justify-between gap-5">
+                      <div>
+                        <p className="editorial-kicker">Archive</p>
+                        <h2
+                          id="project-archive-heading"
+                          className="mt-2 text-3xl font-semibold text-slate-950"
+                        >
+                          Earlier project records
+                        </h2>
+                      </div>
+                      <p className="text-sm text-slate-500">
+                        {archive.length}{' '}
+                        {archive.length === 1 ? 'record' : 'records'}
                       </p>
                     </div>
-                    <ProjectsGrid projects={projects.slice(5)} />
+                    <ProjectsGrid projects={archive} />
                   </section>
                 )}
               </>
             )}
 
-            {!isLoading && !isError && (!projects || projects.length === 0) && (
-              <ProjectsGrid projects={projects} />
+            {!isLoading && !isError && !featuredProject && (
+              <p className="border-y border-slate-300 py-10 text-sm text-slate-600">
+                No project records have been published yet.
+              </p>
             )}
           </div>
         </main>

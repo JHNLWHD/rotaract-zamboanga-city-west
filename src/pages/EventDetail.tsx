@@ -1,400 +1,409 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import {
+  ArrowLeft,
+  Download,
+  ExternalLink,
+  Loader2,
+  Share2,
+} from 'lucide-react';
+import Lightbox from 'yet-another-react-lightbox';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
+import PageHeader from '../components/layout/PageHeader';
 import ShareModal from '../components/ShareModal';
 import EventNotFound from '../components/events/EventNotFound';
-import EventDetailHeader from '../components/events/EventDetailHeader';
-import EventInvitation from '../components/events/EventInvitation';
-import EventRegistration from '../components/events/EventRegistration';
-import EventContent from '../components/events/EventContent';
-import EventGallery from '../components/events/EventGallery';
-import BackToEventsButton from '../components/events/BackToEventsButton';
-import { Loader2 } from 'lucide-react';
-import { toast } from 'sonner';
 import { useEventBySlug } from '../hooks/events/useEventBySlug';
 import { markdownToPlainText } from '../utils/richText';
-import Lightbox from 'yet-another-react-lightbox';
+
 import 'yet-another-react-lightbox/styles.css';
-import 'yet-another-react-lightbox/plugins/captions.css';
-import 'yet-another-react-lightbox/plugins/thumbnails.css';
-import Captions from 'yet-another-react-lightbox/plugins/captions';
-import DownloadPlugin from 'yet-another-react-lightbox/plugins/download';
-import Thumbnails from 'yet-another-react-lightbox/plugins/thumbnails';
+
+const formatDate = (value: string) =>
+  new Date(value).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
 
 const EventDetail = () => {
-  const { date, slug } = useParams();
+  const { date: routeDate, slug } = useParams();
   const { data: event, isLoading, isError } = useEventBySlug(slug);
   const [showShareModal, setShowShareModal] = useState(false);
-  const [lightboxOpen, setLightboxOpen] = useState(false);
-  const [lightboxIndex, setLightboxIndex] = useState(0);
+  const [lightboxIndex, setLightboxIndex] = useState(-1);
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-screen bg-[#faf9f7]">
         <Navbar />
-        <main className="flex-1 flex items-center justify-center">
-          <div className="text-center">
-            <Loader2 className="w-12 h-12 animate-spin text-cranberry-600 mx-auto mb-4" />
-            <p className="text-gray-600">Loading event details...</p>
-          </div>
+        <main className="editorial-shell flex min-h-[24rem] items-center gap-3 text-sm text-slate-600">
+          <Loader2
+            className="h-5 w-5 animate-spin text-cranberry-700"
+            aria-hidden="true"
+          />
+          Loading event record…
         </main>
         <Footer />
       </div>
     );
   }
 
-  if (isError || !event) {
-    return <EventNotFound />;
-  }
+  if (isError || !event) return <EventNotFound />;
 
-  const shareEvent = () => {
-    setShowShareModal(true);
-  };
-
-  const closeShareModal = () => {
-    setShowShareModal(false);
-  };
-
-  const descriptionPlain = markdownToPlainText(event.description);
+  const eventDate = new Date(event.date);
+  const isPast = eventDate.getTime() < Date.now();
+  const status = isPast
+    ? 'Completed'
+    : event.status === 'registration_open'
+      ? 'Registration open'
+      : 'Upcoming';
+  const descriptionPlain = markdownToPlainText(event.description).replace(
+    /\s+/g,
+    ' '
+  );
+  const summary =
+    descriptionPlain.length > 220
+      ? `${descriptionPlain.slice(0, 217).trim()}…`
+      : descriptionPlain;
+  const canonical = `https://rotaract.rotaryzcwest.org/events/${routeDate || event.date.split('T')[0]}/${event.slug}`;
+  const featureImage = event.image || event.invitationImage || '';
+  const slides = event.gallery.map(image => ({ src: image.url }));
 
   const downloadInvitation = () => {
-    if (event.invitationImage) {
-      const link = document.createElement('a');
-      link.href = event.invitationImage;
-      link.download = `${event.title}-invitation.png`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      toast.success('Invitation downloaded!');
-    }
+    if (!event.invitationImage) return;
+    const link = document.createElement('a');
+    link.href = event.invitationImage;
+    link.download = `${event.slug}-invitation`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
   };
 
   return (
     <>
       <Helmet>
-        <title>
-          {event.title} | Great West in Action - Rotaract Club of Zamboanga City
-          West
-        </title>
-        <meta
-          name="title"
-          content={`${event.title} | Great West in Action - Rotaract Club of Zamboanga City West`}
-        />
-        <meta
-          name="description"
-          content={`${descriptionPlain} Join the Great West in Action on ${new Date(event.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })} at ${event.venue}. ${event.status === 'upcoming' ? 'Register now and be part of our dynamic community!' : event.status === 'registration_open' ? 'Registration is open - join us!' : 'See event highlights and photos from this memorable Great West gathering.'}`}
-        />
-        <meta
-          name="keywords"
-          content={`${event.title}, Great West in Action, Rotaract ${event.category.toLowerCase()}, ${event.venue}, Zamboanga City West, ${event.date}, ${event.category.toLowerCase()} event Philippines, Rotaract club activities, fellowship events`}
-        />
-        <meta name="author" content="Rotaract Club of Zamboanga City West" />
-        <meta
-          name="robots"
-          content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
-        />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta httpEquiv="Content-Language" content="en" />
-        <meta name="geo.region" content="PH-ZAM" />
-        <meta name="geo.placename" content="Zamboanga City" />
-
-        <meta
-          name="event:start_date"
-          content={`${event.date}T${event.time.split(' - ')[0].replace(' ', '').toLowerCase()}`}
-        />
-        <meta
-          name="event:end_date"
-          content={`${event.date}T${event.time.split(' - ')[1]?.replace(' ', '').toLowerCase() || '23:59'}`}
-        />
-        <meta name="event:location" content={event.venue} />
-        <meta name="event:status" content={event.status} />
-
-        <meta property="og:type" content="event" />
-        <meta property="og:url" content={event.shareableLink} />
-        <meta
-          property="og:title"
-          content={`${event.title} | Great West in Action - Rotaract Club of Zamboanga City West`}
-        />
-        <meta
-          property="og:description"
-          content={`${descriptionPlain} Join the Great West in Action on ${new Date(event.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })} at ${event.venue}.`}
-        />
-        <meta
-          property="og:image"
-          content={
-            (event.invitationImage || event.image).startsWith('http')
-              ? event.invitationImage || event.image
-              : `https://rotaract.rotaryzcwest.org${event.invitationImage || event.image}`
-          }
-        />
-        <meta
-          property="og:image:alt"
-          content={`${event.title} - Great West in Action event`}
-        />
-        <meta
-          property="og:site_name"
-          content="Rotaract Club of Zamboanga City West"
-        />
-        <meta property="og:locale" content="en_PH" />
-        <meta
-          property="event:start_time"
-          content={`${event.date}T${event.time.split(' - ')[0].replace(/[^0-9:]/g, '')}`}
-        />
-        <meta
-          property="event:end_time"
-          content={`${event.date}T${event.time.split(' - ')[1]?.replace(/[^0-9:]/g, '') || '23:59'}`}
-        />
-
+        <title>{event.title} | Rotaract Club of Zamboanga City West</title>
+        <meta name="description" content={summary} />
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content={canonical} />
+        <meta property="og:title" content={event.title} />
+        <meta property="og:description" content={summary} />
+        {featureImage && <meta property="og:image" content={featureImage} />}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:site" content="@RotaractZCWest" />
-        <meta name="twitter:creator" content="@RotaractZCWest" />
-        <meta name="twitter:url" content={event.shareableLink} />
-        <meta
-          name="twitter:title"
-          content={`${event.title} | Great West in Action - Rotaract Club of Zamboanga City West`}
-        />
-        <meta
-          name="twitter:description"
-          content={`${descriptionPlain} Join the Great West in Action on ${new Date(event.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })} at ${event.venue}.`}
-        />
-        <meta
-          name="twitter:image"
-          content={
-            (event.invitationImage || event.image).startsWith('http')
-              ? event.invitationImage || event.image
-              : `https://rotaract.rotaryzcwest.org${event.invitationImage || event.image}`
-          }
-        />
-        <meta
-          name="twitter:image:alt"
-          content={`${event.title} - Great West in Action event`}
-        />
-        <meta name="twitter:label1" content="Date" />
-        <meta
-          name="twitter:data1"
-          content={new Date(event.date).toLocaleDateString('en-US', {
-            month: 'long',
-            day: 'numeric',
-            year: 'numeric',
-          })}
-        />
-        <meta name="twitter:label2" content="Location" />
-        <meta name="twitter:data2" content={event.venue} />
-
-        <meta name="theme-color" content="#BE185D" />
-        <meta name="msapplication-TileColor" content="#BE185D" />
-        <meta name="application-name" content="Rotaract ZC West" />
-
-        <link rel="canonical" href={event.shareableLink} />
-
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-
-        <script type="application/ld+json">
-          {JSON.stringify(
-            {
-              '@context': 'https://schema.org',
-              '@type': 'Event',
-              name: event.title,
-              description: descriptionPlain,
-              startDate: `${event.date}T${event.time.split(' - ')[0].replace(/[^0-9:]/g, '')}`,
-              endDate: `${event.date}T${event.time.split(' - ')[1]?.replace(/[^0-9:]/g, '') || '23:59'}`,
-              eventStatus:
-                event.status === 'past'
-                  ? 'https://schema.org/EventCompleted'
-                  : event.status === 'upcoming'
-                    ? 'https://schema.org/EventScheduled'
-                    : 'https://schema.org/EventScheduled',
-              eventAttendanceMode:
-                'https://schema.org/OfflineEventAttendanceMode',
-              location: {
-                '@type': 'Place',
-                name: event.venue,
-                address: {
-                  '@type': 'PostalAddress',
-                  streetAddress: event.venue,
-                  addressLocality: 'Zamboanga City',
-                  addressRegion: 'Zamboanga Peninsula',
-                  postalCode: '7000',
-                  addressCountry: 'PH',
-                },
-                geo: {
-                  '@type': 'GeoCoordinates',
-                  latitude: '6.9214',
-                  longitude: '122.0790',
-                },
-              },
-              image: [
-                (event.invitationImage || event.image).startsWith('http')
-                  ? event.invitationImage || event.image
-                  : `https://rotaract.rotaryzcwest.org${event.invitationImage || event.image}`,
-              ],
-              organizer: {
-                '@type': 'Organization',
-                name: 'Rotaract Club of Zamboanga City West',
-                alternateName: 'Great West',
-                url: 'https://rotaract.rotaryzcwest.org',
-                logo: 'https://rotaract.rotaryzcwest.org/images/logo.png',
-                sameAs: [
-                  'https://www.facebook.com/RotaractClubZamboWest',
-                  'https://www.instagram.com/raczambowest1',
-                ],
-                address: {
-                  '@type': 'PostalAddress',
-                  addressLocality: 'Zamboanga City',
-                  addressRegion: 'Zamboanga Peninsula',
-                  addressCountry: 'PH',
-                  postalCode: '7000',
-                },
-              },
-              performer: {
-                '@type': 'Organization',
-                name: 'Rotaract Club of Zamboanga City West',
-                alternateName: 'Great West',
-              },
-              offers: event.registrationUrl
-                ? {
-                    '@type': 'Offer',
-                    url: event.registrationUrl,
-                    price: '0',
-                    priceCurrency: 'PHP',
-                    availability:
-                      event.status === 'past'
-                        ? 'https://schema.org/SoldOut'
-                        : 'https://schema.org/InStock',
-                    validFrom: new Date().toISOString(),
-                  }
-                : undefined,
-              category: event.category,
-              keywords: `${event.category}, Great West in Action, Rotaract, Zamboanga City West, community service, leadership, fellowship`,
-              url: event.shareableLink,
-              identifier: event.id,
-              mainEntityOfPage: {
-                '@type': 'WebPage',
-                '@id': event.shareableLink,
-              },
-              potentialAction: event.registrationUrl
-                ? {
-                    '@type': 'ReserveAction',
-                    target: {
-                      '@type': 'EntryPoint',
-                      urlTemplate: event.registrationUrl,
-                      actionPlatform: [
-                        'http://schema.org/DesktopWebPlatform',
-                        'http://schema.org/MobileWebPlatform',
-                      ],
-                    },
-                    result: {
-                      '@type': 'Reservation',
-                      name: `Registration for ${event.title}`,
-                    },
-                  }
-                : undefined,
-            },
-            null,
-            2
-          )}
-        </script>
-
+        <meta name="twitter:title" content={event.title} />
+        <meta name="twitter:description" content={summary} />
+        {featureImage && <meta name="twitter:image" content={featureImage} />}
+        <link rel="canonical" href={canonical} />
         <script type="application/ld+json">
           {JSON.stringify({
             '@context': 'https://schema.org',
-            '@type': 'BreadcrumbList',
-            itemListElement: [
-              {
-                '@type': 'ListItem',
-                position: 1,
-                name: 'Home',
-                item: 'https://rotaract.rotaryzcwest.org',
+            '@type': 'Event',
+            name: event.title,
+            description: descriptionPlain,
+            startDate: event.date,
+            eventStatus: isPast
+              ? 'https://schema.org/EventCompleted'
+              : 'https://schema.org/EventScheduled',
+            eventAttendanceMode:
+              'https://schema.org/OfflineEventAttendanceMode',
+            location: {
+              '@type': 'Place',
+              name: event.venue,
+              address: {
+                '@type': 'PostalAddress',
+                addressLocality: 'Zamboanga City',
+                addressCountry: 'PH',
               },
-              {
-                '@type': 'ListItem',
-                position: 2,
-                name: 'Great West in Action',
-                item: 'https://rotaract.rotaryzcwest.org/events',
-              },
-              {
-                '@type': 'ListItem',
-                position: 3,
-                name: event.title,
-                item: event.shareableLink,
-              },
-            ],
+            },
+            image: [
+              featureImage,
+              ...event.gallery.map(image => image.url),
+            ].filter(Boolean),
+            organizer: {
+              '@type': 'Organization',
+              name: 'Rotaract Club of Zamboanga City West',
+              url: 'https://rotaract.rotaryzcwest.org',
+            },
+            offers:
+              !isPast && event.registrationUrl
+                ? {
+                    '@type': 'Offer',
+                    url: event.registrationUrl,
+                    availability: 'https://schema.org/InStock',
+                  }
+                : undefined,
+            url: canonical,
           })}
         </script>
       </Helmet>
 
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-screen bg-[#faf9f7]">
         <Navbar />
-        <main id="main-content" role="main" className="flex-1">
-          <BackToEventsButton />
+        <main id="main-content">
+          <PageHeader
+            eyebrow={event.category || 'Event record'}
+            title={event.title}
+            description={summary || 'Published club event record.'}
+            asOf={`${formatDate(event.date)} · ${status}`}
+          />
 
-          <section className="py-12 px-6 bg-white">
-            <EventDetailHeader event={event} onShare={shareEvent} />
+          <div className="editorial-shell py-8 md:py-12">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <Link to="/events" className="editorial-link">
+                <ArrowLeft className="h-4 w-4" aria-hidden="true" />
+                Event archive
+              </Link>
+              <button
+                type="button"
+                onClick={() => setShowShareModal(true)}
+                className="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-slate-950"
+              >
+                <Share2 className="h-4 w-4" aria-hidden="true" />
+                Share record
+              </button>
+            </div>
 
-            <EventRegistration event={event} />
-          </section>
+            {featureImage && (
+              <img
+                src={featureImage}
+                alt={`${event.title} event record`}
+                className="mt-7 max-h-[42rem] w-full object-cover"
+              />
+            )}
 
-          <EventInvitation event={event} onDownload={downloadInvitation} />
+            <div className="mt-10 grid gap-12 lg:grid-cols-[minmax(0,1fr)_18rem]">
+              <article>
+                <section aria-labelledby="event-narrative-heading">
+                  <p className="editorial-kicker">Event narrative</p>
+                  <h2
+                    id="event-narrative-heading"
+                    className="mt-2 text-3xl font-semibold text-slate-950"
+                  >
+                    About this event
+                  </h2>
+                  <div className="prose prose-lg prose-slate mt-5 max-w-none prose-headings:font-display prose-a:text-cranberry-700">
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                      {event.description}
+                    </ReactMarkdown>
+                  </div>
+                </section>
 
-          <EventContent event={event} />
+                {event.highlights.length > 0 && (
+                  <section
+                    className="mt-10"
+                    aria-labelledby="event-highlights-heading"
+                  >
+                    <h2
+                      id="event-highlights-heading"
+                      className="text-2xl font-semibold text-slate-950"
+                    >
+                      Published highlights
+                    </h2>
+                    <ul className="mt-4 divide-y divide-slate-200 border-y border-slate-300">
+                      {event.highlights.map((highlight, index) => (
+                        <li
+                          key={`${highlight}-${index}`}
+                          className="py-3 text-sm leading-6 text-slate-700"
+                        >
+                          {highlight}
+                        </li>
+                      ))}
+                    </ul>
+                  </section>
+                )}
 
-          {event.gallery && event.gallery.length > 0 && (
-            <section className="py-12 px-6">
-              <div className="max-w-4xl mx-auto">
-                <EventGallery
-                  event={event}
-                  onImageClick={index => {
-                    setLightboxIndex(index);
-                    setLightboxOpen(true);
-                  }}
-                />
-              </div>
-            </section>
-          )}
+                {event.agenda.length > 0 && (
+                  <section
+                    className="mt-10"
+                    aria-labelledby="event-agenda-heading"
+                  >
+                    <h2
+                      id="event-agenda-heading"
+                      className="text-2xl font-semibold text-slate-950"
+                    >
+                      Published agenda
+                    </h2>
+                    <ol className="mt-4 divide-y divide-slate-200 border-y border-slate-300">
+                      {event.agenda.map((item, index) => (
+                        <li
+                          key={`${item}-${index}`}
+                          className="grid grid-cols-[2rem_1fr] gap-3 py-3 text-sm leading-6 text-slate-700"
+                        >
+                          <span className="font-semibold tabular-nums text-cranberry-700">
+                            {String(index + 1).padStart(2, '0')}
+                          </span>
+                          {item}
+                        </li>
+                      ))}
+                    </ol>
+                  </section>
+                )}
+
+                {event.gallery.length > 0 && (
+                  <section
+                    className="mt-12"
+                    aria-labelledby="event-gallery-heading"
+                  >
+                    <p className="editorial-kicker">Supporting images</p>
+                    <h2
+                      id="event-gallery-heading"
+                      className="mt-2 text-3xl font-semibold text-slate-950"
+                    >
+                      Event gallery
+                    </h2>
+                    <div className="mt-5 grid gap-5 sm:grid-cols-2">
+                      {event.gallery.map((image, index) => (
+                        <button
+                          key={image.id}
+                          type="button"
+                          onClick={() => setLightboxIndex(index)}
+                          className="text-left"
+                        >
+                          <img
+                            src={image.url}
+                            alt={
+                              image.caption || `${event.title} gallery image`
+                            }
+                            className="aspect-[4/3] w-full object-cover"
+                            loading="lazy"
+                          />
+                          {image.caption && (
+                            <span className="mt-2 block text-xs leading-5 text-slate-500">
+                              {image.caption}
+                            </span>
+                          )}
+                        </button>
+                      ))}
+                    </div>
+                  </section>
+                )}
+              </article>
+
+              <aside
+                className="border-t-2 border-slate-950 pt-5"
+                aria-label="Event record details"
+              >
+                <h2 className="text-xl font-semibold text-slate-950">
+                  Record details
+                </h2>
+                <dl className="mt-4 divide-y divide-slate-200 border-y border-slate-300 text-sm">
+                  <div className="py-3.5">
+                    <dt className="text-slate-500">Date</dt>
+                    <dd className="mt-1 font-semibold text-slate-900">
+                      {formatDate(event.date)}
+                    </dd>
+                  </div>
+                  {event.time && (
+                    <div className="py-3.5">
+                      <dt className="text-slate-500">Time</dt>
+                      <dd className="mt-1 font-semibold text-slate-900">
+                        {event.time}
+                      </dd>
+                    </div>
+                  )}
+                  <div className="py-3.5">
+                    <dt className="text-slate-500">Venue</dt>
+                    <dd className="mt-1 font-semibold leading-6 text-slate-900">
+                      {event.venue}
+                    </dd>
+                  </div>
+                  <div className="py-3.5">
+                    <dt className="text-slate-500">Status</dt>
+                    <dd className="mt-1 font-semibold text-slate-900">
+                      {status}
+                    </dd>
+                  </div>
+                </dl>
+
+                {!isPast && event.registrationUrl && (
+                  <a
+                    href={event.registrationUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-6 inline-flex items-center gap-2 bg-cranberry-700 px-4 py-2.5 text-sm font-semibold text-white hover:bg-cranberry-800"
+                  >
+                    Open registration
+                    <ExternalLink className="h-4 w-4" aria-hidden="true" />
+                  </a>
+                )}
+
+                {event.invitationImage && (
+                  <section
+                    className="mt-8"
+                    aria-labelledby="invitation-heading"
+                  >
+                    <h2
+                      id="invitation-heading"
+                      className="text-xl font-semibold text-slate-950"
+                    >
+                      Invitation record
+                    </h2>
+                    {event.invitationImage !== featureImage && (
+                      <img
+                        src={event.invitationImage}
+                        alt={`${event.title} invitation`}
+                        className="mt-3 w-full object-cover"
+                        loading="lazy"
+                      />
+                    )}
+                    <button
+                      type="button"
+                      onClick={downloadInvitation}
+                      className="editorial-link mt-4"
+                    >
+                      Download invitation
+                      <Download className="h-4 w-4" aria-hidden="true" />
+                    </button>
+                  </section>
+                )}
+
+                {event.requirements.length > 0 && (
+                  <section
+                    className="mt-8"
+                    aria-labelledby="requirements-heading"
+                  >
+                    <h2
+                      id="requirements-heading"
+                      className="text-xl font-semibold text-slate-950"
+                    >
+                      Published requirements
+                    </h2>
+                    <ul className="mt-3 space-y-2 text-sm leading-6 text-slate-700">
+                      {event.requirements.map((requirement, index) => (
+                        <li key={`${requirement}-${index}`}>{requirement}</li>
+                      ))}
+                    </ul>
+                  </section>
+                )}
+              </aside>
+            </div>
+          </div>
         </main>
         <Footer />
-        <ShareModal
-          isOpen={showShareModal}
-          onClose={closeShareModal}
-          content={
-            event
-              ? {
-                  title: event.title,
-                  description: descriptionPlain,
-                  date: event.date,
-                  venue: event.venue,
-                  shareableLink: event.shareableLink,
-                  time: event.time,
-                  category: event.category,
-                }
-              : null
-          }
-          contentType="event"
-        />
-        <Lightbox
-          open={lightboxOpen}
-          index={lightboxIndex}
-          close={() => setLightboxOpen(false)}
-          slides={event.gallery?.map(photo => ({
-            src: photo.url,
-            alt: photo.caption,
-            download: photo.url,
-            description: photo.caption,
-          }))}
-          plugins={[Captions, DownloadPlugin, Thumbnails]}
-          captions={{
-            descriptionTextAlign: 'center',
-            descriptionMaxLines: 3,
-          }}
-        />
       </div>
+
+      <ShareModal
+        isOpen={showShareModal}
+        onClose={() => setShowShareModal(false)}
+        content={{
+          title: event.title,
+          description: summary,
+          date: event.date,
+          venue: event.venue,
+          shareableLink: event.shareableLink || canonical,
+          time: event.time,
+          category: event.category,
+        }}
+        contentType="event"
+      />
+      <Lightbox
+        open={lightboxIndex >= 0}
+        close={() => setLightboxIndex(-1)}
+        index={lightboxIndex}
+        slides={slides}
+      />
     </>
   );
 };

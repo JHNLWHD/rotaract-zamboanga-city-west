@@ -13,8 +13,8 @@ const ErrorState: React.FC<ErrorStateProps> = ({
   isRetrying = false,
 }) => {
   return (
-    <div className="text-center py-20" role="alert">
-      <div className="bg-red-50 border border-red-200 rounded-lg p-6 max-w-md mx-auto">
+    <div className="border-y border-slate-300 py-9" role="alert">
+      <div>
         <p className="text-red-800 font-medium mb-2">Failed to load events</p>
         <p className="text-red-600 text-sm">
           {error instanceof Error ? error.message : 'Please try again later.'}
@@ -23,7 +23,7 @@ const ErrorState: React.FC<ErrorStateProps> = ({
           <Button
             type="button"
             variant="outline"
-            className="mt-4"
+            className="mt-4 rounded-none"
             onClick={onRetry}
             disabled={isRetrying}
           >

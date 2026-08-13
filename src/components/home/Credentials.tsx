@@ -1,234 +1,273 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
-import {
-  ArrowRight,
-  Award,
-  ExternalLink,
-  Landmark,
-  ShieldCheck,
-  Users,
-} from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { fetchProjects } from '../../hooks/projects/fetchProjects';
+import { fetchAllAwards } from '../../hooks/landing-page/awardsSection';
+import { fetchOfficers } from '../../hooks/officers/fetchOfficers';
+import { fetchFoundationGiving } from '../../hooks/foundationGiving/fetchFoundationGiving';
+import { getCurrentTerm } from '../../data/officers';
 import { cacheConfig } from '../../config/cache';
 
-const SPONSOR_URL = 'https://rotaryzcwest.org/';
+const formatDate = (value: string) =>
+  new Date(value).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  });
+
+const fetchHomepageEvidence = async () => {
+  const [projects, recognition, officers, foundation] = await Promise.all([
+    fetchProjects(3),
+    fetchAllAwards(),
+    fetchOfficers(getCurrentTerm()),
+    fetchFoundationGiving(),
+  ]);
+
+  return { projects, recognition, officers, foundation };
+};
 
 const Credentials = () => {
-  const {
-    data: projects,
-    isLoading: projectsLoading,
-    isError: projectsError,
-    refetch: refetchProjects,
-    isFetching: projectsFetching,
-  } = useQuery({
-    queryKey: ['credentialProjects'],
-    queryFn: () => fetchProjects(5),
+  const { data, isLoading, isError, refetch, isFetching } = useQuery({
+    queryKey: ['homepageEvidence', getCurrentTerm()],
+    queryFn: fetchHomepageEvidence,
     ...cacheConfig.monthly,
   });
 
+  const [featuredProject, ...secondaryProjects] = data?.projects || [];
+  const president =
+    data?.officers?.find(
+      officer => officer.position.trim().toLowerCase() === 'president'
+    ) || data?.officers?.[0];
+  const recognitions = data?.recognition?.awards.slice(0, 3) || [];
+  const latestGiving = data?.foundation?.rows.length
+    ? [...data.foundation.rows].sort((a, b) => b.sortOrder - a.sortOrder)[0]
+    : undefined;
+
   return (
     <section
-      id="credentials"
-      className="section-container bg-white"
-      aria-labelledby="credentials-heading"
+      id="club-records"
+      className="editorial-section bg-white"
+      aria-labelledby="club-records-heading"
     >
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center max-w-3xl mx-auto mb-12">
-          <p className="text-sm font-semibold uppercase tracking-wide text-cranberry-700 mb-3">
-            Proof before participation
-          </p>
-          <h2
-            id="credentials-heading"
-            className="text-section-title text-slate-900 mb-6"
-          >
-            Our <span className="text-gradient">Credentials</span>
-          </h2>
-          <p className="text-xl text-slate-600 leading-relaxed">
-            Verify who we are, what we have done, and how the club is led.
-          </p>
-        </div>
-
-        <div className="modern-card px-6 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div className="flex items-center gap-4">
-            <ShieldCheck className="h-7 w-7 shrink-0 text-cranberry-600" />
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-wide text-cranberry-700">
-                Rotary sponsorship
-              </p>
-              <p className="text-sm text-slate-600">
-                Sponsored by the Rotary Club of Zamboanga City West.
-              </p>
-            </div>
+      <div className="editorial-shell">
+        <div className="grid gap-5 md:grid-cols-[0.9fr_1.1fr] md:items-end">
+          <div>
+            <p className="editorial-kicker">Public record</p>
+            <h2 id="club-records-heading" className="editorial-heading mt-3">
+              Evidence of an active club
+            </h2>
           </div>
-          <a
-            href={SPONSOR_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 text-sm font-semibold text-cranberry-700 whitespace-nowrap"
-          >
-            Visit Rotary Club site
-            <ExternalLink className="h-4 w-4" aria-hidden="true" />
-          </a>
+          <p className="max-w-2xl text-base leading-7 text-slate-600 md:justify-self-end md:text-lg">
+            Recent work, current leadership, formal recognition, and Rotary
+            Foundation giving — drawn from the club’s published records.
+          </p>
         </div>
 
-        <div
-          id="flagship-projects"
-          className="mt-8 rounded-3xl bg-slate-50 border border-slate-200 p-6 md:p-8"
-        >
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-6">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-wide text-cranberry-700 mb-2">
-                Community impact
-              </p>
-              <h3 className="text-2xl md:text-3xl font-bold text-slate-900">
-                Featured project evidence
-              </h3>
-            </div>
-            <Link
-              to="/projects"
-              className="inline-flex items-center gap-2 text-sm font-semibold text-cranberry-700"
+        {isLoading && (
+          <p className="border-t border-slate-300 py-12 text-sm text-slate-500">
+            Loading club records…
+          </p>
+        )}
+
+        {isError && (
+          <div className="mt-9 border-y border-slate-300 py-8" role="alert">
+            <p className="text-slate-700">
+              Club records are temporarily unavailable.
+            </p>
+            <button
+              type="button"
+              onClick={() => refetch()}
+              disabled={isFetching}
+              className="editorial-link mt-3 disabled:opacity-50"
             >
-              View all projects
-              <ArrowRight className="h-4 w-4" aria-hidden="true" />
-            </Link>
+              {isFetching ? 'Trying again…' : 'Try again'}
+            </button>
           </div>
+        )}
 
-          {projectsLoading && (
-            <p className="text-slate-600">Loading recent project records…</p>
-          )}
+        {!isLoading && !isError && data && (
+          <>
+            <div className="mt-10 grid gap-8 border-t border-slate-300 pt-8 lg:grid-cols-[1.45fr_0.55fr] lg:gap-12">
+              <div>
+                <div className="mb-5 flex items-end justify-between gap-4">
+                  <h3 className="text-2xl font-semibold text-slate-950">
+                    Recent project evidence
+                  </h3>
+                  <Link to="/projects" className="editorial-link shrink-0">
+                    Project archive
+                    <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                  </Link>
+                </div>
 
-          {!projectsLoading && projectsError && (
-            <div className="flex flex-wrap items-center gap-4" role="alert">
-              <p className="text-slate-600">
-                Project records are temporarily unavailable. You can still
-                browse the complete project archive.
-              </p>
-              <button
-                type="button"
-                onClick={() => refetchProjects()}
-                disabled={projectsFetching}
-                className="text-sm font-semibold text-cranberry-700 underline underline-offset-4 disabled:opacity-50"
-              >
-                {projectsFetching ? 'Trying again…' : 'Try again'}
-              </button>
-            </div>
-          )}
-
-          {!projectsLoading &&
-            !projectsError &&
-            projects &&
-            projects.length > 0 && (
-              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
-                {projects.map(project => (
-                  <Link
-                    key={project.id}
-                    to={`/projects/${project.slug}`}
-                    className="bg-white rounded-xl border border-slate-200 overflow-hidden hover:border-cranberry-300 transition-colors"
-                  >
-                    {project.image && (
+                {featuredProject ? (
+                  <article className="grid gap-6 sm:grid-cols-[0.9fr_1.1fr] sm:items-start">
+                    {featuredProject.image && (
                       <img
-                        src={project.image}
-                        alt=""
-                        className="w-full aspect-[4/3] object-cover"
+                        src={featuredProject.image}
+                        alt={`${featuredProject.title} project record`}
+                        className="aspect-[4/3] w-full object-cover"
                         loading="lazy"
                       />
                     )}
-                    <div className="p-4">
-                      <p className="font-semibold text-slate-900 text-sm line-clamp-3">
-                        {project.title}
+                    <div>
+                      <p className="text-xs font-bold uppercase tracking-[0.14em] text-slate-500">
+                        {formatDate(featuredProject.date)}
+                        {featuredProject.category &&
+                          ` · ${featuredProject.category}`}
                       </p>
-                      <p className="text-xs text-slate-500 mt-2">
-                        {new Date(project.date).toLocaleDateString('en-US', {
-                          year: 'numeric',
-                          month: 'short',
-                          day: 'numeric',
-                        })}
-                      </p>
-                      {(project.impact || project.shortDescription) && (
-                        <p className="text-xs text-slate-600 mt-3 line-clamp-3">
-                          {project.impact || project.shortDescription}
+                      <h4 className="mt-3 text-3xl font-semibold leading-tight text-slate-950">
+                        {featuredProject.title}
+                      </h4>
+                      {featuredProject.shortDescription &&
+                        featuredProject.shortDescription.trim() !==
+                          featuredProject.title.trim() && (
+                          <p className="mt-4 text-sm leading-6 text-slate-600">
+                            {featuredProject.shortDescription}
+                          </p>
+                        )}
+                      {featuredProject.impact && (
+                        <p className="mt-4 border-l-2 border-cranberry-500 pl-4 text-sm leading-6 text-slate-700">
+                          {featuredProject.impact}
                         </p>
                       )}
-                      {project.partners.length > 0 && (
-                        <p className="text-xs text-slate-500 mt-3 line-clamp-2">
-                          Partners: {project.partners.join(', ')}
-                        </p>
-                      )}
+                      <Link
+                        to={`/projects/${featuredProject.slug}`}
+                        className="editorial-link mt-5"
+                      >
+                        Read the project record
+                        <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                      </Link>
                     </div>
-                  </Link>
-                ))}
+                  </article>
+                ) : (
+                  <p className="text-sm text-slate-500">
+                    Project records will appear here when published.
+                  </p>
+                )}
               </div>
-            )}
 
-          {!projectsLoading &&
-            !projectsError &&
-            (!projects || projects.length === 0) && (
-              <p className="text-slate-600">
-                Project records will appear here as they are published.
-              </p>
-            )}
-        </div>
+              <div>
+                <h3 className="text-sm font-bold uppercase tracking-[0.14em] text-slate-500">
+                  Also in the archive
+                </h3>
+                <div className="mt-4 divide-y divide-slate-200 border-y border-slate-300">
+                  {secondaryProjects.length > 0 ? (
+                    secondaryProjects.map(project => (
+                      <Link
+                        key={project.id}
+                        to={`/projects/${project.slug}`}
+                        className="group block py-5"
+                      >
+                        <p className="text-xs text-slate-500">
+                          {formatDate(project.date)}
+                        </p>
+                        <p className="mt-1 font-semibold leading-6 text-slate-900 group-hover:text-cranberry-700">
+                          {project.title}
+                        </p>
+                      </Link>
+                    ))
+                  ) : (
+                    <p className="py-5 text-sm text-slate-500">
+                      No additional records published yet.
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
 
-        <div className="grid gap-6 md:grid-cols-3 mt-8">
-          <Link
-            to="/recognition"
-            className="modern-card p-6 group hover:-translate-y-1 transition-transform"
-          >
-            <Award className="h-8 w-8 text-cranberry-600 mb-5" />
-            <h3 className="text-lg font-bold text-slate-900 mb-2">
-              Recognition
-            </h3>
-            <p className="text-sm text-slate-600 leading-relaxed mb-4">
-              Awards, certificates, and official citations earned by the club.
-            </p>
-            <span className="inline-flex items-center gap-1 text-sm font-semibold text-cranberry-700">
-              View recognition
-              <ArrowRight className="h-4 w-4" aria-hidden="true" />
-            </span>
-          </Link>
+            <div className="mt-12 grid border-t border-slate-300 md:grid-cols-3">
+              <section className="border-b border-slate-200 py-7 md:border-b-0 md:border-r md:pr-8">
+                <p className="editorial-kicker">Current leadership</p>
+                {president ? (
+                  <div className="mt-5 flex items-center gap-4">
+                    {president.profileImage && (
+                      <img
+                        src={president.profileImage}
+                        alt={`${president.name}, ${president.position}`}
+                        className="h-16 w-16 shrink-0 object-cover"
+                        loading="lazy"
+                      />
+                    )}
+                    <div>
+                      <h3 className="text-xl font-semibold text-slate-950">
+                        {president.name}
+                      </h3>
+                      <p className="mt-1 text-sm text-slate-600">
+                        {president.position} · Rotary Year {president.term}
+                      </p>
+                    </div>
+                  </div>
+                ) : (
+                  <p className="mt-4 text-sm text-slate-500">
+                    The current roster will appear when published.
+                  </p>
+                )}
+                <Link to="/officers" className="editorial-link mt-5">
+                  View the officer directory
+                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                </Link>
+              </section>
 
-          <Link
-            to="/officers"
-            className="modern-card p-6 group hover:-translate-y-1 transition-transform"
-          >
-            <Users className="h-8 w-8 text-cranberry-600 mb-5" />
-            <h3 className="text-lg font-bold text-slate-900 mb-2">
-              Club officers
-            </h3>
-            <p className="text-sm text-slate-600 leading-relaxed mb-4">
-              Meet the people responsible for the club’s current Rotary Year.
-            </p>
-            <span className="inline-flex items-center gap-1 text-sm font-semibold text-cranberry-700">
-              Meet the officers
-              <ArrowRight className="h-4 w-4" aria-hidden="true" />
-            </span>
-          </Link>
+              <section className="border-b border-slate-200 py-7 md:border-b-0 md:border-r md:px-8">
+                <p className="editorial-kicker">Recent recognition</p>
+                {recognitions.length > 0 ? (
+                  <ol className="mt-4 divide-y divide-slate-200">
+                    {recognitions.map(recognition => (
+                      <li
+                        key={`${recognition.name}-${recognition.yearReceived}`}
+                        className="grid grid-cols-[4.5rem_1fr] gap-3 py-2.5 text-sm"
+                      >
+                        <span className="text-slate-500">
+                          {recognition.yearReceived}
+                        </span>
+                        <span className="font-semibold text-slate-900">
+                          {recognition.name}
+                        </span>
+                      </li>
+                    ))}
+                  </ol>
+                ) : (
+                  <p className="mt-4 text-sm text-slate-500">
+                    Recognition records will appear when published.
+                  </p>
+                )}
+                <Link to="/recognition" className="editorial-link mt-4">
+                  View recognition record
+                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                </Link>
+              </section>
 
-          <Link
-            to="/foundation-giving"
-            className="modern-card p-6 group hover:-translate-y-1 transition-transform"
-          >
-            <Landmark className="h-8 w-8 text-cranberry-600 mb-5" />
-            <h3 className="text-lg font-bold text-slate-900 mb-2">
-              Foundation giving
-            </h3>
-            <p className="text-sm text-slate-600 leading-relaxed mb-4">
-              Review our five-year Rotary Foundation giving record.
-            </p>
-            <span className="inline-flex items-center gap-1 text-sm font-semibold text-cranberry-700">
-              View giving record
-              <ArrowRight className="h-4 w-4" aria-hidden="true" />
-            </span>
-          </Link>
-        </div>
-
-        <div className="text-center mt-12">
-          <a href="#contact" className="primary-button inline-flex">
-            Contact the club
-            <ArrowRight className="h-4 w-4 ml-2" aria-hidden="true" />
-          </a>
-        </div>
+              <section className="py-7 md:pl-8">
+                <p className="editorial-kicker">Foundation record</p>
+                {latestGiving && data.foundation ? (
+                  <div className="mt-4">
+                    <p className="text-3xl font-semibold tabular-nums text-slate-950">
+                      {new Intl.NumberFormat('en-US', {
+                        style: 'currency',
+                        currency: data.foundation.currencyLabel,
+                      }).format(latestGiving.totalFund)}
+                    </p>
+                    <p className="mt-1 text-sm text-slate-600">
+                      Total giving for {latestGiving.rotaryYearLabel}
+                    </p>
+                    <p className="mt-3 text-xs text-slate-500">
+                      As of {formatDate(data.foundation.asOfDate)}
+                    </p>
+                  </div>
+                ) : (
+                  <p className="mt-4 text-sm text-slate-500">
+                    The giving record will appear when published.
+                  </p>
+                )}
+                <Link to="/foundation-giving" className="editorial-link mt-5">
+                  View the full giving record
+                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                </Link>
+              </section>
+            </div>
+          </>
+        )}
       </div>
     </section>
   );
