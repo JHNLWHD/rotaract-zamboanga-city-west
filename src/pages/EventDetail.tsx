@@ -29,7 +29,7 @@ const formatDate = (value: string) =>
   });
 
 const EventDetail = () => {
-  const { date: routeDate, slug } = useParams();
+  const { slug } = useParams();
   const { data: event, isLoading, isError } = useEventBySlug(slug);
   const [showShareModal, setShowShareModal] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(-1);
@@ -67,14 +67,14 @@ const EventDetail = () => {
     descriptionPlain.length > 220
       ? `${descriptionPlain.slice(0, 217).trim()}…`
       : descriptionPlain;
-  const canonical = `https://rotaract.rotaryzcwest.org/events/${routeDate || event.date.split('T')[0]}/${event.slug}`;
-  const featureImage = event.image || event.invitationImage || '';
+  const canonical = `https://rotaract.rotaryzcwest.org/events/${event.date.split('T')[0]}/${event.slug}`;
+  const invitationImage = event.invitationImage;
+  const featureImage = event.image || invitationImage || '';
   const slides = event.gallery.map(image => ({ src: image.url }));
 
-  const downloadInvitation = () => {
-    if (!event.invitationImage) return;
+  const downloadInvitation = (imageUrl: string) => {
     const link = document.createElement('a');
-    link.href = event.invitationImage;
+    link.href = imageUrl;
     link.download = `${event.slug}-invitation`;
     document.body.appendChild(link);
     link.click();
@@ -329,7 +329,7 @@ const EventDetail = () => {
                   </a>
                 )}
 
-                {event.invitationImage && (
+                {invitationImage && (
                   <section
                     className="mt-8"
                     aria-labelledby="invitation-heading"
@@ -340,9 +340,9 @@ const EventDetail = () => {
                     >
                       Invitation record
                     </h2>
-                    {event.invitationImage !== featureImage && (
+                    {invitationImage !== featureImage && (
                       <img
-                        src={event.invitationImage}
+                        src={invitationImage}
                         alt={`${event.title} invitation`}
                         className="mt-3 w-full object-cover"
                         loading="lazy"
@@ -350,7 +350,7 @@ const EventDetail = () => {
                     )}
                     <button
                       type="button"
-                      onClick={downloadInvitation}
+                      onClick={() => downloadInvitation(invitationImage)}
                       className="editorial-link mt-4"
                     >
                       Download invitation

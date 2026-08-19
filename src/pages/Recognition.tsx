@@ -10,7 +10,7 @@ import { fetchAllAwards } from '../hooks/landing-page/awardsSection';
 import { cacheConfig } from '../config/cache';
 
 const Recognition = () => {
-  const { data, isLoading, isError, refetch, isFetching } = useQuery({
+  const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ['recognition'],
     queryFn: fetchAllAwards,
     ...cacheConfig.yearly,
@@ -72,11 +72,10 @@ const Recognition = () => {
                 </p>
                 <button
                   type="button"
-                  className="editorial-link mt-3 disabled:opacity-50"
+                  className="editorial-link mt-3"
                   onClick={() => refetch()}
-                  disabled={isFetching}
                 >
-                  {isFetching ? 'Trying again…' : 'Try again'}
+                  Try again
                 </button>
               </div>
             )}

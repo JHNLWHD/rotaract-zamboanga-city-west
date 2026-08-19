@@ -22,7 +22,6 @@ function formatUsd(n: number, currency = 'USD'): string {
 }
 
 function formatAsOf(iso: string): string {
-  if (!iso) return '';
   try {
     return format(parseISO(iso), 'MMMM d, yyyy');
   } catch {
@@ -390,8 +389,10 @@ const FoundationGiving = () => {
                     </div>
                     <div className="px-4 py-3 bg-slate-50 border-t border-slate-200">
                       <p className="text-xs text-slate-600">
-                        All amounts in {data.currencyLabel}. As of{' '}
-                        {formatAsOf(data.asOfDate)}.
+                        All amounts in {data.currencyLabel}.
+                        {data.asOfDate && (
+                          <> As of {formatAsOf(data.asOfDate)}.</>
+                        )}
                       </p>
                     </div>
                   </div>

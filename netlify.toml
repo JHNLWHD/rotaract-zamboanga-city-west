@@ -2,16 +2,16 @@
 
 [build]
   # Production build - uses robots.prod.txt and _headers.prod (allows crawling)
-  command = "npm run build"
+  command = "npm run test:coverage && npm run lint:check && npm run build"
   publish = "dist"
 
 # Deploy Preview and Branch Deploy contexts use development robots.txt and _headers.dev (blocks crawling)
 [context.deploy-preview]
-  command = "npm run build:dev"
+  command = "npm run test:coverage && npm run lint:check && npm run build:dev"
 
 [context.branch-deploy]
-  command = "npm run build:dev"
+  command = "npm run test:coverage && npm run lint:check && npm run build:dev"
 
 # Production context
 [context.production]
-  command = "npm run build"
+  command = "npm run test:coverage && npm run lint:check && npm run build"

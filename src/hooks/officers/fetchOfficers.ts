@@ -57,7 +57,7 @@ export type PastPresident = {
 export async function fetchOfficers(
   term?: string,
   category?: 'Executive' | 'Director' | 'Advisor'
-): Promise<Officer[] | null> {
+): Promise<Officer[]> {
   try {
     const query: Record<string, string | number> = {
       content_type: 'officer',
@@ -100,14 +100,7 @@ export async function fetchOfficers(
           fields.socialMediaLinks &&
           typeof fields.socialMediaLinks === 'object'
         ) {
-          try {
-            socialMedia = fields.socialMediaLinks as Officer['socialMedia'];
-          } catch (error) {
-            console.warn(
-              `Could not process social media links for officer ${fields.name}:`,
-              error
-            );
-          }
+          socialMedia = fields.socialMediaLinks as Officer['socialMedia'];
         }
 
         return {
@@ -133,7 +126,7 @@ export async function fetchOfficers(
   }
 }
 
-export async function fetchPastPresidents(): Promise<PastPresident[] | null> {
+export async function fetchPastPresidents(): Promise<PastPresident[]> {
   try {
     const entries = await contentful.client.getEntries<PastPresidentSkeleton>({
       content_type: 'pastPresident',
@@ -160,21 +153,19 @@ export async function fetchPastPresidents(): Promise<PastPresident[] | null> {
 }
 
 // Helper functions for specific officer categories
-export async function fetchExecutiveBoard(
-  term?: string
-): Promise<Officer[] | null> {
+export async function fetchExecutiveBoard(term?: string): Promise<Officer[]> {
   return fetchOfficers(term, 'Executive');
 }
 
-export async function fetchDirectors(term?: string): Promise<Officer[] | null> {
+export async function fetchDirectors(term?: string): Promise<Officer[]> {
   return fetchOfficers(term, 'Director');
 }
 
-export async function fetchAdvisors(term?: string): Promise<Officer[] | null> {
+export async function fetchAdvisors(term?: string): Promise<Officer[]> {
   return fetchOfficers(term, 'Advisor');
 }
 
-export async function fetchCurrentOfficers(): Promise<Officer[] | null> {
+export async function fetchCurrentOfficers(): Promise<Officer[]> {
   return fetchOfficers('2026-2027');
 }
 
@@ -182,17 +173,13 @@ export async function fetchAllOfficers(term?: string): Promise<{
   executive: Officer[];
   directors: Officer[];
   advisors: Officer[];
-} | null> {
+}> {
   try {
     const [executive, directors, advisors] = await Promise.all([
       fetchExecutiveBoard(term),
       fetchDirectors(term),
       fetchAdvisors(term),
     ]);
-
-    if (!executive || !directors || !advisors) {
-      return null;
-    }
 
     return {
       executive,

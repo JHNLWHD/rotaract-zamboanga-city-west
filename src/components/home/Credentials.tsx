@@ -28,7 +28,7 @@ const fetchHomepageEvidence = async () => {
 };
 
 const Credentials = () => {
-  const { data, isLoading, isError, refetch, isFetching } = useQuery({
+  const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ['homepageEvidence', getCurrentTerm()],
     queryFn: fetchHomepageEvidence,
     ...cacheConfig.monthly,
@@ -78,10 +78,9 @@ const Credentials = () => {
             <button
               type="button"
               onClick={() => refetch()}
-              disabled={isFetching}
-              className="editorial-link mt-3 disabled:opacity-50"
+              className="editorial-link mt-3"
             >
-              {isFetching ? 'Trying again…' : 'Try again'}
+              Try again
             </button>
           </div>
         )}
