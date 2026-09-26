@@ -1,4 +1,4 @@
-import { screen, waitFor } from '@testing-library/react';
+import { screen, waitFor, within } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import ProjectsGrid from '../components/projects/ProjectsGrid';
 import ProjectsErrorState from '../components/projects/ProjectsErrorState';
@@ -17,14 +17,17 @@ vi.mock('yet-another-react-lightbox', () => ({
     open,
     close,
     index,
+    slides,
   }: {
     open: boolean;
     close: () => void;
     index: number;
+    slides: { src: string; alt: string }[];
   }) =>
     open ? (
       <div role="dialog" aria-label="Project lightbox">
         Image {index + 1}
+        <img src={slides[index].src} alt={slides[index].alt} />
         <button type="button" onClick={close}>
           Close lightbox
         </button>
@@ -279,14 +282,37 @@ describe('Project detail', () => {
       screen.queryByRole('dialog', { name: 'Share project' })
     ).not.toBeInTheDocument();
 
-    await user.click(screen.getByRole('button', { name: /Volunteers/ }));
+    const firstImage = screen.getByRole('button', {
+      name: 'Open image 1: Volunteers',
+    });
+    expect(firstImage).toHaveAttribute('aria-haspopup', 'dialog');
+    firstImage.focus();
+    await user.keyboard('{Enter}');
     expect(
       screen.getByRole('dialog', { name: 'Project lightbox' })
     ).toHaveTextContent('Image 1');
+    expect(
+      within(
+        screen.getByRole('dialog', { name: 'Project lightbox' })
+      ).getByRole('img', { name: 'Volunteers' })
+    ).toHaveAttribute('src', 'https://images.test/one.jpg');
     await user.click(screen.getByRole('button', { name: 'Close lightbox' }));
     expect(
       screen.queryByRole('dialog', { name: 'Project lightbox' })
     ).not.toBeInTheDocument();
+
+    screen
+      .getByRole('button', {
+        name: 'Open image 2: Project service-day gallery image',
+      })
+      .focus();
+    await user.keyboard(' ');
+    expect(
+      within(
+        screen.getByRole('dialog', { name: 'Project lightbox' })
+      ).getByRole('img', { name: 'Project service-day gallery image' })
+    ).toHaveAttribute('src', 'https://images.test/two.jpg');
+    await user.click(screen.getByRole('button', { name: 'Close lightbox' }));
   });
 
   it('uses outcome metadata and published partner names without repeating the outcome', async () => {

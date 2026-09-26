@@ -93,7 +93,10 @@ const EventDetail = () => {
   const canonical = `https://rotaract.rotaryzcwest.org/events/${event.date.split('T')[0]}/${event.slug}`;
   const invitationImage = event.invitationImage;
   const featureImage = event.image || invitationImage || '';
-  const slides = event.gallery.map(image => ({ src: image.url }));
+  const slides = event.gallery.map(image => ({
+    src: image.url,
+    alt: image.caption || `${event.title} gallery image`,
+  }));
 
   const downloadInvitation = (imageUrl: string) => {
     const link = document.createElement('a');
@@ -290,6 +293,8 @@ const EventDetail = () => {
                         <button
                           key={image.id}
                           type="button"
+                          aria-label={`Open image ${index + 1}: ${image.caption || `${event.title} gallery image`}`}
+                          aria-haspopup="dialog"
                           onClick={() => setLightboxIndex(index)}
                           className="text-left"
                         >

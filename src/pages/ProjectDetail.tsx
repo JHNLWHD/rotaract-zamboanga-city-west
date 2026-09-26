@@ -79,7 +79,10 @@ const ProjectDetail = () => {
   const partners: ProjectPartnerLinks = project.partnerLinks?.length
     ? project.partnerLinks
     : project.partners.map(name => ({ name }));
-  const slides = project.gallery.map(image => ({ src: image.url }));
+  const slides = project.gallery.map(image => ({
+    src: image.url,
+    alt: image.caption || `${project.title} gallery image`,
+  }));
 
   return (
     <>
@@ -234,6 +237,8 @@ const ProjectDetail = () => {
                         <button
                           key={image.id}
                           type="button"
+                          aria-label={`Open image ${index + 1}: ${image.caption || `${project.title} gallery image`}`}
+                          aria-haspopup="dialog"
                           onClick={() => setLightboxIndex(index)}
                           className="text-left"
                         >
