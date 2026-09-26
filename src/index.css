@@ -124,7 +124,7 @@
   }
 
   .editorial-section {
-    @apply border-t border-slate-200 py-12 md:py-16;
+    @apply border-t border-slate-200 py-10 md:py-16;
   }
 
   .editorial-kicker {

@@ -1,6 +1,7 @@
 import contentful from '../contentfulClient';
 import type { EntrySkeletonType, EntryFieldTypes } from 'contentful';
 import { processAsset } from '../../utils/contentful';
+import { getAllEntries } from '../getAllEntries';
 
 type OfficerSkeleton = EntrySkeletonType & {
   contentTypeId: 'officer';
@@ -72,7 +73,7 @@ export async function fetchOfficers(
       query['fields.category'] = category;
     }
 
-    const entries = await contentful.client.getEntries<OfficerSkeleton>(query);
+    const entries = await getAllEntries<OfficerSkeleton>(query);
 
     const officers: Officer[] = await Promise.all(
       entries.items.map(async entry => {
@@ -128,7 +129,7 @@ export async function fetchOfficers(
 
 export async function fetchPastPresidents(): Promise<PastPresident[]> {
   try {
-    const entries = await contentful.client.getEntries<PastPresidentSkeleton>({
+    const entries = await getAllEntries<PastPresidentSkeleton>({
       content_type: 'pastPresident',
       order: 'fields.displayOrder',
     });

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
+import { serializeJson } from '../utils/seo';
 import { Loader2 } from 'lucide-react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
@@ -7,6 +8,7 @@ import PageHeader from '../components/layout/PageHeader';
 import { useOfficers, usePastPresidents } from '../hooks/officers/useOfficers';
 import { type Officer } from '../hooks/officers/fetchOfficers';
 import { getCurrentTerm } from '../data/officers';
+import { responsiveImage } from '../utils/contentful';
 
 type OfficerGroupProps = {
   title: string;
@@ -39,7 +41,7 @@ const OfficerGroup: React.FC<OfficerGroupProps> = ({ title, officers }) => {
           >
             {officer.profileImage && (
               <img
-                src={officer.profileImage}
+                {...responsiveImage(officer.profileImage, '80px')}
                 alt={`${officer.name}, ${officer.position}`}
                 className="h-20 w-20 shrink-0 object-cover"
                 loading="lazy"
@@ -120,7 +122,7 @@ const Officers = () => {
           href="https://rotaract.rotaryzcwest.org/officers"
         />
         <script type="application/ld+json">
-          {JSON.stringify({
+          {serializeJson({
             '@context': 'https://schema.org',
             '@type': 'Organization',
             name: 'Rotaract Club of Zamboanga City West',

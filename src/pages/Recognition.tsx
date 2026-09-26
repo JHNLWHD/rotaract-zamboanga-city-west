@@ -8,6 +8,7 @@ import Footer from '../components/layout/Footer';
 import PageHeader from '../components/layout/PageHeader';
 import { fetchAllAwards } from '../hooks/landing-page/awardsSection';
 import { cacheConfig } from '../config/cache';
+import { responsiveImage } from '../utils/contentful';
 
 const Recognition = () => {
   const { data, isLoading, isError, refetch } = useQuery({
@@ -96,15 +97,15 @@ const Recognition = () => {
                   return (
                     <li
                       key={`${award.name}-${award.dateReceived || award.yearReceived}`}
-                      className="grid gap-5 border-t border-slate-300 py-7 md:grid-cols-[8rem_minmax(0,1fr)] lg:grid-cols-[8rem_minmax(0,1fr)_16rem] lg:gap-9"
+                      className={`grid gap-5 border-t border-slate-300 py-7 md:grid-cols-[8rem_minmax(0,1fr)] lg:gap-9 ${imageUrl ? 'lg:grid-cols-[8rem_minmax(0,1fr)_16rem]' : ''}`}
                     >
                       <div>
-                        <p className="font-display text-3xl font-semibold text-slate-950">
+                        <p className="whitespace-nowrap font-display text-2xl font-semibold text-slate-950">
                           {award.yearReceived}
                         </p>
                       </div>
 
-                      <article>
+                      <article className="max-w-3xl">
                         {award.issuingOrganization && (
                           <p className="text-xs font-bold uppercase tracking-[0.13em] text-slate-500">
                             Issued by {award.issuingOrganization}
@@ -142,12 +143,15 @@ const Recognition = () => {
                       {imageUrl && (
                         <figure className="md:col-start-2 lg:col-start-3 lg:row-start-1">
                           <img
-                            src={imageUrl}
+                            {...responsiveImage(
+                              imageUrl,
+                              '(min-width: 1024px) 256px, (min-width: 768px) calc(100vw - 224px), calc(100vw - 40px)'
+                            )}
                             alt={
                               award.image.description ||
                               `${award.name} certificate or recognition`
                             }
-                            className="aspect-[4/3] w-full object-cover"
+                            className="aspect-[4/3] w-full bg-[#f4f1ec] object-contain"
                             loading="lazy"
                           />
                           {award.image.description && (

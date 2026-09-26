@@ -5,6 +5,10 @@
   command = "npm run test:coverage && npm run lint:check && npm run build"
   publish = "dist"
 
+# Preserve the existing extensionless, non-trailing-slash canonical URLs.
+[build.processing.html]
+  pretty_urls = false
+
 # Deploy Preview and Branch Deploy contexts use development robots.txt and _headers.dev (blocks crawling)
 [context.deploy-preview]
   command = "npm run test:coverage && npm run lint:check && npm run build:dev"

@@ -2,6 +2,8 @@ import contentful from '../contentfulClient';
 import type { EntrySkeletonType, EntryFieldTypes } from 'contentful';
 import { processAsset } from '../../utils/contentful';
 import { richTextToMarkdown, type RichText } from '../../utils/richText';
+import { eventStartDate, isPastEvent } from '../../utils/eventDate';
+import { getAllEntries } from '../getAllEntries';
 
 type EventSkeleton = EntrySkeletonType & {
   contentTypeId: 'event';
@@ -26,6 +28,7 @@ type EventSkeleton = EntrySkeletonType & {
 };
 
 export type Event = {
+  updatedAt?: string;
   id: string;
   title: string;
   slug: string;
@@ -68,7 +71,7 @@ export async function fetchEvents(
       query['fields.status'] = status;
     }
 
-    const entries = await contentful.client.getEntries<EventSkeleton>(query);
+    const entries = await getAllEntries<EventSkeleton>(query);
 
     const events: Event[] = await Promise.all(
       entries.items.map(async entry => {
@@ -133,6 +136,7 @@ export async function fetchEvents(
         }
 
         return {
+          updatedAt: entry.sys.updatedAt,
           id: entry.sys.id,
           title: fields.title || '',
           slug: fields.slug || '',
@@ -158,13 +162,13 @@ export async function fetchEvents(
 
     // Sort events: upcoming first, then past events
     const sortedEvents = events.sort((a, b) => {
-      const aDate = new Date(a.date);
-      const bDate = new Date(b.date);
-      const now = new Date();
+      const aDate = new Date(eventStartDate(a));
+      const bDate = new Date(eventStartDate(b));
+      const now = Date.now();
 
       // Separate upcoming and past events
-      const aIsUpcoming = aDate >= now;
-      const bIsUpcoming = bDate >= now;
+      const aIsUpcoming = !isPastEvent(a, now);
+      const bIsUpcoming = !isPastEvent(b, now);
 
       if (aIsUpcoming && !bIsUpcoming) return -1;
       if (!aIsUpcoming && bIsUpcoming) return 1;
@@ -256,6 +260,7 @@ export async function fetchEventBySlug(slug: string): Promise<Event | null> {
     }
 
     return {
+      updatedAt: entry.sys.updatedAt,
       id: entry.sys.id,
       title: fields.title || '',
       slug: fields.slug || '',

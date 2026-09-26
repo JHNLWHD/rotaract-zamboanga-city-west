@@ -166,6 +166,8 @@ describe('homepage content', () => {
     expect(screen.getByText('Jamie Cruz')).toBeInTheDocument();
     expect(screen.getByText('Outstanding Club')).toBeInTheDocument();
     expect(screen.getByText('$825.00')).toBeInTheDocument();
+    expect(screen.getByText('Description featured')).toBeInTheDocument();
+    expect(screen.queryByText('100 people reached')).not.toBeInTheDocument();
     expect(
       screen.getByRole('link', { name: /Project second/ })
     ).toHaveAttribute('href', '/projects/second');

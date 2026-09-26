@@ -8,9 +8,11 @@ import { fetchOfficers } from '../../hooks/officers/fetchOfficers';
 import { fetchFoundationGiving } from '../../hooks/foundationGiving/fetchFoundationGiving';
 import { getCurrentTerm } from '../../data/officers';
 import { cacheConfig } from '../../config/cache';
+import { responsiveImage } from '../../utils/contentful';
 
 const formatDate = (value: string) =>
   new Date(value).toLocaleDateString('en-US', {
+    timeZone: 'Asia/Manila',
     year: 'numeric',
     month: 'short',
     day: 'numeric',
@@ -59,8 +61,8 @@ const Credentials = () => {
             </h2>
           </div>
           <p className="max-w-2xl text-base leading-7 text-slate-600 md:justify-self-end md:text-lg">
-            Recent work, current leadership, formal recognition, and Rotary
-            Foundation giving — drawn from the club’s published records.
+            Community projects, current officers, recognition, and Rotary
+            Foundation giving.
           </p>
         </div>
 
@@ -87,11 +89,11 @@ const Credentials = () => {
 
         {!isLoading && !isError && data && (
           <>
-            <div className="mt-10 grid gap-8 border-t border-slate-300 pt-8 lg:grid-cols-[1.45fr_0.55fr] lg:gap-12">
+            <div className="mt-6 grid gap-6 border-t border-slate-300 pt-6 md:mt-10 md:gap-8 md:pt-8 lg:grid-cols-[1.45fr_0.55fr] lg:gap-12">
               <div>
-                <div className="mb-5 flex items-end justify-between gap-4">
+                <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
                   <h3 className="text-2xl font-semibold text-slate-950">
-                    Recent project evidence
+                    Recent project
                   </h3>
                   <Link to="/projects" className="editorial-link shrink-0">
                     Project archive
@@ -103,9 +105,12 @@ const Credentials = () => {
                   <article className="grid gap-6 sm:grid-cols-[0.9fr_1.1fr] sm:items-start">
                     {featuredProject.image && (
                       <img
-                        src={featuredProject.image}
+                        {...responsiveImage(
+                          featuredProject.image,
+                          '(min-width: 1024px) 352px, (min-width: 640px) 45vw, calc(100vw - 40px)'
+                        )}
                         alt={`${featuredProject.title} project record`}
-                        className="aspect-[4/3] w-full object-cover"
+                        className="aspect-[4/3] w-full bg-[#f4f1ec] object-contain"
                         loading="lazy"
                       />
                     )}
@@ -125,11 +130,6 @@ const Credentials = () => {
                             {featuredProject.shortDescription}
                           </p>
                         )}
-                      {featuredProject.impact && (
-                        <p className="mt-4 border-l-2 border-cranberry-500 pl-4 text-sm leading-6 text-slate-700">
-                          {featuredProject.impact}
-                        </p>
-                      )}
                       <Link
                         to={`/projects/${featuredProject.slug}`}
                         className="editorial-link mt-5"
@@ -156,7 +156,7 @@ const Credentials = () => {
                       <Link
                         key={project.id}
                         to={`/projects/${project.slug}`}
-                        className="group block py-5"
+                        className="group block py-3 md:py-5"
                       >
                         <p className="text-xs text-slate-500">
                           {formatDate(project.date)}
@@ -175,14 +175,14 @@ const Credentials = () => {
               </div>
             </div>
 
-            <div className="mt-12 grid border-t border-slate-300 md:grid-cols-3">
-              <section className="border-b border-slate-200 py-7 md:border-b-0 md:border-r md:pr-8">
+            <div className="mt-6 grid border-t border-slate-300 md:mt-12 md:grid-cols-3">
+              <section className="border-b border-slate-200 py-5 md:border-b-0 md:border-r md:py-7 md:pr-8">
                 <p className="editorial-kicker">Current leadership</p>
                 {president ? (
-                  <div className="mt-5 flex items-center gap-4">
+                  <div className="mt-3 flex items-center gap-4 md:mt-5">
                     {president.profileImage && (
                       <img
-                        src={president.profileImage}
+                        {...responsiveImage(president.profileImage, '64px')}
                         alt={`${president.name}, ${president.position}`}
                         className="h-16 w-16 shrink-0 object-cover"
                         loading="lazy"
@@ -202,13 +202,13 @@ const Credentials = () => {
                     The current roster will appear when published.
                   </p>
                 )}
-                <Link to="/officers" className="editorial-link mt-5">
+                <Link to="/officers" className="editorial-link mt-3 md:mt-5">
                   View the officer directory
                   <ArrowRight className="h-4 w-4" aria-hidden="true" />
                 </Link>
               </section>
 
-              <section className="border-b border-slate-200 py-7 md:border-b-0 md:border-r md:px-8">
+              <section className="border-b border-slate-200 py-5 md:border-b-0 md:border-r md:px-8 md:py-7">
                 <p className="editorial-kicker">Recent recognition</p>
                 {recognitions.length > 0 ? (
                   <ol className="mt-4 divide-y divide-slate-200">
@@ -237,7 +237,7 @@ const Credentials = () => {
                 </Link>
               </section>
 
-              <section className="py-7 md:pl-8">
+              <section className="py-5 md:py-7 md:pl-8">
                 <p className="editorial-kicker">Foundation record</p>
                 {latestGiving && data.foundation ? (
                   <div className="mt-4">
@@ -259,7 +259,10 @@ const Credentials = () => {
                     The giving record will appear when published.
                   </p>
                 )}
-                <Link to="/foundation-giving" className="editorial-link mt-5">
+                <Link
+                  to="/foundation-giving"
+                  className="editorial-link mt-3 md:mt-5"
+                >
                   View the full giving record
                   <ArrowRight className="h-4 w-4" aria-hidden="true" />
                 </Link>

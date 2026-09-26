@@ -244,7 +244,6 @@ describe('homepage Contentful fetchers', () => {
     expect(client.getEntries).toHaveBeenCalledWith({
       content_type: 'cardsAwards',
       order: '-fields.dateReceived',
-      limit: 100,
     });
 
     client.getEntries.mockRejectedValueOnce(new Error('query failed'));

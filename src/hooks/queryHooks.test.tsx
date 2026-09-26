@@ -67,7 +67,7 @@ describe('React Query hooks', () => {
     expect(fetchEventBySlug).toHaveBeenCalledWith('event-1');
   });
 
-  it('turns missing detail records into query errors', async () => {
+  it('keeps missing records distinct from request errors without retrying absence', async () => {
     fetchProjectBySlug.mockResolvedValue(null);
     fetchEventBySlug.mockResolvedValue(null);
     const project = renderHook(() => useProjectBySlug('missing-project'), {
@@ -77,16 +77,12 @@ describe('React Query hooks', () => {
       wrapper,
     });
 
-    await waitFor(() =>
-      expect(project.result.current.error).toEqual(
-        new Error('Project not found')
-      )
-    );
-    await waitFor(() =>
-      expect(event.result.current.error).toEqual(new Error('Event not found'))
-    );
-    expect(fetchProjectBySlug).toHaveBeenCalledTimes(2);
-    expect(fetchEventBySlug).toHaveBeenCalledTimes(2);
+    await waitFor(() => expect(project.result.current.isSuccess).toBe(true));
+    await waitFor(() => expect(event.result.current.isSuccess).toBe(true));
+    expect(project.result.current.data).toBeNull();
+    expect(event.result.current.data).toBeNull();
+    expect(fetchProjectBySlug).toHaveBeenCalledTimes(1);
+    expect(fetchEventBySlug).toHaveBeenCalledTimes(1);
   });
 
   it('keeps missing slugs idle and rejects manual refetches', async () => {

@@ -57,4 +57,18 @@ describe('App routes', () => {
     expect(screen.getByRole('heading', { name: heading })).toBeInTheDocument();
     expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
   });
+
+  it('preserves a server 404 on a route-shaped missing record', () => {
+    window.history.replaceState({}, '', '/projects/missing');
+    const view = render(<App notFoundPath="/projects/missing" />);
+    expect(
+      screen.getByRole('heading', { name: 'Not found page' })
+    ).toBeInTheDocument();
+    window.history.replaceState({}, '', '/projects');
+    window.dispatchEvent(new PopStateEvent('popstate'));
+    view.rerender(<App notFoundPath="/projects/missing" />);
+    expect(
+      screen.getByRole('heading', { name: 'Projects page' })
+    ).toBeInTheDocument();
+  });
 });

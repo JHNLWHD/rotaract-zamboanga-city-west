@@ -8,11 +8,7 @@ export const useEventBySlug = (slug: string | undefined) => {
       if (!slug) {
         throw new Error('Slug is required');
       }
-      const event = await fetchEventBySlug(slug);
-      if (!event) {
-        throw new Error('Event not found');
-      }
-      return event;
+      return fetchEventBySlug(slug);
     },
     enabled: !!slug,
     staleTime: 5 * 60 * 1000,

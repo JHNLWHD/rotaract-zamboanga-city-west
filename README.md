@@ -44,6 +44,21 @@ Follow these steps to set up and run the project locally:
    ```
    The app will be available at [http://localhost:8080](http://localhost:5173) by default.
 
+## Local Contentful draft review
+
+Set `VITE_CONTENTFUL_PREVIEW_TOKEN` in your ignored `.env.local`, using the
+preview token associated with the existing Contentful delivery API key. Then run:
+
+```sh
+npm run dev:drafts
+```
+
+This binds to `127.0.0.1` and reads the latest entries and asset captions through
+Contentful's read-only Preview API. Refresh the page after changing a draft.
+Nothing is published. Do not expose this local server or its token publicly.
+Regular development and both deployment builds continue to use published content.
+Missing preview credentials stop draft mode instead of silently showing live copy.
+
 ## Deployment
 
 - Deploy to [Netlify](https://www.netlify.com/) or your preferred static hosting provider.

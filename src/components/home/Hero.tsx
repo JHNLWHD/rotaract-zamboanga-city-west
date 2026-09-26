@@ -5,6 +5,7 @@ import ReactMarkdown from 'react-markdown';
 import { fetchHeroContent } from '../../hooks/landing-page/heroSection';
 import { fetchAboutCommunity } from '../../hooks/landing-page/aboutCommunity';
 import { cacheConfig } from '../../config/cache';
+import { responsiveImage } from '../../utils/contentful';
 
 const Hero = () => {
   const { data: hero } = useQuery({
@@ -24,19 +25,19 @@ const Hero = () => {
 
   return (
     <section className="bg-[#faf9f7]" aria-labelledby="home-heading">
-      <div className="editorial-shell py-10 md:py-14 lg:py-16">
-        <div className="grid gap-9 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-14">
+      <div className="editorial-shell py-7 md:py-14 lg:py-16">
+        <div className="grid gap-6 md:gap-9 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-14">
           <div>
             <p className="editorial-kicker">
               {hero?.badgeText || 'Official club record'}
             </p>
             <h1
               id="home-heading"
-              className="mt-4 text-5xl font-semibold leading-[0.98] tracking-[-0.035em] text-slate-950 sm:text-6xl"
+              className="mt-3 text-[2.5rem] font-semibold leading-[1.05] tracking-[-0.035em] text-slate-950 sm:mt-4 sm:text-6xl sm:leading-[0.98]"
             >
               Rotaract Club of Zamboanga City West
             </h1>
-            <div className="mt-6 max-w-xl text-base leading-7 text-slate-600 md:text-lg">
+            <div className="mt-4 max-w-xl text-base leading-7 text-slate-600 md:mt-6 md:text-lg">
               {hero?.subTitle ? (
                 <ReactMarkdown
                   components={{
@@ -52,7 +53,7 @@ const Hero = () => {
                 </p>
               )}
             </div>
-            <div className="mt-7 flex flex-wrap gap-x-7 gap-y-3">
+            <div className="mt-5 flex flex-wrap gap-x-7 gap-y-3 md:mt-7">
               <a href="#club-profile" className="editorial-link">
                 Get to Know Great West
                 <ArrowRight className="h-4 w-4" aria-hidden="true" />
@@ -66,12 +67,15 @@ const Hero = () => {
 
           <figure>
             <img
-              src={image}
+              {...responsiveImage(
+                image,
+                '(min-width: 1024px) 640px, calc(100vw - 40px)'
+              )}
               alt={
                 about?.image?.description ||
                 'Members and partners of the Rotaract Club of Zamboanga City West'
               }
-              className="aspect-[16/10] w-full object-cover"
+              className="aspect-video w-full object-cover sm:aspect-[16/10]"
             />
             <figcaption className="mt-2 text-xs leading-5 text-slate-500">
               {about?.image?.description ||
@@ -80,8 +84,8 @@ const Hero = () => {
           </figure>
         </div>
 
-        <dl className="mt-10 grid border-y border-slate-300 sm:grid-cols-2 lg:grid-cols-4">
-          <div className="border-b border-slate-200 py-4 sm:border-r lg:border-b-0">
+        <dl className="mt-6 grid grid-cols-2 border-y border-slate-300 md:mt-10 lg:grid-cols-4">
+          <div className="border-b border-r border-slate-200 py-3 pr-3 md:py-4 lg:border-b-0">
             <dt className="text-xs font-bold uppercase tracking-[0.14em] text-slate-500">
               Chartered
             </dt>
@@ -89,7 +93,7 @@ const Hero = () => {
               6 January 2010 · Club ID 88047
             </dd>
           </div>
-          <div className="border-b border-slate-200 py-4 sm:pl-5 lg:border-b-0 lg:border-r">
+          <div className="border-b border-slate-200 py-3 pl-3 md:py-4 md:pl-5 lg:border-b-0 lg:border-r">
             <dt className="text-xs font-bold uppercase tracking-[0.14em] text-slate-500">
               District
             </dt>
@@ -97,7 +101,7 @@ const Hero = () => {
               Rotary International District 3850
             </dd>
           </div>
-          <div className="border-b border-slate-200 py-4 sm:border-b-0 sm:border-r lg:pl-5">
+          <div className="border-r border-slate-200 py-3 pr-3 md:py-4 lg:pl-5">
             <dt className="text-xs font-bold uppercase tracking-[0.14em] text-slate-500">
               Sponsoring club
             </dt>
@@ -112,7 +116,7 @@ const Hero = () => {
               </a>
             </dd>
           </div>
-          <div className="py-4 sm:pl-5">
+          <div className="py-3 pl-3 md:py-4 md:pl-5">
             <dt className="text-xs font-bold uppercase tracking-[0.14em] text-slate-500">
               Institutional reference
             </dt>

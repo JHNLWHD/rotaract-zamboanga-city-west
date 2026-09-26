@@ -2,7 +2,7 @@ import type { Asset } from 'contentful';
 import { describe, expect, it } from 'vitest';
 import { cacheConfig } from '../config/cache';
 import { cn } from '../lib/utils';
-import { processAsset } from './contentful';
+import { processAsset, responsiveImage } from './contentful';
 import {
   markdownToPlainText,
   richTextToMarkdown,
@@ -13,6 +13,32 @@ const asset = (url?: string) =>
   ({ fields: { file: url ? { url } : undefined } }) as unknown as Asset;
 
 describe('content utilities', () => {
+  it('resizes only supported Contentful images and preserves original URLs', () => {
+    const original =
+      'https://images.ctfassets.net/space/asset/photo.jpg?fl=progressive';
+    const props = responsiveImage(original, '(min-width: 768px) 400px, 100vw');
+    const url = new URL(props.src);
+    expect(url.searchParams.get('fm')).toBe('webp');
+    expect(url.searchParams.get('q')).toBe('80');
+    expect(url.searchParams.get('w')).toBe('960');
+    expect(url.searchParams.has('fl')).toBe(false);
+    expect(url.searchParams.has('fit')).toBe(false);
+    expect(url.searchParams.has('h')).toBe(false);
+    expect(
+      props.srcSet.split(', ').map(candidate => candidate.split(' ')[1])
+    ).toEqual(['320w', '640w', '960w', '1280w', '1920w']);
+    expect(props.sizes).toBe('(min-width: 768px) 400px, 100vw');
+    expect(original).not.toContain('w=');
+    for (const src of [
+      '/photo.png',
+      'https://images.test/photo.jpg',
+      'https://images.ctfassets.net/file.svg',
+      'https://images.ctfassets.net/animation.gif',
+      'https://images.ctfassets.net.evil.test/photo.jpg',
+      '',
+    ])
+      expect(responsiveImage(src, '100vw')).toEqual({ src });
+  });
   it('normalizes Contentful asset URLs and missing assets', () => {
     expect(processAsset(asset('//images.ctfassets.net/photo.jpg'))).toBe(
       'https://images.ctfassets.net/photo.jpg'

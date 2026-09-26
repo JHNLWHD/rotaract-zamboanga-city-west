@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
+import { serializeJson } from '../utils/seo';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { ArrowLeft, ExternalLink, Loader2, Share2 } from 'lucide-react';
@@ -10,12 +11,16 @@ import Footer from '../components/layout/Footer';
 import PageHeader from '../components/layout/PageHeader';
 import ShareModal from '../components/ShareModal';
 import ProjectNotFound from '../components/projects/ProjectNotFound';
+import RecordUnavailable from '../components/RecordUnavailable';
 import { useProjectBySlug } from '../hooks/projects/useProjectBySlug';
+import type { ProjectPartnerLinks } from '../hooks/projects/fetchProjects';
+import { responsiveImage } from '../utils/contentful';
 
 import 'yet-another-react-lightbox/styles.css';
 
 const formatDate = (value: string) =>
   new Date(value).toLocaleDateString('en-US', {
+    timeZone: 'Asia/Manila',
     year: 'numeric',
     month: 'long',
     day: 'numeric',
@@ -23,7 +28,13 @@ const formatDate = (value: string) =>
 
 const ProjectDetail = () => {
   const { slug } = useParams();
-  const { data: project, isLoading, isError } = useProjectBySlug(slug);
+  const {
+    data: project,
+    isLoading,
+    isError,
+    refetch,
+    isFetching,
+  } = useProjectBySlug(slug);
   const [showShareModal, setShowShareModal] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(-1);
 
@@ -31,7 +42,10 @@ const ProjectDetail = () => {
     return (
       <div className="min-h-screen bg-[#faf9f7]">
         <Navbar />
-        <main className="editorial-shell flex min-h-[24rem] items-center gap-3 text-sm text-slate-600">
+        <main
+          id="main-content"
+          className="editorial-shell flex min-h-[24rem] items-center gap-3 text-sm text-slate-600"
+        >
           <Loader2
             className="h-5 w-5 animate-spin text-cranberry-700"
             aria-hidden="true"
@@ -43,7 +57,15 @@ const ProjectDetail = () => {
     );
   }
 
-  if (isError || !project) return <ProjectNotFound />;
+  if (isError && !project)
+    return (
+      <RecordUnavailable
+        kind="Project"
+        onRetry={refetch}
+        isRetrying={isFetching}
+      />
+    );
+  if (!project) return <ProjectNotFound />;
 
   const canonical = `https://rotaract.rotaryzcwest.org/projects/${project.slug}`;
   const description =
@@ -54,7 +76,7 @@ const ProjectDetail = () => {
     description.length > 220
       ? `${description.slice(0, 217).trim()}…`
       : description;
-  const partners = project.partnerLinks?.length
+  const partners: ProjectPartnerLinks = project.partnerLinks?.length
     ? project.partnerLinks
     : project.partners.map(name => ({ name }));
   const slides = project.gallery.map(image => ({ src: image.url }));
@@ -68,14 +90,24 @@ const ProjectDetail = () => {
         <meta property="og:url" content={canonical} />
         <meta property="og:title" content={project.title} />
         <meta property="og:description" content={summary} />
-        {project.image && <meta property="og:image" content={project.image} />}
+        <meta
+          property="og:image"
+          content={
+            project.image || 'https://rotaract.rotaryzcwest.org/og-image.png'
+          }
+        />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={project.title} />
         <meta name="twitter:description" content={summary} />
-        {project.image && <meta name="twitter:image" content={project.image} />}
+        <meta
+          name="twitter:image"
+          content={
+            project.image || 'https://rotaract.rotaryzcwest.org/og-image.png'
+          }
+        />
         <link rel="canonical" href={canonical} />
         <script type="application/ld+json">
-          {JSON.stringify({
+          {serializeJson({
             '@context': 'https://schema.org',
             '@type': 'Article',
             headline: project.title,
@@ -103,7 +135,6 @@ const ProjectDetail = () => {
           <PageHeader
             eyebrow={project.category || 'Project record'}
             title={project.title}
-            description={summary}
             asOf={`${formatDate(project.date)} · ${project.venue}`}
           />
 
@@ -124,11 +155,14 @@ const ProjectDetail = () => {
             </div>
 
             {project.image && (
-              <figure className="mt-7">
+              <figure className="mt-7 bg-[#f4f1ec]">
                 <img
-                  src={project.image}
+                  {...responsiveImage(
+                    project.image,
+                    '(min-width: 1024px) 960px, calc(100vw - 40px)'
+                  )}
                   alt={`${project.title} project record`}
-                  className="max-h-[42rem] w-full object-cover"
+                  className="max-h-[32rem] w-full object-contain"
                 />
               </figure>
             )}
@@ -204,7 +238,10 @@ const ProjectDetail = () => {
                           className="text-left"
                         >
                           <img
-                            src={image.url}
+                            {...responsiveImage(
+                              image.url,
+                              '(min-width: 1024px) 440px, (min-width: 640px) 50vw, calc(100vw - 40px)'
+                            )}
                             alt={
                               image.caption || `${project.title} gallery image`
                             }

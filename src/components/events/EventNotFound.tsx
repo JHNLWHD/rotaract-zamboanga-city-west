@@ -1,4 +1,5 @@
 import React from 'react';
+import { Helmet } from 'react-helmet';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
@@ -10,8 +11,15 @@ const EventNotFound: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
+      <Helmet>
+        <title>Event Not Found | Rotaract Club of Zamboanga City West</title>
+        <meta name="robots" content="noindex, follow" />
+      </Helmet>
       <Navbar />
-      <main className="flex-1 flex items-center justify-center py-20">
+      <main
+        id="main-content"
+        className="flex-1 flex items-center justify-center py-20"
+      >
         <div className="text-center">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
             Event Not Found

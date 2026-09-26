@@ -3,6 +3,9 @@ import { ArrowRight, ExternalLink, Share2 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { Link } from 'react-router-dom';
 import { type Event } from '../../hooks/events/fetchEvents';
+import { isPastEvent } from '../../utils/eventDate';
+import { useRenderTime } from '../../hooks/useRenderTime';
+import { responsiveImage } from '../../utils/contentful';
 
 type EventCardProps = {
   event: Event;
@@ -12,27 +15,36 @@ type EventCardProps = {
 const EventCard: React.FC<EventCardProps> = ({ event, onShare }) => {
   const date = new Date(event.date);
   const detailPath = `/events/${event.date.split('T')[0]}/${event.slug}`;
-  const isPast = date.getTime() < Date.now();
+  const isPast = isPastEvent(event, useRenderTime());
   const status = isPast
-    ? 'completed'
+    ? 'past'
     : event.status === 'registration_open'
       ? 'registration open'
       : 'upcoming';
 
   return (
     <article
-      className="grid gap-5 border-t border-slate-300 py-6 md:grid-cols-[8rem_minmax(0,1fr)] lg:grid-cols-[8rem_minmax(0,1fr)_15rem] lg:gap-8"
+      className={`grid gap-5 border-t border-slate-300 py-6 md:grid-cols-[8rem_minmax(0,1fr)] lg:gap-8 ${event.image ? 'lg:grid-cols-[8rem_minmax(0,1fr)_15rem]' : ''}`}
       role="listitem"
     >
       <time dateTime={event.date} className="block">
         <span className="block text-xs font-bold uppercase tracking-[0.14em] text-cranberry-700">
-          {date.toLocaleDateString('en-US', { month: 'short' })}
+          {date.toLocaleDateString('en-US', {
+            month: 'short',
+            timeZone: 'Asia/Manila',
+          })}
         </span>
         <span className="mt-1 block font-display text-4xl font-semibold leading-none text-slate-950">
-          {date.toLocaleDateString('en-US', { day: '2-digit' })}
+          {date.toLocaleDateString('en-US', {
+            day: '2-digit',
+            timeZone: 'Asia/Manila',
+          })}
         </span>
         <span className="mt-1 block text-sm text-slate-500">
-          {date.getFullYear()}
+          {date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            timeZone: 'Asia/Manila',
+          })}
         </span>
       </time>
 
@@ -94,9 +106,12 @@ const EventCard: React.FC<EventCardProps> = ({ event, onShare }) => {
           className="md:col-start-2 lg:col-start-3 lg:row-start-1"
         >
           <img
-            src={event.image}
+            {...responsiveImage(
+              event.image,
+              '(min-width: 1024px) 240px, (min-width: 768px) calc(100vw - 224px), calc(100vw - 40px)'
+            )}
             alt={`${event.title} event record`}
-            className="aspect-[4/3] w-full object-cover"
+            className="aspect-[4/3] w-full bg-[#f4f1ec] object-contain"
             loading="lazy"
           />
         </Link>

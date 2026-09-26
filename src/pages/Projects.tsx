@@ -1,5 +1,6 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
+import { serializeJson } from '../utils/seo';
 import { useQuery } from '@tanstack/react-query';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -11,9 +12,11 @@ import ProjectsLoadingState from '../components/projects/ProjectsLoadingState';
 import ProjectsErrorState from '../components/projects/ProjectsErrorState';
 import { fetchProjects } from '../hooks/projects/fetchProjects';
 import { cacheConfig } from '../config/cache';
+import { responsiveImage } from '../utils/contentful';
 
 const formatDate = (value: string) =>
   new Date(value).toLocaleDateString('en-US', {
+    timeZone: 'Asia/Manila',
     year: 'numeric',
     month: 'long',
     day: 'numeric',
@@ -67,7 +70,7 @@ const Projects = () => {
           href="https://rotaract.rotaryzcwest.org/projects"
         />
         <script type="application/ld+json">
-          {JSON.stringify({
+          {serializeJson({
             '@context': 'https://schema.org',
             '@type': 'CollectionPage',
             name: 'Projects of the Rotaract Club of Zamboanga City West',
@@ -119,9 +122,12 @@ const Projects = () => {
                   <article className="mt-4 grid gap-7 border-y border-slate-300 py-7 lg:grid-cols-[1.15fr_0.85fr] lg:items-start lg:gap-12">
                     {featuredProject.image && (
                       <img
-                        src={featuredProject.image}
+                        {...responsiveImage(
+                          featuredProject.image,
+                          '(min-width: 1024px) 672px, calc(100vw - 40px)'
+                        )}
                         alt={`${featuredProject.title} project record`}
-                        className="aspect-[16/10] w-full object-cover"
+                        className="aspect-[16/10] w-full bg-[#f4f1ec] object-contain"
                       />
                     )}
                     <div>

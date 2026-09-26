@@ -1,5 +1,6 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
+import { serializeJson } from '../utils/seo';
 import { format, parseISO } from 'date-fns';
 import { Loader2 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
@@ -23,7 +24,7 @@ function formatUsd(n: number, currency = 'USD'): string {
 
 function formatAsOf(iso: string): string {
   try {
-    return format(parseISO(iso), 'MMMM d, yyyy');
+    return format(parseISO(iso.slice(0, 10)), 'MMMM d, yyyy');
   } catch {
     return iso;
   }
@@ -154,7 +155,7 @@ const FoundationGiving = () => {
 
   const jsonLd =
     data &&
-    JSON.stringify({
+    serializeJson({
       '@context': 'https://schema.org',
       '@type': 'BreadcrumbList',
       itemListElement: [

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useRenderTime } from '../../hooks/useRenderTime';
 import { Link } from 'react-router-dom';
 
 const recordLinks = [
@@ -57,7 +58,14 @@ const Footer = () => (
       </div>
 
       <div className="mt-7 flex flex-col gap-2 border-t border-slate-200 pr-16 pt-5 text-xs text-slate-500 sm:flex-row sm:items-center sm:justify-between">
-        <p>© {new Date().getFullYear()} Rotaract Club of Zamboanga City West</p>
+        <p>
+          ©{' '}
+          {new Date(useRenderTime()).toLocaleDateString('en-US', {
+            year: 'numeric',
+            timeZone: 'Asia/Manila',
+          })}{' '}
+          Rotaract Club of Zamboanga City West
+        </p>
         <a
           href="https://rotaryzcwest.org/"
           target="_blank"

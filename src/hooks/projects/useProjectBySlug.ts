@@ -8,11 +8,7 @@ export const useProjectBySlug = (slug: string | undefined) => {
       if (!slug) {
         throw new Error('Slug is required');
       }
-      const project = await fetchProjectBySlug(slug);
-      if (!project) {
-        throw new Error('Project not found');
-      }
-      return project;
+      return fetchProjectBySlug(slug);
     },
     enabled: !!slug,
     staleTime: 5 * 60 * 1000,

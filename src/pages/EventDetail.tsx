@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
+import { serializeJson } from '../utils/seo';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import {
@@ -16,21 +17,33 @@ import Footer from '../components/layout/Footer';
 import PageHeader from '../components/layout/PageHeader';
 import ShareModal from '../components/ShareModal';
 import EventNotFound from '../components/events/EventNotFound';
+import RecordUnavailable from '../components/RecordUnavailable';
 import { useEventBySlug } from '../hooks/events/useEventBySlug';
 import { markdownToPlainText } from '../utils/richText';
+import { eventStartDate, isPastEvent } from '../utils/eventDate';
+import { useRenderTime } from '../hooks/useRenderTime';
+import { responsiveImage } from '../utils/contentful';
 
 import 'yet-another-react-lightbox/styles.css';
 
 const formatDate = (value: string) =>
   new Date(value).toLocaleDateString('en-US', {
+    timeZone: 'Asia/Manila',
     year: 'numeric',
     month: 'long',
     day: 'numeric',
   });
 
 const EventDetail = () => {
+  const now = useRenderTime();
   const { slug } = useParams();
-  const { data: event, isLoading, isError } = useEventBySlug(slug);
+  const {
+    data: event,
+    isLoading,
+    isError,
+    refetch,
+    isFetching,
+  } = useEventBySlug(slug);
   const [showShareModal, setShowShareModal] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(-1);
 
@@ -38,7 +51,10 @@ const EventDetail = () => {
     return (
       <div className="min-h-screen bg-[#faf9f7]">
         <Navbar />
-        <main className="editorial-shell flex min-h-[24rem] items-center gap-3 text-sm text-slate-600">
+        <main
+          id="main-content"
+          className="editorial-shell flex min-h-[24rem] items-center gap-3 text-sm text-slate-600"
+        >
           <Loader2
             className="h-5 w-5 animate-spin text-cranberry-700"
             aria-hidden="true"
@@ -50,12 +66,19 @@ const EventDetail = () => {
     );
   }
 
-  if (isError || !event) return <EventNotFound />;
+  if (isError && !event)
+    return (
+      <RecordUnavailable
+        kind="Event"
+        onRetry={refetch}
+        isRetrying={isFetching}
+      />
+    );
+  if (!event) return <EventNotFound />;
 
-  const eventDate = new Date(event.date);
-  const isPast = eventDate.getTime() < Date.now();
+  const isPast = isPastEvent(event, now);
   const status = isPast
-    ? 'Completed'
+    ? 'Past event'
     : event.status === 'registration_open'
       ? 'Registration open'
       : 'Upcoming';
@@ -90,22 +113,29 @@ const EventDetail = () => {
         <meta property="og:url" content={canonical} />
         <meta property="og:title" content={event.title} />
         <meta property="og:description" content={summary} />
-        {featureImage && <meta property="og:image" content={featureImage} />}
+        <meta
+          property="og:image"
+          content={
+            featureImage || 'https://rotaract.rotaryzcwest.org/og-image.png'
+          }
+        />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={event.title} />
         <meta name="twitter:description" content={summary} />
-        {featureImage && <meta name="twitter:image" content={featureImage} />}
+        <meta
+          name="twitter:image"
+          content={
+            featureImage || 'https://rotaract.rotaryzcwest.org/og-image.png'
+          }
+        />
         <link rel="canonical" href={canonical} />
         <script type="application/ld+json">
-          {JSON.stringify({
+          {serializeJson({
             '@context': 'https://schema.org',
             '@type': 'Event',
             name: event.title,
             description: descriptionPlain,
-            startDate: event.date,
-            eventStatus: isPast
-              ? 'https://schema.org/EventCompleted'
-              : 'https://schema.org/EventScheduled',
+            startDate: eventStartDate(event),
             eventAttendanceMode:
               'https://schema.org/OfflineEventAttendanceMode',
             location: {
@@ -145,7 +175,6 @@ const EventDetail = () => {
           <PageHeader
             eyebrow={event.category || 'Event record'}
             title={event.title}
-            description={summary || 'Published club event record.'}
             asOf={`${formatDate(event.date)} · ${status}`}
           />
 
@@ -167,9 +196,12 @@ const EventDetail = () => {
 
             {featureImage && (
               <img
-                src={featureImage}
+                {...responsiveImage(
+                  featureImage,
+                  '(min-width: 1024px) 960px, calc(100vw - 40px)'
+                )}
                 alt={`${event.title} event record`}
-                className="mt-7 max-h-[42rem] w-full object-cover"
+                className="mt-7 max-h-[32rem] w-full bg-[#f4f1ec] object-contain"
               />
             )}
 
@@ -262,7 +294,10 @@ const EventDetail = () => {
                           className="text-left"
                         >
                           <img
-                            src={image.url}
+                            {...responsiveImage(
+                              image.url,
+                              '(min-width: 1024px) 440px, (min-width: 640px) 50vw, calc(100vw - 40px)'
+                            )}
                             alt={
                               image.caption || `${event.title} gallery image`
                             }
@@ -342,7 +377,10 @@ const EventDetail = () => {
                     </h2>
                     {invitationImage !== featureImage && (
                       <img
-                        src={invitationImage}
+                        {...responsiveImage(
+                          invitationImage,
+                          '(min-width: 1024px) 288px, calc(100vw - 40px)'
+                        )}
                         alt={`${event.title} invitation`}
                         className="mt-3 w-full object-cover"
                         loading="lazy"

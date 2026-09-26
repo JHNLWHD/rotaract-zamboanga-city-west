@@ -199,7 +199,7 @@ describe('Projects archive', () => {
 describe('Project detail', () => {
   beforeEach(() => useProjectBySlug.mockReset());
 
-  it('renders loading and not-found states', () => {
+  it('renders loading and a retryable CMS failure without claiming a missing record', async () => {
     useProjectBySlug.mockReturnValue({
       data: undefined,
       isLoading: true,
@@ -213,11 +213,17 @@ describe('Project detail', () => {
       data: undefined,
       isLoading: false,
       isError: true,
+      isFetching: false,
+      refetch: vi.fn(),
     });
-    renderRoute(<ProjectDetail />, '/projects/service-day');
+    const { user } = renderRoute(<ProjectDetail />, '/projects/service-day');
     expect(
-      screen.getByRole('heading', { name: 'Project Not Found' })
+      screen.getByRole('heading', { name: 'Project temporarily unavailable' })
     ).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Try again' }));
+    expect(
+      useProjectBySlug.mock.results.at(-1)?.value.refetch
+    ).toHaveBeenCalledOnce();
   });
 
   it('treats an empty successful query as not found and returns to the archive', async () => {
@@ -227,6 +233,13 @@ describe('Project detail', () => {
       isError: false,
     });
     const { user } = renderRoute(<ProjectDetail />, '/projects/missing');
+    await waitFor(() =>
+      expect(document.querySelector('meta[name="robots"]')).toHaveAttribute(
+        'content',
+        'noindex, follow'
+      )
+    );
+    expect(screen.getByRole('main')).toHaveAttribute('id', 'main-content');
     await user.click(screen.getByRole('button', { name: /Back to Projects/ }));
     expect(window.location.pathname).toBe('/');
   });
@@ -236,7 +249,7 @@ describe('Project detail', () => {
     useProjectBySlug.mockReturnValue({
       data: detailProject({ shortDescription: longDescription }),
       isLoading: false,
-      isError: false,
+      isError: true,
     });
     const { user } = renderRoute(<ProjectDetail />, '/projects/service-day');
 
@@ -250,7 +263,12 @@ describe('Project detail', () => {
       'https://partner.test'
     );
     expect(screen.getByText('Partner Two')).toBeInTheDocument();
-    expect(screen.getByText(`${'A'.repeat(217)}…`)).toBeInTheDocument();
+    expect(screen.queryByText(`${'A'.repeat(217)}…`)).not.toBeInTheDocument();
+    await waitFor(() =>
+      expect(
+        document.querySelector('meta[name="description"]')
+      ).toHaveAttribute('content', `${'A'.repeat(217)}…`)
+    );
 
     await user.click(screen.getByRole('button', { name: 'Share record' }));
     expect(
@@ -271,7 +289,7 @@ describe('Project detail', () => {
     ).not.toBeInTheDocument();
   });
 
-  it('uses the outcome and published partner names as fallbacks', () => {
+  it('uses outcome metadata and published partner names without repeating the outcome', async () => {
     useProjectBySlug.mockReturnValue({
       data: detailProject({
         shortDescription: 'Project service-day',
@@ -288,7 +306,12 @@ describe('Project detail', () => {
     const outcome = renderRoute(<ProjectDetail />, '/projects/service-day');
 
     expect(screen.getByText('Project record')).toBeInTheDocument();
-    expect(screen.getAllByText('100 people reached')).toHaveLength(2);
+    expect(screen.getAllByText('100 people reached')).toHaveLength(1);
+    await waitFor(() =>
+      expect(
+        document.querySelector('meta[name="description"]')
+      ).toHaveAttribute('content', '100 people reached')
+    );
     expect(screen.getByText('Partner One')).toBeInTheDocument();
     expect(
       screen.queryByRole('img', { name: /project record/ })
@@ -309,8 +332,13 @@ describe('Project detail', () => {
       isError: false,
     });
     renderRoute(<ProjectDetail />, '/projects/service-day');
-    expect(
-      screen.getByText('Published project record from the club archive.')
-    ).toBeInTheDocument();
+    await waitFor(() =>
+      expect(
+        document.querySelector('meta[name="description"]')
+      ).toHaveAttribute(
+        'content',
+        'Published project record from the club archive.'
+      )
+    );
   });
 });

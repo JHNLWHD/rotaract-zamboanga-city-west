@@ -145,7 +145,7 @@ describe('Events archive', () => {
     ).toBeInTheDocument();
   });
 
-  it('separates upcoming and completed records and opens sharing', async () => {
+  it('separates upcoming and past records and opens sharing', async () => {
     fetchEvents.mockResolvedValue([
       event('upcoming', '2026-08-20', { status: 'registration_open' }),
       event('future-two', '2026-08-21', {
@@ -162,7 +162,7 @@ describe('Events archive', () => {
     expect(await screen.findByText('2 events')).toBeInTheDocument();
     expect(screen.getByText('1 record')).toBeInTheDocument();
     expect(screen.getByText('Service · registration open')).toBeInTheDocument();
-    expect(screen.getByText('Service · completed')).toBeInTheDocument();
+    expect(screen.getByText('Service · past')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /Registration/ })).toHaveAttribute(
       'href',
       'https://forms.test/register'
@@ -181,7 +181,7 @@ describe('Events archive', () => {
     ).not.toBeInTheDocument();
   });
 
-  it('labels singular upcoming and plural completed counts', async () => {
+  it('labels singular upcoming and plural past counts', async () => {
     fetchEvents.mockResolvedValue([
       event('upcoming', '2026-08-20'),
       event('past-one', '2026-08-18'),
@@ -199,6 +199,12 @@ describe('Events archive', () => {
     renderRoute(<Events />, '/events');
     expect(
       await screen.findByText(/No upcoming event has been published/)
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole('heading', { name: 'Upcoming events' })
+    ).not.toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: 'Past activities' })
     ).toBeInTheDocument();
 
     const empty = renderRoute(
@@ -243,15 +249,16 @@ describe('Event detail', () => {
       data: undefined,
       isLoading: false,
       isError: true,
+      isFetching: true,
+      refetch: vi.fn(),
     });
     const error = detail({});
     expect(
-      screen.getByRole('heading', { name: 'Event Not Found' })
+      screen.getByRole('heading', { name: 'Event temporarily unavailable' })
     ).toBeInTheDocument();
-    await error.user.click(
-      screen.getByRole('button', { name: /Back to Events/ })
-    );
-    expect(screen.getByText('Events archive destination')).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Trying again…' })
+    ).toBeDisabled();
     error.unmount();
 
     useEventBySlug.mockReturnValue({
@@ -259,10 +266,21 @@ describe('Event detail', () => {
       isLoading: false,
       isError: false,
     });
-    detail({});
+    const missing = detail({});
     expect(
       screen.getByRole('heading', { name: 'Event Not Found' })
     ).toBeInTheDocument();
+    await waitFor(() =>
+      expect(document.querySelector('meta[name="robots"]')).toHaveAttribute(
+        'content',
+        'noindex, follow'
+      )
+    );
+    expect(screen.getByRole('main')).toHaveAttribute('id', 'main-content');
+    await missing.user.click(
+      screen.getByRole('button', { name: /Back to Events/ })
+    );
+    expect(screen.getByText('Events archive destination')).toBeInTheDocument();
   });
 
   it('renders a future event, downloads its invitation, and controls dialogs', async () => {
@@ -287,7 +305,13 @@ describe('Event detail', () => {
     expect(screen.getByText('Community-led')).toBeInTheDocument();
     expect(screen.getByText('Opening program')).toBeInTheDocument();
     expect(screen.getByText('Bring water')).toBeInTheDocument();
-    expect(screen.getByText(`${'A'.repeat(217)}…`)).toBeInTheDocument();
+    expect(screen.queryByText(`${'A'.repeat(217)}…`)).not.toBeInTheDocument();
+    expect(screen.getByText('A'.repeat(230))).toBeInTheDocument();
+    await waitFor(() =>
+      expect(
+        document.querySelector('meta[name="description"]')
+      ).toHaveAttribute('content', `${'A'.repeat(217)}…`)
+    );
 
     await user.click(
       screen.getByRole('button', { name: /Download invitation/ })
@@ -308,7 +332,7 @@ describe('Event detail', () => {
     await user.click(screen.getByRole('button', { name: 'Close lightbox' }));
   });
 
-  it('marks a past event completed and uses its invitation as the feature image', () => {
+  it('uses neutral past wording and preserves cached data during a refresh failure', async () => {
     useEventBySlug.mockReturnValue({
       data: event('past', '2026-08-18', {
         image: '',
@@ -319,11 +343,21 @@ describe('Event detail', () => {
         gallery: [],
       }),
       isLoading: false,
-      isError: false,
+      isError: true,
     });
     detail({}, '/events/2026-08-18/past');
 
-    expect(screen.getAllByText(/Completed/)).toHaveLength(2);
+    expect(screen.getAllByText(/Past event/)).toHaveLength(2);
+    await waitFor(() =>
+      expect(
+        document.querySelector('script[type="application/ld+json"]')
+      ).not.toBeNull()
+    );
+    const schema = JSON.parse(
+      document.querySelector('script[type="application/ld+json"]')!.textContent!
+    );
+    expect(schema.startDate).toBe('2026-08-18T09:00:00+08:00');
+    expect(schema).not.toHaveProperty('eventStatus');
     expect(
       screen.queryByRole('link', { name: /Open registration/ })
     ).not.toBeInTheDocument();
@@ -358,8 +392,8 @@ describe('Event detail', () => {
 
     expect(screen.getByText('Event record')).toBeInTheDocument();
     expect(
-      screen.getByText('Published club event record.')
-    ).toBeInTheDocument();
+      screen.queryByText('Published club event record.')
+    ).not.toBeInTheDocument();
     expect(screen.getAllByText(/Upcoming/)).toHaveLength(2);
     await user.click(screen.getByRole('button', { name: 'Share record' }));
     expect(screen.getByRole('dialog', { name: 'Share event' })).toHaveAttribute(

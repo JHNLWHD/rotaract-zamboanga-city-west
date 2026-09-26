@@ -1,5 +1,6 @@
 import contentful from '../contentfulClient';
 import type { Entry, EntrySkeletonType, EntryFieldTypes } from 'contentful';
+import { getAllEntries } from '../getAllEntries';
 
 type AwardsSkeleton = EntrySkeletonType<{
   name: EntryFieldTypes.Symbol;
@@ -43,7 +44,9 @@ export type HomepageAwardsSection = {
   awards: Award[];
 };
 
-async function mapAwardEntry(cardEntry: Entry<AwardsSkeleton>): Promise<Award> {
+async function mapAwardEntry(
+  cardEntry: Entry<AwardsSkeleton, undefined>
+): Promise<Award> {
   let image: Image | undefined;
   if (cardEntry.fields.image) {
     const imageAsset = await contentful.client.getAsset(
@@ -106,10 +109,9 @@ export async function fetchAwards(): Promise<HomepageAwardsSection | null> {
 
 export async function fetchAllAwards(): Promise<HomepageAwardsSection | null> {
   try {
-    const entries = await contentful.client.getEntries<AwardsSkeleton>({
+    const entries = await getAllEntries<AwardsSkeleton>({
       content_type: 'cardsAwards',
       order: '-fields.dateReceived',
-      limit: 100,
     });
 
     return {

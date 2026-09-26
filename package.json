@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "cp public/robots.prod.txt public/robots.txt && cp public/_headers.prod public/_headers && npm run type-check && vite build",
-    "build:dev": "cp public/robots.dev.txt public/robots.txt && cp public/_headers.dev public/_headers && npm run type-check && vite build --mode development",
-    "type-check": "tsc --noEmit",
+    "dev:drafts": "vite --mode drafts --host 127.0.0.1",
+    "build": "cp public/robots.prod.txt public/robots.txt && cp public/_headers.prod public/_headers && npm run type-check && vite build && node scripts/prerender.js",
+    "build:dev": "cp public/robots.dev.txt public/robots.txt && cp public/_headers.dev public/_headers && npm run type-check && vite build --mode development && node scripts/prerender.js --development",
+    "type-check": "tsc --noEmit -p tsconfig.app.json && tsc --noEmit -p tsconfig.node.json",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",

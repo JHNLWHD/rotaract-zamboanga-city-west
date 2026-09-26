@@ -67,6 +67,11 @@ describe('Recognition', () => {
           sourceUrl: '',
           image: { url: 'https://images.test/citation.jpg', description: '' },
         },
+        {
+          name: 'Archived citation',
+          yearReceived: '2024',
+          image: { url: '', description: '' },
+        },
       ],
     });
 
@@ -79,6 +84,12 @@ describe('Recognition', () => {
       screen.getByText('Issued by Rotary District 3850')
     ).toBeInTheDocument();
     expect(screen.getByText('District recognition')).toBeInTheDocument();
+    expect(
+      screen
+        .getByRole('heading', { name: 'Archived citation' })
+        .closest('li')
+        ?.querySelector('figure')
+    ).toBeNull();
     expect(screen.getByText('documented service')).toHaveProperty(
       'tagName',
       'STRONG'

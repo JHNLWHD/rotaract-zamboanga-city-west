@@ -2,6 +2,7 @@ import React from 'react';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { type ProjectListItem } from '../../hooks/projects/fetchProjects';
+import { responsiveImage } from '../../utils/contentful';
 
 type ProjectCardProps = {
   project: ProjectListItem;
@@ -17,15 +18,19 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => (
     {project.image && (
       <Link to={`/projects/${project.slug}`} tabIndex={-1} aria-hidden="true">
         <img
-          src={project.image}
+          {...responsiveImage(
+            project.image,
+            '(min-width: 1280px) 592px, (min-width: 768px) 50vw, calc(100vw - 40px)'
+          )}
           alt=""
-          className="aspect-[16/10] w-full object-cover"
+          className="aspect-[16/10] w-full bg-[#f4f1ec] object-contain"
           loading="lazy"
         />
       </Link>
     )}
     <p className="mt-4 text-xs font-bold uppercase tracking-[0.12em] text-slate-500">
       {new Date(project.date).toLocaleDateString('en-US', {
+        timeZone: 'Asia/Manila',
         year: 'numeric',
         month: 'short',
         day: 'numeric',

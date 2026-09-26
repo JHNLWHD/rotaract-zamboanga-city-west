@@ -1,5 +1,6 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
+import { serializeJson } from '../utils/seo';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import Hero from '../components/home/Hero';
@@ -65,7 +66,7 @@ const Index = () => (
       <link rel="canonical" href="https://rotaract.rotaryzcwest.org/" />
 
       <script type="application/ld+json">
-        {JSON.stringify({
+        {serializeJson({
           '@context': 'https://schema.org',
           '@type': 'Organization',
           name: 'Rotaract Club of Zamboanga City West',
