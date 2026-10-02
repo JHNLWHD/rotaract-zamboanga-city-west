@@ -79,7 +79,7 @@ describe('homepage Contentful fetchers', () => {
     expect(console.warn).toHaveBeenCalled();
 
     client.getEntries.mockRejectedValueOnce(new Error('query failed'));
-    await expect(fetchHeroContent()).resolves.toBeNull();
+    await expect(fetchHeroContent()).rejects.toThrow('query failed');
     expect(console.error).toHaveBeenCalled();
   });
 
@@ -151,7 +151,7 @@ describe('homepage Contentful fetchers', () => {
     await expect(fetchAboutCommunity()).resolves.toBeNull();
 
     client.getEntries.mockRejectedValueOnce(new Error('query failed'));
-    await expect(fetchAboutCommunity()).resolves.toBeNull();
+    await expect(fetchAboutCommunity()).rejects.toThrow('query failed');
   });
 
   it('maps homepage awards with image and field defaults', async () => {

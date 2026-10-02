@@ -88,6 +88,6 @@ export async function fetchAboutCommunity(): Promise<HomepageAboutSection | null
     return result;
   } catch (error) {
     console.error('Error fetching About Community section:', error);
-    return null;
+    throw error;
   }
 }
