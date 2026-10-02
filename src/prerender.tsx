@@ -140,7 +140,7 @@ export async function loadPages(): Promise<Page[]> {
   return pages;
 }
 
-export function renderPage(page: Page) {
+export function renderPage(page: Page, routes?: string[]) {
   const client = new QueryClient({
     defaultOptions: { queries: { retry: false, gcTime: Infinity } },
   });
@@ -175,7 +175,7 @@ export function renderPage(page: Page) {
         head.meta.toString() +
         head.link.toString() +
         head.script.toString(),
-      state: serializeJson({ ...dehydrate(client), renderedAt }),
+      state: serializeJson({ ...dehydrate(client), renderedAt, routes }),
     };
   } finally {
     Helmet.renderStatic();

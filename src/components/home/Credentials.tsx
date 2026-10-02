@@ -20,7 +20,7 @@ const formatDate = (value: string) =>
 
 const fetchHomepageEvidence = async () => {
   const [projects, recognition, officers, foundation] = await Promise.all([
-    fetchProjects(3),
+    fetchProjects(),
     fetchAllAwards(),
     fetchOfficers(getCurrentTerm()),
     fetchFoundationGiving(),
@@ -36,7 +36,10 @@ const Credentials = () => {
     ...cacheConfig.monthly,
   });
 
-  const [featuredProject, ...secondaryProjects] = data?.projects || [];
+  const [featuredProject, ...secondaryProjects] = (data?.projects || []).slice(
+    0,
+    3
+  );
   const president =
     data?.officers?.find(
       officer => officer.position.trim().toLowerCase() === 'president'

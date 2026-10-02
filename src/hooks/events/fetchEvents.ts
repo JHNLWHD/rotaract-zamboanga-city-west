@@ -4,6 +4,7 @@ import { processAsset } from '../../utils/contentful';
 import { richTextToMarkdown, type RichText } from '../../utils/richText';
 import { eventStartDate, isPastEvent } from '../../utils/eventDate';
 import { getAllEntries } from '../getAllEntries';
+import { getDeployedRoutes } from '../../utils/deployedRoutes';
 
 type EventSkeleton = EntrySkeletonType & {
   contentTypeId: 'event';
@@ -181,7 +182,12 @@ export async function fetchEvents(
       }
     });
 
-    return sortedEvents;
+    const routes = getDeployedRoutes();
+    return sortedEvents.filter(
+      event =>
+        !routes ||
+        routes.has(`/events/${event.date.slice(0, 10)}/${event.slug}`)
+    );
   } catch (error) {
     console.error('Error fetching events:', error);
     throw error;

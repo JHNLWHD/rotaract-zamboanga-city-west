@@ -134,8 +134,9 @@ it('renders the actual public routes with content, metadata and safe query snaps
     '/projects/service-day',
     '/events/2026-08-01/induction',
   ]);
+  const routes = pages.map(page => page.path);
   for (const page of pages) {
-    const rendered = renderPage(page);
+    const rendered = renderPage(page, routes);
     const doc = new DOMParser().parseFromString(
       `<html><head>${rendered.head}</head><body>${rendered.body}</body></html>`,
       'text/html'
@@ -148,6 +149,7 @@ it('renders the actual public routes with content, metadata and safe query snaps
     expect(rendered.body).not.toMatch(/Loading .*records?/);
     expect(rendered.state).not.toMatch(/private@example|private-phone/);
     const state = JSON.parse(rendered.state);
+    expect(state.routes).toEqual(routes);
     expect(state.queries.length).toBeGreaterThan(0);
     expect(state.queries.every(query => query.state.dataUpdatedAt === 0)).toBe(
       true
@@ -158,6 +160,9 @@ it('renders the actual public routes with content, metadata and safe query snaps
   )!;
   expect(renderPage(detail).head).toContain('2026-08-01T18:00:00+08:00');
   expect(detail.lastmod).toBe(event.updatedAt);
+  expect(
+    JSON.parse(renderPage({ path: '/404', queries: [] }, routes).state).routes
+  ).toEqual(routes);
 });
 
 it.each([

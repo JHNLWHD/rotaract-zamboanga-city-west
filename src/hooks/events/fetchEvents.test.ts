@@ -228,6 +228,35 @@ describe('event Contentful fetchers', () => {
     expect(console.error).toHaveBeenCalled();
   });
 
+  it('keeps refreshed event links within the deployed routes', async () => {
+    const state = document.createElement('script');
+    state.id = 'page-state';
+    state.type = 'application/json';
+    state.textContent = JSON.stringify({
+      routes: ['/events/2026-08-20/service-day', '/events/2026-08-21/moved'],
+    });
+    document.body.appendChild(state);
+    client.getEntries.mockResolvedValue({
+      items: [
+        event('new-event', '2026-08-22'),
+        event('moved', '2026-08-23'),
+        event('service-day', '2026-08-20', { title: 'Updated event title' }),
+      ],
+    });
+    client.getAsset.mockResolvedValue({ fields: {} });
+    try {
+      const records = await fetchEvents();
+      expect(records?.map(({ slug, title }) => ({ slug, title }))).toEqual([
+        {
+          slug: 'service-day',
+          title: 'Updated event title',
+        },
+      ]);
+    } finally {
+      state.remove();
+    }
+  });
+
   it('returns null for an unpublished event slug', async () => {
     client.getEntries.mockResolvedValue({ items: [] });
 

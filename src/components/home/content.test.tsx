@@ -133,6 +133,7 @@ describe('homepage content', () => {
       project('featured'),
       project('second'),
       project('third'),
+      project('fourth'),
     ]);
     fetchAllAwards.mockResolvedValue({
       awards: [
@@ -167,6 +168,8 @@ describe('homepage content', () => {
     expect(screen.getByText('Outstanding Club')).toBeInTheDocument();
     expect(screen.getByText('$825.00')).toBeInTheDocument();
     expect(screen.getByText('Description featured')).toBeInTheDocument();
+    expect(fetchProjects).toHaveBeenCalledWith();
+    expect(screen.queryByText('Project fourth')).not.toBeInTheDocument();
     expect(screen.queryByText('100 people reached')).not.toBeInTheDocument();
     expect(
       screen.getByRole('link', { name: /Project second/ })

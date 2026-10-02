@@ -129,6 +129,31 @@ describe('project Contentful fetchers', () => {
     expect(console.error).toHaveBeenCalled();
   });
 
+  it('keeps refreshed project links within the deployed routes', async () => {
+    const state = document.createElement('script');
+    state.id = 'page-state';
+    state.type = 'application/json';
+    state.textContent = JSON.stringify({ routes: ['/projects/mangrove-day'] });
+    document.body.appendChild(state);
+    client.getEntries.mockResolvedValue({
+      items: [
+        project({ slug: 'new-project', featuredImage: undefined }),
+        project({ title: 'Updated project title', featuredImage: undefined }),
+      ],
+    });
+    try {
+      const records = await fetchProjects();
+      expect(records?.map(({ slug, title }) => ({ slug, title }))).toEqual([
+        {
+          slug: 'mangrove-day',
+          title: 'Updated project title',
+        },
+      ]);
+    } finally {
+      state.remove();
+    }
+  });
+
   it('returns null when a project slug is not published', async () => {
     client.getEntries.mockResolvedValue({ items: [] });
 

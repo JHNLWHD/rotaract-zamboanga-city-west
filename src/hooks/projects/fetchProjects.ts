@@ -3,6 +3,7 @@ import type { EntrySkeletonType, EntryFieldTypes } from 'contentful';
 import { processAsset } from '../../utils/contentful';
 import { richTextToMarkdown, type RichText } from '../../utils/richText';
 import { getAllEntries } from '../getAllEntries';
+import { getDeployedRoutes } from '../../utils/deployedRoutes';
 
 type ProjectSkeleton = EntrySkeletonType & {
   contentTypeId: 'project';
@@ -117,7 +118,10 @@ export async function fetchProjects(
       })
     );
 
-    return projects;
+    const routes = getDeployedRoutes();
+    return projects.filter(
+      project => !routes || routes.has(`/projects/${project.slug}`)
+    );
   } catch (error) {
     console.error('Error fetching projects:', error);
     throw error;

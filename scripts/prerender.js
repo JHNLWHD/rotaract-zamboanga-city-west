@@ -121,17 +121,18 @@ async function buildPages() {
       await vite.ssrLoadModule('/src/prerender.tsx');
     const pages = await loadPages();
     const xml = sitemap(pages);
+    const routes = pages.map(page => page.path);
     const template = await readFile('dist/index.html', 'utf8');
     for (const page of pages) {
       const target = path.join('dist', outputFile(page.path));
-      const html = pageHtml(template, renderPage(page));
+      const html = pageHtml(template, renderPage(page, routes));
       validateHtml(html, page.path);
       await mkdir(path.dirname(target), { recursive: true });
       await writeFile(target, html);
     }
     const missing = pageHtml(
       template,
-      renderPage({ path: '/404', queries: [] }),
+      renderPage({ path: '/404', queries: [] }, routes),
       404
     );
     validateHtml(missing, '/404', 404);
