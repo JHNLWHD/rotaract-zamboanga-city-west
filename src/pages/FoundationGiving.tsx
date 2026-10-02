@@ -150,7 +150,7 @@ function GivingYearCard({
 }
 
 const FoundationGiving = () => {
-  const { data, isLoading, isError, error, refetch, isFetching } =
+  const { data, isLoading, isLoadingError, error, refetch, isFetching } =
     useFoundationGiving();
 
   const jsonLd =
@@ -270,7 +270,7 @@ const FoundationGiving = () => {
                 </div>
               )}
 
-              {isError && (
+              {isLoadingError && (
                 <div className="border-y border-slate-300 py-9" role="alert">
                   <div>
                     <p className="text-red-800 font-medium mb-2">
@@ -293,7 +293,7 @@ const FoundationGiving = () => {
                 </div>
               )}
 
-              {!isLoading && !isError && !data && (
+              {!isLoading && !isLoadingError && !data && (
                 <div className="border-y border-slate-300 py-9 text-slate-600">
                   <p>No foundation giving report is published yet.</p>
                 </div>

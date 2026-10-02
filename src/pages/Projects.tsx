@@ -26,7 +26,7 @@ const Projects = () => {
   const {
     data: projects,
     isLoading,
-    isError,
+    isLoadingError,
     error,
     refetch,
     isFetching,
@@ -107,7 +107,7 @@ const Projects = () => {
           <div className="editorial-shell py-10 md:py-14">
             {isLoading && <ProjectsLoadingState />}
 
-            {isError && (
+            {isLoadingError && (
               <ProjectsErrorState
                 error={error}
                 onRetry={() => refetch()}
@@ -115,7 +115,7 @@ const Projects = () => {
               />
             )}
 
-            {!isLoading && !isError && featuredProject && (
+            {!isLoading && !isLoadingError && featuredProject && (
               <>
                 <section aria-labelledby="featured-project-heading">
                   <p className="editorial-kicker">Featured record</p>
@@ -209,7 +209,7 @@ const Projects = () => {
               </>
             )}
 
-            {!isLoading && !isError && !featuredProject && (
+            {!isLoading && !isLoadingError && !featuredProject && (
               <p className="border-y border-slate-300 py-10 text-sm text-slate-600">
                 No project records have been published yet.
               </p>

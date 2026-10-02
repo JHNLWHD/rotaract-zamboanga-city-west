@@ -30,7 +30,7 @@ const fetchHomepageEvidence = async () => {
 };
 
 const Credentials = () => {
-  const { data, isLoading, isError, refetch } = useQuery({
+  const { data, isLoading, isLoadingError, refetch } = useQuery({
     queryKey: ['homepageEvidence', getCurrentTerm()],
     queryFn: fetchHomepageEvidence,
     ...cacheConfig.monthly,
@@ -72,7 +72,7 @@ const Credentials = () => {
           </p>
         )}
 
-        {isError && (
+        {isLoadingError && (
           <div className="mt-9 border-y border-slate-300 py-8" role="alert">
             <p className="text-slate-700">
               Club records are temporarily unavailable.
@@ -87,7 +87,7 @@ const Credentials = () => {
           </div>
         )}
 
-        {!isLoading && !isError && data && (
+        {!isLoading && !isLoadingError && data && (
           <>
             <div className="mt-6 grid gap-6 border-t border-slate-300 pt-6 md:mt-10 md:gap-8 md:pt-8 lg:grid-cols-[1.45fr_0.55fr] lg:gap-12">
               <div>

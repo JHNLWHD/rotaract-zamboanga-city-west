@@ -11,7 +11,7 @@ import { cacheConfig } from '../config/cache';
 import { responsiveImage } from '../utils/contentful';
 
 const Recognition = () => {
-  const { data, isLoading, isError, refetch } = useQuery({
+  const { data, isLoading, isLoadingError, refetch } = useQuery({
     queryKey: ['recognition'],
     queryFn: fetchAllAwards,
     ...cacheConfig.yearly,
@@ -66,7 +66,7 @@ const Recognition = () => {
               </div>
             )}
 
-            {isError && (
+            {isLoadingError && (
               <div className="border-y border-slate-300 py-9" role="alert">
                 <p className="text-sm text-slate-700">
                   Recognition records are temporarily unavailable.
@@ -81,13 +81,13 @@ const Recognition = () => {
               </div>
             )}
 
-            {!isLoading && !isError && awards.length === 0 && (
+            {!isLoading && !isLoadingError && awards.length === 0 && (
               <p className="border-y border-slate-300 py-9 text-sm text-slate-600">
                 No recognition records have been published yet.
               </p>
             )}
 
-            {!isLoading && !isError && awards.length > 0 && (
+            {!isLoading && !isLoadingError && awards.length > 0 && (
               <ol aria-label="Recognition records">
                 {awards.map(award => {
                   const imageUrl = award.image.url.startsWith('//')

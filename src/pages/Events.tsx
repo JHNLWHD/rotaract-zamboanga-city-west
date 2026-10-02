@@ -21,7 +21,7 @@ const Events = () => {
   const {
     data: events,
     isLoading,
-    isError,
+    isLoadingError,
     error,
     refetch,
     isFetching,
@@ -100,7 +100,7 @@ const Events = () => {
           <div className="editorial-shell py-10 md:py-14">
             {isLoading && <LoadingState />}
 
-            {isError && (
+            {isLoadingError && (
               <ErrorState
                 error={error}
                 onRetry={() => refetch()}
@@ -108,7 +108,7 @@ const Events = () => {
               />
             )}
 
-            {!isLoading && !isError && (
+            {!isLoading && !isLoadingError && (
               <div className="space-y-8 md:space-y-10">
                 {upcomingEvents.length > 0 ? (
                   <section aria-labelledby="upcoming-events-heading">

@@ -1,6 +1,14 @@
 import { beforeEach, expect, it, vi } from 'vitest';
 import { Helmet } from 'react-helmet';
-import { render, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import {
+  hydrate,
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query';
+import { MemoryRouter } from 'react-router-dom';
+import { AppContent } from './App';
+import { RenderTimeContext } from './hooks/useRenderTime';
 vi.mock('./components/ui/sonner', () => ({ Toaster: () => null }));
 const cms = vi.hoisted(() => ({
   fetchProjects: vi.fn(),
@@ -9,6 +17,7 @@ const cms = vi.hoisted(() => ({
   fetchAllAwards: vi.fn(),
   fetchHeroContent: vi.fn(),
   fetchAboutCommunity: vi.fn(),
+  fetchOfficers: vi.fn(),
   fetchAllOfficers: vi.fn(),
   fetchPastPresidents: vi.fn(),
   fetchFoundationGiving: vi.fn(),
@@ -28,6 +37,7 @@ vi.mock('./hooks/landing-page/aboutCommunity', () => ({
   fetchAboutCommunity: cms.fetchAboutCommunity,
 }));
 vi.mock('./hooks/officers/fetchOfficers', () => ({
+  fetchOfficers: cms.fetchOfficers,
   fetchAllOfficers: cms.fetchAllOfficers,
   fetchPastPresidents: cms.fetchPastPresidents,
 }));
@@ -149,6 +159,60 @@ it('renders the actual public routes with content, metadata and safe query snaps
   expect(renderPage(detail).head).toContain('2026-08-01T18:00:00+08:00');
   expect(detail.lastmod).toBe(event.updatedAt);
 });
+
+it.each([
+  ['/', 'Service day'],
+  ['/events', 'Induction'],
+  ['/projects', 'Service day'],
+  ['/recognition', 'No recognition records have been published yet.'],
+  ['/officers', 'President Name'],
+  ['/foundation-giving', 'Club giving'],
+])(
+  'keeps the hydrated %s snapshot visible when its refresh fails',
+  async (path, visibleRecord) => {
+    const pages = await loadPages();
+    const page = pages.find(page => page.path === path)!;
+    const rendered = renderPage(page);
+    const state = JSON.parse(rendered.state);
+    const client = new QueryClient({
+      defaultOptions: {
+        queries: { retry: false, retryDelay: 0, gcTime: Infinity },
+      },
+    });
+    hydrate(client, state);
+    Object.values(cms).forEach(mock =>
+      mock.mockRejectedValue(new Error('CMS temporarily unavailable'))
+    );
+    const container = document.createElement('div');
+    container.innerHTML = rendered.body;
+    document.body.appendChild(container);
+
+    const { unmount } = render(
+      <RenderTimeContext.Provider value={state.renderedAt}>
+        <QueryClientProvider client={client}>
+          <MemoryRouter initialEntries={[path]}>
+            <AppContent />
+          </MemoryRouter>
+        </QueryClientProvider>
+      </RenderTimeContext.Provider>,
+      { container, hydrate: true }
+    );
+
+    try {
+      await waitFor(() => {
+        for (const [key, data] of page.queries) {
+          expect(client.getQueryState(key)?.status).toBe('error');
+          expect(client.getQueryData(key)).toEqual(data);
+        }
+      });
+      expect(screen.getByText(visibleRecord)).toBeInTheDocument();
+      expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+    } finally {
+      unmount();
+      client.clear();
+    }
+  }
+);
 
 it.each([
   'fetchProjects',

@@ -29,7 +29,7 @@ const officer = (id: string, overrides: Record<string, unknown> = {}) => ({
 const hookState = (overrides: Record<string, unknown> = {}) => ({
   data: undefined,
   isLoading: false,
-  isError: false,
+  isLoadingError: false,
   isFetching: false,
   refetch: vi.fn().mockResolvedValue(undefined),
   ...overrides,
@@ -52,7 +52,7 @@ describe('Officers', () => {
     const refetchOfficers = vi.fn().mockResolvedValue(undefined);
     const refetchPresidents = vi.fn().mockResolvedValue(undefined);
     useOfficers.mockReturnValue(
-      hookState({ isError: true, refetch: refetchOfficers })
+      hookState({ isLoadingError: true, refetch: refetchOfficers })
     );
     usePastPresidents.mockReturnValue(
       hookState({ refetch: refetchPresidents })
@@ -68,7 +68,7 @@ describe('Officers', () => {
   });
 
   it('disables retry while either source is fetching', () => {
-    useOfficers.mockReturnValue(hookState({ isError: true }));
+    useOfficers.mockReturnValue(hookState({ isLoadingError: true }));
     usePastPresidents.mockReturnValue(hookState({ isFetching: true }));
     renderRoute(<Officers />, '/officers');
     expect(

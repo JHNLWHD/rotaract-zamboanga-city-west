@@ -11,7 +11,7 @@ vi.mock('../hooks/foundationGiving/useFoundationGiving', () => ({
 const state = (overrides: Record<string, unknown> = {}) => ({
   data: undefined,
   isLoading: false,
-  isError: false,
+  isLoadingError: false,
   error: undefined,
   refetch: vi.fn(),
   isFetching: false,
@@ -68,7 +68,11 @@ describe('FoundationGiving', () => {
   it('shows an Error message and retries', async () => {
     const refetch = vi.fn();
     useFoundationGiving.mockReturnValue(
-      state({ isError: true, error: new Error('Report unavailable'), refetch })
+      state({
+        isLoadingError: true,
+        error: new Error('Report unavailable'),
+        refetch,
+      })
     );
     const { user } = renderRoute(<FoundationGiving />, '/foundation-giving');
     expect(screen.getByRole('alert')).toHaveTextContent('Report unavailable');
@@ -78,7 +82,7 @@ describe('FoundationGiving', () => {
 
   it('shows the generic retrying error state', () => {
     useFoundationGiving.mockReturnValue(
-      state({ isError: true, error: 'unavailable', isFetching: true })
+      state({ isLoadingError: true, error: 'unavailable', isFetching: true })
     );
     renderRoute(<FoundationGiving />, '/foundation-giving');
     expect(screen.getByRole('alert')).toHaveTextContent(

@@ -76,14 +76,14 @@ const Officers = () => {
   const {
     data: officers,
     isLoading: isLoadingOfficers,
-    isError: isErrorOfficers,
+    isLoadingError: isLoadingErrorOfficers,
     refetch: refetchOfficers,
     isFetching: isFetchingOfficers,
   } = useOfficers(currentTerm);
   const {
     data: presidents,
     isLoading: isLoadingPresidents,
-    isError: isErrorPresidents,
+    isLoadingError: isLoadingErrorPresidents,
     refetch: refetchPresidents,
     isFetching: isFetchingPresidents,
   } = usePastPresidents();
@@ -93,7 +93,7 @@ const Officers = () => {
   const advisors = officers?.advisors || [];
   const allOfficers = [...executive, ...directors, ...advisors];
   const isLoading = isLoadingOfficers || isLoadingPresidents;
-  const isError = isErrorOfficers || isErrorPresidents;
+  const isLoadingError = isLoadingErrorOfficers || isLoadingErrorPresidents;
   const isRetrying = isFetchingOfficers || isFetchingPresidents;
   const description = `The published officer directory of the Rotaract Club of Zamboanga City West for Rotary Year ${currentTerm}.`;
 
@@ -157,7 +157,7 @@ const Officers = () => {
               </div>
             )}
 
-            {isError && (
+            {isLoadingError && (
               <div className="border-y border-slate-300 py-9" role="alert">
                 <p className="text-sm text-slate-700">
                   Officer records are temporarily unavailable.
@@ -175,7 +175,7 @@ const Officers = () => {
               </div>
             )}
 
-            {!isLoading && !isError && (
+            {!isLoading && !isLoadingError && (
               <div className="space-y-14">
                 {allOfficers.length > 0 ? (
                   <>
