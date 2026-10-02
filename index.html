@@ -1,36 +1,38 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!--page-head-->
     <link rel="icon" type="image/png" href="/favicon.ico" />
-    <meta name="google-site-verification" content="ObQgiVLDfGaLBPh5JdvHL_IuQAVeWsK1Ac-hDHEQ-Nk" />
-    
+    <meta
+      name="google-site-verification"
+      content="ObQgiVLDfGaLBPh5JdvHL_IuQAVeWsK1Ac-hDHEQ-Nk"
+    />
+
     <!-- Preconnect for performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    
+
     <!-- DNS prefetch for external domains -->
     <link rel="dns-prefetch" href="//cdn.botpress.cloud" />
     <link rel="dns-prefetch" href="//files.bpcontent.cloud" />
-    
+
     <!-- Theme color for mobile browsers -->
-    <meta name="theme-color" content="#dc2626" />
-    <meta name="msapplication-TileColor" content="#dc2626" />
-    
+    <meta name="theme-color" content="#faf9f7" />
+    <meta name="msapplication-TileColor" content="#faf9f7" />
+
     <!-- Apple touch icons -->
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
     <link rel="manifest" href="/site.webmanifest" />
-    
+
     <!-- Additional SEO meta tags -->
     <meta name="application-name" content="Great West" />
     <meta name="apple-mobile-web-app-title" content="Great West" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-    
+
     <!-- Security headers -->
     <meta http-equiv="X-Content-Type-Options" content="nosniff" />
     <meta http-equiv="X-Frame-Options" content="DENY" />
@@ -38,8 +40,9 @@
   </head>
 
   <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
     <div id="root"></div>
-    
+
     <!-- Hidden form for Netlify form detection -->
     <form name="contact" data-netlify="true" hidden>
       <input type="text" name="name" />
@@ -48,9 +51,31 @@
       <textarea name="message"></textarea>
       <input type="hidden" name="form-name" value="contact" />
     </form>
-    
+
     <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
     <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
     <script type="module" src="/src/main.tsx"></script>
+    <script src="https://cdn.botpress.cloud/webchat/v3.0/inject.js"></script>
+    <script>
+      window.botpress.init({
+        botId: 'aa6ae44a-905b-4544-9df9-f0fd36d8ec72',
+        clientId: 'd95a1c6d-47af-4fdd-83cd-e6ad99c64915',
+        configuration: {
+          version: 'v1',
+          botName: 'Ask the club',
+          botAvatar:
+            'https://files.bpcontent.cloud/2025/06/13/13/20250613132944-S2K9UIUH.png',
+          botDescription:
+            'Ask about the club, its public records, and current activities.',
+          color: '#b91c5e',
+          variant: 'solid',
+          headerVariant: 'solid',
+          themeMode: 'light',
+          fontFamily: 'inter',
+          radius: 1,
+          feedbackEnabled: false,
+        },
+      });
+    </script>
   </body>
 </html>

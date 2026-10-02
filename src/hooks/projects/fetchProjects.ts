@@ -2,6 +2,8 @@ import contentful from '../contentfulClient';
 import type { EntrySkeletonType, EntryFieldTypes } from 'contentful';
 import { processAsset } from '../../utils/contentful';
 import { richTextToMarkdown, type RichText } from '../../utils/richText';
+import { getAllEntries } from '../getAllEntries';
+import { getDeployedRoutes } from '../../utils/deployedRoutes';
 
 type ProjectSkeleton = EntrySkeletonType & {
   contentTypeId: 'project';
@@ -32,6 +34,7 @@ export type ProjectPartnerLinks = Array<{
 }>;
 
 export type ProjectListItem = {
+  updatedAt?: string;
   id: string;
   title: string;
   slug: string;
@@ -78,7 +81,7 @@ export async function fetchProjects(
       query['fields.category'] = category;
     }
 
-    const entries = await contentful.client.getEntries<ProjectSkeleton>(query);
+    const entries = await getAllEntries<ProjectSkeleton>(query);
 
     const projects: ProjectListItem[] = await Promise.all(
       entries.items.map(async entry => {
@@ -100,6 +103,7 @@ export async function fetchProjects(
         }
 
         return {
+          updatedAt: entry.sys.updatedAt,
           id: entry.sys.id,
           title: fields.title || '',
           slug: fields.slug || '',
@@ -114,10 +118,13 @@ export async function fetchProjects(
       })
     );
 
-    return projects;
+    const routes = getDeployedRoutes();
+    return projects.filter(
+      project => !routes || routes.has(`/projects/${project.slug}`)
+    );
   } catch (error) {
     console.error('Error fetching projects:', error);
-    return null;
+    throw error;
   }
 }
 
@@ -188,6 +195,7 @@ export async function fetchProjectBySlug(
     }
 
     return {
+      updatedAt: entry.sys.updatedAt,
       id: entry.sys.id,
       title: fields.title || '',
       slug: fields.slug || '',
@@ -211,6 +219,6 @@ export async function fetchProjectBySlug(
     };
   } catch (error) {
     console.error('Error fetching project by slug:', error);
-    return null;
+    throw error;
   }
 }

@@ -1,5 +1,6 @@
 import contentful from '../contentfulClient';
-import type { EntrySkeletonType, EntryFieldTypes } from 'contentful';
+import type { Entry, EntrySkeletonType, EntryFieldTypes } from 'contentful';
+import { getAllEntries } from '../getAllEntries';
 
 type AwardsSkeleton = EntrySkeletonType<{
   name: EntryFieldTypes.Symbol;
@@ -7,6 +8,8 @@ type AwardsSkeleton = EntrySkeletonType<{
   description: EntryFieldTypes.Symbol;
   icon: EntryFieldTypes.Symbol;
   yearReceived: EntryFieldTypes.Symbol;
+  issuingOrganization?: EntryFieldTypes.Symbol;
+  sourceUrl?: EntryFieldTypes.Symbol;
   isFeatured: EntryFieldTypes.Boolean;
   image: EntryFieldTypes.AssetLink;
   dateReceived: EntryFieldTypes.Date;
@@ -29,6 +32,8 @@ export type Award = {
   description: string;
   icon: string;
   yearReceived: string;
+  issuingOrganization: string;
+  sourceUrl: string;
   color: string;
   dateReceived: string;
   isFeatured: boolean;
@@ -38,6 +43,36 @@ export type Award = {
 export type HomepageAwardsSection = {
   awards: Award[];
 };
+
+async function mapAwardEntry(
+  cardEntry: Entry<AwardsSkeleton, undefined>
+): Promise<Award> {
+  let image: Image | undefined;
+  if (cardEntry.fields.image) {
+    const imageAsset = await contentful.client.getAsset(
+      cardEntry.fields.image.sys.id
+    );
+    image = {
+      url: imageAsset.fields.file?.url || '',
+      title: imageAsset.fields.title,
+      description: imageAsset.fields.description,
+    };
+  }
+
+  return {
+    name: cardEntry.fields.name ?? '',
+    shortDescription: cardEntry.fields.shortDescription ?? '',
+    description: cardEntry.fields.description ?? '',
+    icon: cardEntry.fields.icon ?? 'award',
+    yearReceived: cardEntry.fields.yearReceived ?? '',
+    issuingOrganization: cardEntry.fields.issuingOrganization ?? '',
+    sourceUrl: cardEntry.fields.sourceUrl ?? '',
+    color: cardEntry.fields.color ?? 'blue',
+    dateReceived: cardEntry.fields.dateReceived ?? '',
+    isFeatured: cardEntry.fields.isFeatured ?? false,
+    image: image || { url: '', title: '', description: '' },
+  };
+}
 
 export async function fetchAwards(): Promise<HomepageAwardsSection | null> {
   try {
@@ -61,30 +96,7 @@ export async function fetchAwards(): Promise<HomepageAwardsSection | null> {
         const cardEntry = await contentful.client.getEntry<AwardsSkeleton>(
           link.sys.id
         );
-
-        let image: Image | undefined;
-        if (cardEntry.fields.image) {
-          const imageAsset = await contentful.client.getAsset(
-            cardEntry.fields.image.sys.id
-          );
-          image = {
-            url: imageAsset.fields.file?.url || '',
-            title: imageAsset.fields.title,
-            description: imageAsset.fields.description,
-          };
-        }
-
-        return {
-          name: cardEntry.fields.name ?? '',
-          shortDescription: cardEntry.fields.shortDescription ?? '',
-          description: cardEntry.fields.description ?? '',
-          icon: cardEntry.fields.icon ?? 'award',
-          yearReceived: cardEntry.fields.yearReceived ?? '',
-          color: cardEntry.fields.color ?? 'blue',
-          dateReceived: cardEntry.fields.dateReceived ?? '',
-          isFeatured: cardEntry.fields.isFeatured ?? false,
-          image: image || { url: '', title: '', description: '' },
-        };
+        return mapAwardEntry(cardEntry);
       })
     );
 
@@ -92,5 +104,21 @@ export async function fetchAwards(): Promise<HomepageAwardsSection | null> {
   } catch (error) {
     console.error('Error fetching awards:', error);
     return null;
+  }
+}
+
+export async function fetchAllAwards(): Promise<HomepageAwardsSection | null> {
+  try {
+    const entries = await getAllEntries<AwardsSkeleton>({
+      content_type: 'cardsAwards',
+      order: '-fields.dateReceived',
+    });
+
+    return {
+      awards: await Promise.all(entries.items.map(mapAwardEntry)),
+    };
+  } catch (error) {
+    console.error('Error fetching all awards:', error);
+    throw error;
   }
 }

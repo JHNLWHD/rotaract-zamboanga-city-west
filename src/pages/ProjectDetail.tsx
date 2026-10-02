@@ -1,241 +1,301 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
+import { serializeJson } from '../utils/seo';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import { ArrowLeft, ExternalLink, Loader2, Share2 } from 'lucide-react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
+import PageHeader from '../components/layout/PageHeader';
 import ShareModal from '../components/ShareModal';
 import ProjectNotFound from '../components/projects/ProjectNotFound';
-import ProjectBreadcrumb from '../components/projects/ProjectBreadcrumb';
-import ProjectMainContent from '../components/projects/ProjectMainContent';
-import ProjectSidebar from '../components/projects/ProjectSidebar';
+import RecordUnavailable from '../components/RecordUnavailable';
+import RecordGallery from '../components/RecordGallery';
 import { useProjectBySlug } from '../hooks/projects/useProjectBySlug';
-import { Loader2 } from 'lucide-react';
+import type { ProjectPartnerLinks } from '../hooks/projects/fetchProjects';
+import { responsiveImage } from '../utils/contentful';
 
-import 'yet-another-react-lightbox/styles.css';
-import 'yet-another-react-lightbox/plugins/captions.css';
-import 'yet-another-react-lightbox/plugins/thumbnails.css';
+const formatDate = (value: string) =>
+  new Date(value).toLocaleDateString('en-US', {
+    timeZone: 'Asia/Manila',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
 
 const ProjectDetail = () => {
   const { slug } = useParams();
-  const { data: project, isLoading, isError } = useProjectBySlug(slug);
+  const {
+    data: project,
+    isLoading,
+    isError,
+    refetch,
+    isFetching,
+  } = useProjectBySlug(slug);
   const [showShareModal, setShowShareModal] = useState(false);
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-screen bg-[#faf9f7]">
         <Navbar />
-        <main className="flex-1 flex items-center justify-center">
-          <div className="text-center">
-            <Loader2 className="w-12 h-12 animate-spin text-cranberry-600 mx-auto mb-4" />
-            <p className="text-gray-600">Loading project details...</p>
-          </div>
+        <main
+          id="main-content"
+          className="editorial-shell flex min-h-[24rem] items-center gap-3 text-sm text-slate-600"
+        >
+          <Loader2
+            className="h-5 w-5 animate-spin text-cranberry-700"
+            aria-hidden="true"
+          />
+          Loading project record…
         </main>
         <Footer />
       </div>
     );
   }
 
-  if (isError || !project) {
-    return <ProjectNotFound />;
-  }
+  if (isError && !project)
+    return (
+      <RecordUnavailable
+        kind="Project"
+        onRetry={refetch}
+        isRetrying={isFetching}
+      />
+    );
+  if (!project) return <ProjectNotFound />;
 
-  const shareProject = () => {
-    setShowShareModal(true);
-  };
-
-  const closeShareModal = () => {
-    setShowShareModal(false);
-  };
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
-  };
+  const canonical = `https://rotaract.rotaryzcwest.org/projects/${project.slug}`;
+  const description =
+    project.shortDescription.trim() !== project.title.trim()
+      ? project.shortDescription
+      : project.impact || 'Published project record from the club archive.';
+  const summary =
+    description.length > 220
+      ? `${description.slice(0, 217).trim()}…`
+      : description;
+  const partners: ProjectPartnerLinks = project.partnerLinks?.length
+    ? project.partnerLinks
+    : project.partners.map(name => ({ name }));
 
   return (
     <>
       <Helmet>
-        <title>
-          {project.title} | Great West Community Impact - Rotaract Club of
-          Zamboanga City West
-        </title>
-        <meta
-          name="title"
-          content={`${project.title} | Great West Community Impact - Rotaract Club of Zamboanga City West`}
-        />
-        <meta
-          name="description"
-          content={`${project.shortDescription} ${project.impact} See how the Great West is making lasting impact in Zamboanga City through this award-winning community service project.`}
-        />
-        <meta
-          name="keywords"
-          content={`${project.title}, Great West community impact, Rotaract ${project.category.toLowerCase()}, ${project.venue}, Zamboanga City West, ${project.date}, ${project.category.toLowerCase()} project Philippines, award-winning community service, volunteer projects`}
-        />
-        <meta name="author" content="Rotaract Club of Zamboanga City West" />
-        <meta
-          name="robots"
-          content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
-        />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta httpEquiv="Content-Language" content="en" />
-        <meta name="geo.region" content="PH-ZAM" />
-        <meta name="geo.placename" content="Zamboanga City" />
-
-        <meta name="project:start_date" content={project.date} />
-        <meta name="project:location" content={project.venue} />
-
+        <title>{project.title} | Rotaract Club of Zamboanga City West</title>
+        <meta name="description" content={summary} />
         <meta property="og:type" content="article" />
+        <meta property="og:url" content={canonical} />
+        <meta property="og:title" content={project.title} />
+        <meta property="og:description" content={summary} />
         <meta
-          property="og:url"
-          content={`https://rotaract.rotaryzcwest.org/projects/${project.slug}`}
+          property="og:image"
+          content={
+            project.image || 'https://rotaract.rotaryzcwest.org/og-image.png'
+          }
         />
-        <meta
-          property="og:title"
-          content={`${project.title} | Great West Community Impact - Rotaract Club of Zamboanga City West`}
-        />
-        <meta
-          property="og:description"
-          content={`${project.shortDescription} ${project.impact} See how the Great West is making lasting impact in Zamboanga City through this award-winning community service project.`}
-        />
-        <meta property="og:image" content={project.image} />
-        <meta
-          property="og:image:alt"
-          content={`${project.title} - Great West community impact project`}
-        />
-        <meta
-          property="og:site_name"
-          content="Rotaract Club of Zamboanga City West"
-        />
-        <meta property="og:locale" content="en_PH" />
-
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:site" content="@RotaractZCWest" />
-        <meta name="twitter:creator" content="@RotaractZCWest" />
+        <meta name="twitter:title" content={project.title} />
+        <meta name="twitter:description" content={summary} />
         <meta
-          name="twitter:url"
-          content={`https://rotaract.rotaryzcwest.org/projects/${project.slug}`}
+          name="twitter:image"
+          content={
+            project.image || 'https://rotaract.rotaryzcwest.org/og-image.png'
+          }
         />
-        <meta
-          name="twitter:title"
-          content={`${project.title} | Great West Community Impact - Rotaract Club of Zamboanga City West`}
-        />
-        <meta
-          name="twitter:description"
-          content={`${project.shortDescription} ${project.impact} See how the Great West is making lasting impact in Zamboanga City through this award-winning community service project.`}
-        />
-        <meta name="twitter:image" content={project.image} />
-        <meta
-          name="twitter:image:alt"
-          content={`${project.title} - Great West community impact project`}
-        />
-        <meta name="twitter:label1" content="Date" />
-        <meta name="twitter:data1" content={formatDate(project.date)} />
-        <meta name="twitter:label2" content="Location" />
-        <meta name="twitter:data2" content={project.venue} />
-
-        <meta name="theme-color" content="#BE185D" />
-        <meta name="msapplication-TileColor" content="#BE185D" />
-        <meta name="application-name" content="Rotaract ZC West" />
-
-        <link
-          rel="canonical"
-          href={`https://rotaract.rotaryzcwest.org/projects/${project.slug}`}
-        />
-
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-
+        <link rel="canonical" href={canonical} />
         <script type="application/ld+json">
-          {JSON.stringify({
+          {serializeJson({
             '@context': 'https://schema.org',
-            '@type': 'Project',
-            name: project.title,
-            description: project.description,
-            startDate: project.date,
-            location: {
-              '@type': 'Place',
-              name: project.venue,
-              address: {
-                '@type': 'PostalAddress',
-                streetAddress: project.venue,
-                addressLocality: 'Zamboanga City',
-                addressRegion: 'Zamboanga Peninsula',
-                postalCode: '7000',
-                addressCountry: 'PH',
-              },
-              geo: {
-                '@type': 'GeoCoordinates',
-                latitude: '6.9214',
-                longitude: '122.0790',
-              },
-            },
-            image: [project.image],
-            organizer: {
+            '@type': 'Article',
+            headline: project.title,
+            description: summary,
+            datePublished: project.date,
+            image: [
+              project.image,
+              ...project.gallery.map(image => image.url),
+            ].filter(Boolean),
+            author: {
               '@type': 'Organization',
               name: 'Rotaract Club of Zamboanga City West',
-              alternateName: 'Great West',
               url: 'https://rotaract.rotaryzcwest.org',
-              logo: 'https://rotaract.rotaryzcwest.org/images/logo.png',
-              sameAs: [
-                'https://www.facebook.com/RotaractClubZamboWest',
-                'https://www.instagram.com/raczambowest1',
-              ],
             },
-            funder: project.partners
-              ? project.partners.map(partner => ({
-                  '@type': 'Organization',
-                  name: partner,
-                }))
-              : undefined,
-            category: project.category,
-            impact: project.impact,
-          })}
-        </script>
-
-        <script type="application/ld+json">
-          {JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'BreadcrumbList',
-            itemListElement: [
-              {
-                '@type': 'ListItem',
-                position: 1,
-                name: 'Home',
-                item: 'https://rotaract.rotaryzcwest.org',
-              },
-              {
-                '@type': 'ListItem',
-                position: 2,
-                name: 'Community Impact',
-                item: 'https://rotaract.rotaryzcwest.org/projects',
-              },
-              {
-                '@type': 'ListItem',
-                position: 3,
-                name: project.title,
-                item: `https://rotaract.rotaryzcwest.org/projects/${project.slug}`,
-              },
-            ],
+            about: project.category,
+            locationCreated: project.venue,
+            mainEntityOfPage: canonical,
           })}
         </script>
       </Helmet>
-      <div className="min-h-screen flex flex-col">
+
+      <div className="min-h-screen bg-[#faf9f7]">
         <Navbar />
-        <main className="flex-1 bg-gradient-to-br from-cranberry-50 via-white to-pink-50 pt-20">
-          <div className="container mx-auto px-6 py-16">
-            <ProjectBreadcrumb project={project} />
+        <main id="main-content">
+          <PageHeader
+            eyebrow={project.category || 'Project record'}
+            title={project.title}
+            asOf={`${formatDate(project.date)} · ${project.venue}`}
+          />
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
-              <ProjectMainContent project={project} onShare={shareProject} />
+          <div className="editorial-shell py-8 md:py-12">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <Link to="/projects" className="editorial-link">
+                <ArrowLeft className="h-4 w-4" aria-hidden="true" />
+                Project archive
+              </Link>
+              <button
+                type="button"
+                onClick={() => setShowShareModal(true)}
+                className="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-slate-950"
+              >
+                <Share2 className="h-4 w-4" aria-hidden="true" />
+                Share record
+              </button>
+            </div>
 
-              <ProjectSidebar project={project} />
+            {project.image && (
+              <figure className="mt-7 bg-[#f4f1ec]">
+                <img
+                  {...responsiveImage(
+                    project.image,
+                    '(min-width: 1024px) 960px, calc(100vw - 40px)'
+                  )}
+                  alt={`${project.title} project record`}
+                  className="max-h-[32rem] w-full object-contain"
+                />
+              </figure>
+            )}
+
+            <div className="mt-10 grid gap-12 lg:grid-cols-[minmax(0,1fr)_18rem]">
+              <article>
+                <section aria-labelledby="project-about-heading">
+                  <p className="editorial-kicker">Project narrative</p>
+                  <h2
+                    id="project-about-heading"
+                    className="mt-2 text-3xl font-semibold text-slate-950"
+                  >
+                    About this project
+                  </h2>
+                  <div className="prose prose-lg prose-slate mt-5 max-w-none prose-headings:font-display prose-a:text-cranberry-700">
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                      {project.description}
+                    </ReactMarkdown>
+                  </div>
+                </section>
+
+                {project.impact && (
+                  <section className="mt-10 border-l-2 border-cranberry-600 pl-5">
+                    <p className="editorial-kicker">Reported outcome</p>
+                    <p className="mt-3 text-base leading-7 text-slate-700">
+                      {project.impact}
+                    </p>
+                  </section>
+                )}
+
+                {project.highlights.length > 0 && (
+                  <section
+                    className="mt-10"
+                    aria-labelledby="highlights-heading"
+                  >
+                    <h2
+                      id="highlights-heading"
+                      className="text-2xl font-semibold text-slate-950"
+                    >
+                      Published highlights
+                    </h2>
+                    <ul className="mt-4 divide-y divide-slate-200 border-y border-slate-300">
+                      {project.highlights.map(highlight => (
+                        <li
+                          key={highlight}
+                          className="py-3 text-sm leading-6 text-slate-700"
+                        >
+                          {highlight}
+                        </li>
+                      ))}
+                    </ul>
+                  </section>
+                )}
+
+                <RecordGallery
+                  images={project.gallery}
+                  heading="Project gallery"
+                  fallbackAlt={`${project.title} gallery image`}
+                />
+              </article>
+
+              <aside
+                className="border-t-2 border-slate-950 pt-5"
+                aria-label="Project record details"
+              >
+                <h2 className="text-xl font-semibold text-slate-950">
+                  Record details
+                </h2>
+                <dl className="mt-4 divide-y divide-slate-200 border-y border-slate-300 text-sm">
+                  <div className="py-3.5">
+                    <dt className="text-slate-500">Date</dt>
+                    <dd className="mt-1 font-semibold text-slate-900">
+                      {formatDate(project.date)}
+                    </dd>
+                  </div>
+                  <div className="py-3.5">
+                    <dt className="text-slate-500">Venue</dt>
+                    <dd className="mt-1 font-semibold leading-6 text-slate-900">
+                      {project.venue}
+                    </dd>
+                  </div>
+                  <div className="py-3.5">
+                    <dt className="text-slate-500">Area of work</dt>
+                    <dd className="mt-1 font-semibold text-slate-900">
+                      {project.category}
+                    </dd>
+                  </div>
+                </dl>
+
+                {partners.length > 0 && (
+                  <section
+                    className="mt-7"
+                    aria-labelledby="project-partners-heading"
+                  >
+                    <h2
+                      id="project-partners-heading"
+                      className="text-xl font-semibold text-slate-950"
+                    >
+                      Partners
+                    </h2>
+                    <ul className="mt-3 space-y-2 text-sm text-slate-700">
+                      {partners.map(partner => (
+                        <li key={partner.name}>
+                          {partner.url ? (
+                            <a
+                              href={partner.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1 font-semibold text-cranberry-700"
+                            >
+                              {partner.name}
+                              <ExternalLink
+                                className="h-3.5 w-3.5"
+                                aria-hidden="true"
+                              />
+                            </a>
+                          ) : (
+                            partner.name
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  </section>
+                )}
+
+                {project.facebookLink && (
+                  <a
+                    href={project.facebookLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="editorial-link mt-7"
+                  >
+                    View published social record
+                    <ExternalLink className="h-4 w-4" aria-hidden="true" />
+                  </a>
+                )}
+              </aside>
             </div>
           </div>
         </main>
@@ -244,19 +304,15 @@ const ProjectDetail = () => {
 
       <ShareModal
         isOpen={showShareModal}
-        onClose={closeShareModal}
-        content={
-          project
-            ? {
-                title: project.title,
-                description: project.shortDescription,
-                date: project.date,
-                venue: project.venue,
-                shareableLink: project.shareableLink,
-                category: project.category,
-              }
-            : null
-        }
+        onClose={() => setShowShareModal(false)}
+        content={{
+          title: project.title,
+          description: summary,
+          date: project.date,
+          venue: project.venue,
+          shareableLink: project.shareableLink,
+          category: project.category,
+        }}
         contentType="project"
       />
     </>

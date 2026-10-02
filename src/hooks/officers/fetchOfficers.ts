@@ -1,6 +1,7 @@
 import contentful from '../contentfulClient';
 import type { EntrySkeletonType, EntryFieldTypes } from 'contentful';
 import { processAsset } from '../../utils/contentful';
+import { getAllEntries } from '../getAllEntries';
 
 type OfficerSkeleton = EntrySkeletonType & {
   contentTypeId: 'officer';
@@ -57,7 +58,7 @@ export type PastPresident = {
 export async function fetchOfficers(
   term?: string,
   category?: 'Executive' | 'Director' | 'Advisor'
-): Promise<Officer[] | null> {
+): Promise<Officer[]> {
   try {
     const query: Record<string, string | number> = {
       content_type: 'officer',
@@ -72,7 +73,7 @@ export async function fetchOfficers(
       query['fields.category'] = category;
     }
 
-    const entries = await contentful.client.getEntries<OfficerSkeleton>(query);
+    const entries = await getAllEntries<OfficerSkeleton>(query);
 
     const officers: Officer[] = await Promise.all(
       entries.items.map(async entry => {
@@ -100,14 +101,7 @@ export async function fetchOfficers(
           fields.socialMediaLinks &&
           typeof fields.socialMediaLinks === 'object'
         ) {
-          try {
-            socialMedia = fields.socialMediaLinks as Officer['socialMedia'];
-          } catch (error) {
-            console.warn(
-              `Could not process social media links for officer ${fields.name}:`,
-              error
-            );
-          }
+          socialMedia = fields.socialMediaLinks as Officer['socialMedia'];
         }
 
         return {
@@ -129,13 +123,13 @@ export async function fetchOfficers(
     return officers;
   } catch (error) {
     console.error('Error fetching officers:', error);
-    return null;
+    throw error;
   }
 }
 
-export async function fetchPastPresidents(): Promise<PastPresident[] | null> {
+export async function fetchPastPresidents(): Promise<PastPresident[]> {
   try {
-    const entries = await contentful.client.getEntries<PastPresidentSkeleton>({
+    const entries = await getAllEntries<PastPresidentSkeleton>({
       content_type: 'pastPresident',
       order: 'fields.displayOrder',
     });
@@ -155,26 +149,24 @@ export async function fetchPastPresidents(): Promise<PastPresident[] | null> {
     return pastPresidents;
   } catch (error) {
     console.error('Error fetching past presidents:', error);
-    return null;
+    throw error;
   }
 }
 
 // Helper functions for specific officer categories
-export async function fetchExecutiveBoard(
-  term?: string
-): Promise<Officer[] | null> {
+export async function fetchExecutiveBoard(term?: string): Promise<Officer[]> {
   return fetchOfficers(term, 'Executive');
 }
 
-export async function fetchDirectors(term?: string): Promise<Officer[] | null> {
+export async function fetchDirectors(term?: string): Promise<Officer[]> {
   return fetchOfficers(term, 'Director');
 }
 
-export async function fetchAdvisors(term?: string): Promise<Officer[] | null> {
+export async function fetchAdvisors(term?: string): Promise<Officer[]> {
   return fetchOfficers(term, 'Advisor');
 }
 
-export async function fetchCurrentOfficers(): Promise<Officer[] | null> {
+export async function fetchCurrentOfficers(): Promise<Officer[]> {
   return fetchOfficers('2026-2027');
 }
 
@@ -182,17 +174,13 @@ export async function fetchAllOfficers(term?: string): Promise<{
   executive: Officer[];
   directors: Officer[];
   advisors: Officer[];
-} | null> {
+}> {
   try {
     const [executive, directors, advisors] = await Promise.all([
       fetchExecutiveBoard(term),
       fetchDirectors(term),
       fetchAdvisors(term),
     ]);
-
-    if (!executive || !directors || !advisors) {
-      return null;
-    }
 
     return {
       executive,
@@ -201,6 +189,6 @@ export async function fetchAllOfficers(term?: string): Promise<{
     };
   } catch (error) {
     console.error('Error fetching all officers:', error);
-    return null;
+    throw error;
   }
 }

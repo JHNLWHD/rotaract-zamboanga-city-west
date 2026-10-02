@@ -617,6 +617,20 @@ const contentTypes = [
         validations: [{ size: { max: 20 } }],
       },
       {
+        id: 'issuingOrganization',
+        name: 'Issuing Organization',
+        type: 'Symbol',
+        required: false,
+        validations: [{ size: { max: 120 } }],
+      },
+      {
+        id: 'sourceUrl',
+        name: 'Official Citation URL',
+        type: 'Symbol',
+        required: false,
+        validations: [{ size: { max: 500 } }],
+      },
+      {
         id: 'dateReceived',
         name: 'Date Received',
         type: 'Date',
@@ -807,7 +821,11 @@ async function setupContentTypes() {
           `❌ Error creating content type "${contentTypeName}":`,
           error.message
         );
-        results.push({ name: contentTypeName, success: false, error: error.message });
+        results.push({
+          name: contentTypeName,
+          success: false,
+          error: error.message,
+        });
 
         // Continue with other content types instead of failing completely
         continue;
@@ -816,11 +834,11 @@ async function setupContentTypes() {
 
     console.log('\n🎉 Content model setup completed!');
     console.log('\n📋 Summary:');
-    
+
     // Display results with actual status
     const successCount = results.filter(r => r.success).length;
     const failureCount = results.filter(r => !r.success).length;
-    
+
     for (const result of results) {
       if (result.success) {
         console.log(`   ✅ ${result.name} content type`);
@@ -828,14 +846,18 @@ async function setupContentTypes() {
         console.log(`   ❌ ${result.name} content type - ${result.error}`);
       }
     }
-    
-    console.log(`\n📊 Results: ${successCount} succeeded, ${failureCount} failed`);
-    
+
+    console.log(
+      `\n📊 Results: ${successCount} succeeded, ${failureCount} failed`
+    );
+
     if (failureCount > 0) {
-      console.log('\n⚠️  Some content types failed to create. Review the errors above.');
+      console.log(
+        '\n⚠️  Some content types failed to create. Review the errors above.'
+      );
       process.exit(1);
     }
-    
+
     console.log('\n🚀 Ready for data migration!');
   } catch (error) {
     console.error('❌ Setup failed:', error.message);

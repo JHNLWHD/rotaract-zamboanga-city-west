@@ -1,73 +1,44 @@
 import React, { useState } from 'react';
 import { Helmet } from 'react-helmet';
+import { serializeJson } from '../utils/seo';
 import { useQuery } from '@tanstack/react-query';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
+import PageHeader from '../components/layout/PageHeader';
 import ShareModal from '../components/ShareModal';
 import EventsGrid from '../components/events/EventsGrid';
 import LoadingState from '../components/events/LoadingState';
 import ErrorState from '../components/events/ErrorState';
-import { Button } from '@/components/ui/button';
-import { Calendar } from 'lucide-react';
-import { fetchEvents, type Event } from '../hooks/events/fetchEvents';
-import { cacheConfig } from '../config/cache';
+import { type Event } from '../hooks/events/fetchEvents';
+import { eventsQuery } from '../hooks/contentQueries';
+import { isPastEvent } from '../utils/eventDate';
+import { useRenderTime } from '../hooks/useRenderTime';
 
 const Events = () => {
-  const [showShareModal, setShowShareModal] = useState(false);
   const [currentShareEvent, setCurrentShareEvent] = useState<Event | null>(
     null
   );
-
   const {
     data: events,
     isLoading,
-    isError,
+    isLoadingError,
     error,
-  } = useQuery({
-    queryKey: ['events'],
-    queryFn: () => fetchEvents(),
-    ...cacheConfig.monthly,
-  });
+    refetch,
+    isFetching,
+  } = useQuery(eventsQuery);
 
-  const handleShareEvent = (event: Event) => {
-    setCurrentShareEvent(event);
-    setShowShareModal(true);
-  };
-
-  const closeShareModal = () => {
-    setShowShareModal(false);
-    setCurrentShareEvent(null);
-  };
+  const now = useRenderTime();
+  const upcomingEvents =
+    events?.filter(event => !isPastEvent(event, now)) || [];
+  const pastEvents = events?.filter(event => isPastEvent(event, now)) || [];
+  const description =
+    'A chronological record of meetings, service activities, trainings, and fellowship events published by the Rotaract Club of Zamboanga City West.';
 
   return (
     <>
       <Helmet>
-        <title>
-          Great West in Action - Club Events & Activities | Rotaract Club of
-          Zamboanga City West
-        </title>
-        <meta
-          name="title"
-          content="Great West in Action - Club Events & Activities | Rotaract Club of Zamboanga City West"
-        />
-        <meta
-          name="description"
-          content="Join the Great West in Action! Discover purposeful meetings, leadership trainings, social gatherings, and special fellowship ceremonies that strengthen our Rotaract community in Zamboanga City West."
-        />
-        <meta
-          name="keywords"
-          content="Rotaract events Zamboanga City West, Great West in Action, fellowship meetings Philippines, leadership training Zamboanga, club activities, Rotaract community events, youth organization activities, volunteer events Philippines"
-        />
-        <meta name="author" content="Rotaract Club of Zamboanga City West" />
-        <meta
-          name="robots"
-          content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
-        />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta httpEquiv="Content-Language" content="en" />
-        <meta name="geo.region" content="PH-ZAM" />
-        <meta name="geo.placename" content="Zamboanga City" />
-
+        <title>Events | Rotaract Club of Zamboanga City West</title>
+        <meta name="description" content={description} />
         <meta property="og:type" content="website" />
         <meta
           property="og:url"
@@ -75,206 +46,132 @@ const Events = () => {
         />
         <meta
           property="og:title"
-          content="Great West in Action - Club Events & Activities | Rotaract Club of Zamboanga City West"
+          content="Events | Rotaract Club of Zamboanga City West"
         />
-        <meta
-          property="og:description"
-          content="Join the Great West in Action! Discover purposeful meetings, leadership trainings, social gatherings, and special fellowship ceremonies that strengthen our Rotaract community in Zamboanga City West."
-        />
+        <meta property="og:description" content={description} />
         <meta
           property="og:image"
           content="https://rotaract.rotaryzcwest.org/og-image.png"
         />
-        <meta
-          property="og:image:alt"
-          content="Great West in Action - Rotaract Club of Zamboanga City West Events"
-        />
-        <meta
-          property="og:site_name"
-          content="Rotaract Club of Zamboanga City West"
-        />
-        <meta property="og:locale" content="en_US" />
-
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:site" content="@RotaractZCWest" />
-        <meta name="twitter:creator" content="@RotaractZCWest" />
-        <meta
-          name="twitter:url"
-          content="https://rotaract.rotaryzcwest.org/events"
-        />
         <meta
           name="twitter:title"
-          content="Great West in Action - Club Events & Activities | Rotaract Club of Zamboanga City West"
+          content="Events | Rotaract Club of Zamboanga City West"
         />
-        <meta
-          name="twitter:description"
-          content="Join the Great West in Action! Discover purposeful meetings, leadership trainings, social gatherings, and special fellowship ceremonies that strengthen our Rotaract community in Zamboanga City West."
-        />
-        <meta
-          name="twitter:image"
-          content="https://rotaract.rotaryzcwest.org/images/events-og-image.jpg"
-        />
-        <meta
-          name="twitter:image:alt"
-          content="Great West in Action - Rotaract Club of Zamboanga City West Events"
-        />
-
-        <meta name="theme-color" content="#BE185D" />
-        <meta name="msapplication-TileColor" content="#BE185D" />
-        <meta name="application-name" content="Rotaract ZC West" />
-
+        <meta name="twitter:description" content={description} />
         <link rel="canonical" href="https://rotaract.rotaryzcwest.org/events" />
-
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-
         <script type="application/ld+json">
-          {JSON.stringify({
+          {serializeJson({
             '@context': 'https://schema.org',
             '@type': 'CollectionPage',
-            name: 'Great West in Action - Club Events & Activities',
-            description:
-              'Join the Great West in Action! Discover purposeful meetings, leadership trainings, social gatherings, and special fellowship ceremonies that strengthen our Rotaract community in Zamboanga City West.',
+            name: 'Events of the Rotaract Club of Zamboanga City West',
+            description,
             url: 'https://rotaract.rotaryzcwest.org/events',
-            publisher: {
-              '@type': 'Organization',
-              name: 'Rotaract Club of Zamboanga City West',
-              alternateName: 'Great West',
-              url: 'https://rotaract.rotaryzcwest.org',
-            },
             mainEntity: {
               '@type': 'ItemList',
+              numberOfItems: events?.length || 0,
               itemListElement: (events || []).map((event, index) => ({
                 '@type': 'ListItem',
                 position: index + 1,
-                item: {
-                  '@type': 'Event',
-                  name: event.title,
-                  description: event.description,
-                  startDate: `${event.date}T${event.time.split(' - ')[0].replace(' ', '').toLowerCase()}`,
-                  endDate: `${event.date}T${event.time.split(' - ')[1]?.replace(' ', '').toLowerCase() || '23:59'}`,
-                  location: {
-                    '@type': 'Place',
-                    name: event.venue,
-                    address: {
-                      '@type': 'PostalAddress',
-                      addressLocality: 'Zamboanga City',
-                      addressRegion: 'Zamboanga Peninsula',
-                      addressCountry: 'PH',
-                    },
-                  },
-                  organizer: {
-                    '@type': 'Organization',
-                    name: 'Rotaract Club of Zamboanga City West',
-                    url: 'https://rotaract.rotaryzcwest.org',
-                  },
-                  url: event.shareableLink,
-                  image: event.image.startsWith('http')
-                    ? event.image
-                    : `https://rotaract.rotaryzcwest.org${event.image}`,
-                  eventStatus:
-                    event.status === 'upcoming'
-                      ? 'https://schema.org/EventScheduled'
-                      : event.status === 'registration_open'
-                        ? 'https://schema.org/EventScheduled'
-                        : 'https://schema.org/EventCompleted',
-                },
+                name: event.title,
+                url: `https://rotaract.rotaryzcwest.org/events/${event.date.split('T')[0]}/${event.slug}`,
               })),
-            },
-            breadcrumb: {
-              '@type': 'BreadcrumbList',
-              itemListElement: [
-                {
-                  '@type': 'ListItem',
-                  position: 1,
-                  name: 'Home',
-                  item: 'https://rotaract.rotaryzcwest.org',
-                },
-                {
-                  '@type': 'ListItem',
-                  position: 2,
-                  name: 'Great West in Action',
-                  item: 'https://rotaract.rotaryzcwest.org/events',
-                },
-              ],
             },
           })}
         </script>
       </Helmet>
 
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-screen bg-[#faf9f7]">
         <Navbar />
-        <main id="main-content" role="main" className="flex-1">
-          <section
-            className="bg-gradient-to-br from-cranberry-600 via-cranberry-700 to-cranberry-800 text-white pt-32 pb-20 px-6"
-            role="banner"
-          >
-            <div className="max-w-7xl mx-auto text-center">
-              <h1 className="text-4xl md:text-6xl font-bold mb-6">
-                Great West in Action
-              </h1>
-              <p className="text-xl md:text-2xl mb-8 text-cranberry-100 max-w-3xl mx-auto">
-                Join us for purposeful meetings, leadership trainings, social
-                gatherings, and special fellowship ceremonies that strengthen
-                our Rotaract community
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button
-                  size="lg"
-                  className="bg-white text-cranberry-600 hover:bg-cranberry-50 font-semibold"
-                  onClick={() =>
-                    document
-                      .getElementById('all-events')
-                      ?.scrollIntoView({ behavior: 'smooth' })
-                  }
-                  aria-label="Scroll to view all events section"
-                >
-                  <Calendar className="w-5 h-5 mr-2" aria-hidden="true" />
-                  View All Events
-                </Button>
+        <main id="main-content">
+          <PageHeader
+            eyebrow="Activity record"
+            title="Events and club activities"
+            description="A date-led archive of upcoming and past club activity, using the details and images published by the club."
+            asOf={
+              events ? `${events.length} published event records` : undefined
+            }
+          />
+
+          <div className="editorial-shell py-10 md:py-14">
+            {isLoading && <LoadingState />}
+
+            {isLoadingError && (
+              <ErrorState
+                error={error}
+                onRetry={() => refetch()}
+                isRetrying={isFetching}
+              />
+            )}
+
+            {!isLoading && !isLoadingError && (
+              <div className="space-y-8 md:space-y-10">
+                {upcomingEvents.length > 0 ? (
+                  <section aria-labelledby="upcoming-events-heading">
+                    <div className="mb-5 flex items-end justify-between gap-5">
+                      <div>
+                        <p className="editorial-kicker">Next</p>
+                        <h2
+                          id="upcoming-events-heading"
+                          className="mt-2 text-3xl font-semibold text-slate-950"
+                        >
+                          Upcoming events
+                        </h2>
+                      </div>
+                      <p className="text-sm text-slate-500">
+                        {upcomingEvents.length}{' '}
+                        {upcomingEvents.length === 1 ? 'event' : 'events'}
+                      </p>
+                    </div>
+                    <EventsGrid
+                      events={upcomingEvents}
+                      onShareEvent={setCurrentShareEvent}
+                    />
+                  </section>
+                ) : pastEvents.length > 0 ? (
+                  <p className="border-b border-slate-300 pb-4 text-sm text-slate-600">
+                    No upcoming event has been published. Explore past
+                    activities below.
+                  </p>
+                ) : null}
+
+                {pastEvents.length > 0 && (
+                  <section aria-labelledby="past-events-heading">
+                    <div className="mb-5 flex items-end justify-between gap-5">
+                      <div>
+                        <p className="editorial-kicker">Archive</p>
+                        <h2
+                          id="past-events-heading"
+                          className="mt-2 text-3xl font-semibold text-slate-950"
+                        >
+                          Past activities
+                        </h2>
+                      </div>
+                      <p className="text-sm text-slate-500">
+                        {pastEvents.length}{' '}
+                        {pastEvents.length === 1 ? 'record' : 'records'}
+                      </p>
+                    </div>
+                    <EventsGrid
+                      events={pastEvents}
+                      onShareEvent={setCurrentShareEvent}
+                    />
+                  </section>
+                )}
+
+                {!events?.length && (
+                  <p className="border-y border-slate-300 py-8 text-sm text-slate-600">
+                    No event records have been published yet.
+                  </p>
+                )}
               </div>
-            </div>
-          </section>
-
-          <section
-            id="all-events"
-            className="py-16 px-6 bg-gray-50"
-            role="main"
-            aria-labelledby="events-heading"
-          >
-            <div className="max-w-7xl mx-auto">
-              <div className="text-center mb-12">
-                <h2
-                  id="events-heading"
-                  className="text-3xl md:text-4xl font-bold text-gray-900 mb-4"
-                >
-                  Club Highlights
-                </h2>
-                <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                  Get a glimpse of our innovative projects, leadership
-                  milestones, and dynamic community networks— stay connected
-                  with our vibrant Rotaract community
-                </p>
-              </div>
-
-              {isLoading && <LoadingState />}
-
-              {isError && <ErrorState error={error} />}
-
-              {!isLoading && !isError && (
-                <EventsGrid events={events} onShareEvent={handleShareEvent} />
-              )}
-            </div>
-          </section>
+            )}
+          </div>
         </main>
         <Footer />
         <ShareModal
-          isOpen={showShareModal}
-          onClose={closeShareModal}
+          isOpen={Boolean(currentShareEvent)}
+          onClose={() => setCurrentShareEvent(null)}
           content={
             currentShareEvent
               ? {

@@ -227,6 +227,10 @@ async function createAwardCard(environment, award) {
         description: { 'en-US': award.description },
         icon: { 'en-US': award.icon },
         yearReceived: { 'en-US': award.yearReceived },
+        ...(award.issuingOrganization && {
+          issuingOrganization: { 'en-US': award.issuingOrganization },
+        }),
+        ...(award.sourceUrl && { sourceUrl: { 'en-US': award.sourceUrl } }),
         dateReceived: { 'en-US': award.dateReceived },
         color: { 'en-US': award.color },
         isFeatured: { 'en-US': award.isFeatured },

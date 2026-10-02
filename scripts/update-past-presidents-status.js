@@ -30,7 +30,9 @@ async function updateStatus(environment, term, status) {
   });
 
   if (existingEntries.items.length === 0) {
-    console.log(`⚠️  No pastPresident entry found for term "${term}", skipping...`);
+    console.log(
+      `⚠️  No pastPresident entry found for term "${term}", skipping...`
+    );
     return;
   }
 
@@ -38,7 +40,9 @@ async function updateStatus(environment, term, status) {
   const currentStatus = entry.fields.status?.['en-US'];
 
   if (currentStatus === status) {
-    console.log(`ℹ️  "${term}" already has status "${status ?? '(none)'}", no change needed`);
+    console.log(
+      `ℹ️  "${term}" already has status "${status ?? '(none)'}", no change needed`
+    );
     return;
   }
 
@@ -51,7 +55,9 @@ async function updateStatus(environment, term, status) {
   const updatedEntry = await entry.update();
   await updatedEntry.publish();
 
-  console.log(`✅ Updated "${term}": status "${currentStatus ?? '(none)'}" → "${status ?? '(none)'}"`);
+  console.log(
+    `✅ Updated "${term}": status "${currentStatus ?? '(none)'}" → "${status ?? '(none)'}"`
+  );
 }
 
 async function run() {

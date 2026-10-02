@@ -122,7 +122,7 @@ export default {
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
-        display: ['Montserrat', 'sans-serif'],
+        display: ['"Source Serif 4"', 'serif'],
       },
       keyframes: {
         'accordion-down': {

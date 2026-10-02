@@ -65,6 +65,6 @@ export async function fetchHeroContent(): Promise<HomepageHeroSection | null> {
     };
   } catch (error) {
     console.error('Error fetching homepage hero section:', error);
-    return null;
+    throw error;
   }
 }
