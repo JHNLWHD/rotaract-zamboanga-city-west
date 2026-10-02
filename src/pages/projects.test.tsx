@@ -12,28 +12,6 @@ const { fetchProjects, useProjectBySlug } = vi.hoisted(() => ({
 }));
 vi.mock('../hooks/projects/fetchProjects', () => ({ fetchProjects }));
 vi.mock('../hooks/projects/useProjectBySlug', () => ({ useProjectBySlug }));
-vi.mock('yet-another-react-lightbox', () => ({
-  default: ({
-    open,
-    close,
-    index,
-    slides,
-  }: {
-    open: boolean;
-    close: () => void;
-    index: number;
-    slides: { src: string; alt: string }[];
-  }) =>
-    open ? (
-      <div role="dialog" aria-label="Project lightbox">
-        Image {index + 1}
-        <img src={slides[index].src} alt={slides[index].alt} />
-        <button type="button" onClick={close}>
-          Close lightbox
-        </button>
-      </div>
-    ) : null,
-}));
 vi.mock('../components/ShareModal', () => ({
   default: ({
     isOpen,
@@ -247,7 +225,7 @@ describe('Project detail', () => {
     expect(window.location.pathname).toBe('/');
   });
 
-  it('renders a complete record and controls share and gallery dialogs', async () => {
+  it('renders a complete record, controls sharing, and supplies its record images to the gallery', async () => {
     const longDescription = 'A'.repeat(230);
     useProjectBySlug.mockReturnValue({
       data: detailProject({ shortDescription: longDescription }),
@@ -282,37 +260,17 @@ describe('Project detail', () => {
       screen.queryByRole('dialog', { name: 'Share project' })
     ).not.toBeInTheDocument();
 
-    const firstImage = screen.getByRole('button', {
-      name: 'Open image 1: Volunteers',
-    });
-    expect(firstImage).toHaveAttribute('aria-haspopup', 'dialog');
-    firstImage.focus();
-    await user.keyboard('{Enter}');
+    const gallery = screen.getByRole('region', { name: 'Project gallery' });
     expect(
-      screen.getByRole('dialog', { name: 'Project lightbox' })
-    ).toHaveTextContent('Image 1');
+      within(gallery)
+        .getAllByRole('img')
+        .map(image => image.getAttribute('src'))
+    ).toEqual(['https://images.test/one.jpg', 'https://images.test/two.jpg']);
     expect(
-      within(
-        screen.getByRole('dialog', { name: 'Project lightbox' })
-      ).getByRole('img', { name: 'Volunteers' })
-    ).toHaveAttribute('src', 'https://images.test/one.jpg');
-    await user.click(screen.getByRole('button', { name: 'Close lightbox' }));
-    expect(
-      screen.queryByRole('dialog', { name: 'Project lightbox' })
-    ).not.toBeInTheDocument();
-
-    screen
-      .getByRole('button', {
-        name: 'Open image 2: Project service-day gallery image',
+      within(gallery).getByRole('img', {
+        name: 'Project service-day gallery image',
       })
-      .focus();
-    await user.keyboard(' ');
-    expect(
-      within(
-        screen.getByRole('dialog', { name: 'Project lightbox' })
-      ).getByRole('img', { name: 'Project service-day gallery image' })
-    ).toHaveAttribute('src', 'https://images.test/two.jpg');
-    await user.click(screen.getByRole('button', { name: 'Close lightbox' }));
+    ).toBeInTheDocument();
   });
 
   it('uses outcome metadata and published partner names without repeating the outcome', async () => {

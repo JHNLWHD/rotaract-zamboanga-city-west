@@ -2,22 +2,15 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { ArrowRight } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
-import { fetchHeroContent } from '../../hooks/landing-page/heroSection';
-import { fetchAboutCommunity } from '../../hooks/landing-page/aboutCommunity';
-import { cacheConfig } from '../../config/cache';
+import {
+  heroContentQuery,
+  aboutContentQuery,
+} from '../../hooks/contentQueries';
 import { responsiveImage } from '../../utils/contentful';
 
 const Hero = () => {
-  const { data: hero } = useQuery({
-    queryKey: ['heroContent'],
-    queryFn: fetchHeroContent,
-    ...cacheConfig.yearly,
-  });
-  const { data: about } = useQuery({
-    queryKey: ['aboutContent'],
-    queryFn: fetchAboutCommunity,
-    ...cacheConfig.yearly,
-  });
+  const { data: hero } = useQuery(heroContentQuery);
+  const { data: about } = useQuery(aboutContentQuery);
 
   const image =
     about?.image?.url ||

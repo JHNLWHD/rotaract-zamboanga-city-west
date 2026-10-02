@@ -5,18 +5,16 @@ import { serializeJson } from '../utils/seo';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { ArrowLeft, ExternalLink, Loader2, Share2 } from 'lucide-react';
-import Lightbox from 'yet-another-react-lightbox';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import PageHeader from '../components/layout/PageHeader';
 import ShareModal from '../components/ShareModal';
 import ProjectNotFound from '../components/projects/ProjectNotFound';
 import RecordUnavailable from '../components/RecordUnavailable';
+import RecordGallery from '../components/RecordGallery';
 import { useProjectBySlug } from '../hooks/projects/useProjectBySlug';
 import type { ProjectPartnerLinks } from '../hooks/projects/fetchProjects';
 import { responsiveImage } from '../utils/contentful';
-
-import 'yet-another-react-lightbox/styles.css';
 
 const formatDate = (value: string) =>
   new Date(value).toLocaleDateString('en-US', {
@@ -36,7 +34,6 @@ const ProjectDetail = () => {
     isFetching,
   } = useProjectBySlug(slug);
   const [showShareModal, setShowShareModal] = useState(false);
-  const [lightboxIndex, setLightboxIndex] = useState(-1);
 
   if (isLoading) {
     return (
@@ -79,10 +76,6 @@ const ProjectDetail = () => {
   const partners: ProjectPartnerLinks = project.partnerLinks?.length
     ? project.partnerLinks
     : project.partners.map(name => ({ name }));
-  const slides = project.gallery.map(image => ({
-    src: image.url,
-    alt: image.caption || `${project.title} gallery image`,
-  }));
 
   return (
     <>
@@ -220,49 +213,11 @@ const ProjectDetail = () => {
                   </section>
                 )}
 
-                {project.gallery.length > 0 && (
-                  <section
-                    className="mt-12"
-                    aria-labelledby="project-gallery-heading"
-                  >
-                    <p className="editorial-kicker">Supporting images</p>
-                    <h2
-                      id="project-gallery-heading"
-                      className="mt-2 text-3xl font-semibold text-slate-950"
-                    >
-                      Project gallery
-                    </h2>
-                    <div className="mt-5 grid gap-5 sm:grid-cols-2">
-                      {project.gallery.map((image, index) => (
-                        <button
-                          key={image.id}
-                          type="button"
-                          aria-label={`Open image ${index + 1}: ${image.caption || `${project.title} gallery image`}`}
-                          aria-haspopup="dialog"
-                          onClick={() => setLightboxIndex(index)}
-                          className="text-left"
-                        >
-                          <img
-                            {...responsiveImage(
-                              image.url,
-                              '(min-width: 1024px) 440px, (min-width: 640px) 50vw, calc(100vw - 40px)'
-                            )}
-                            alt={
-                              image.caption || `${project.title} gallery image`
-                            }
-                            className="aspect-[4/3] w-full object-cover"
-                            loading="lazy"
-                          />
-                          {image.caption && (
-                            <span className="mt-2 block text-xs leading-5 text-slate-500">
-                              {image.caption}
-                            </span>
-                          )}
-                        </button>
-                      ))}
-                    </div>
-                  </section>
-                )}
+                <RecordGallery
+                  images={project.gallery}
+                  heading="Project gallery"
+                  fallbackAlt={`${project.title} gallery image`}
+                />
               </article>
 
               <aside
@@ -359,12 +314,6 @@ const ProjectDetail = () => {
           category: project.category,
         }}
         contentType="project"
-      />
-      <Lightbox
-        open={lightboxIndex >= 0}
-        close={() => setLightboxIndex(-1)}
-        index={lightboxIndex}
-        slides={slides}
       />
     </>
   );

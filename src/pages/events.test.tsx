@@ -13,28 +13,6 @@ const { fetchEvents, useEventBySlug } = vi.hoisted(() => ({
 }));
 vi.mock('../hooks/events/fetchEvents', () => ({ fetchEvents }));
 vi.mock('../hooks/events/useEventBySlug', () => ({ useEventBySlug }));
-vi.mock('yet-another-react-lightbox', () => ({
-  default: ({
-    open,
-    close,
-    index,
-    slides,
-  }: {
-    open: boolean;
-    close: () => void;
-    index: number;
-    slides: { src: string; alt: string }[];
-  }) =>
-    open ? (
-      <div role="dialog" aria-label="Event lightbox">
-        Image {index + 1}
-        <img src={slides[index].src} alt={slides[index].alt} />
-        <button type="button" onClick={close}>
-          Close lightbox
-        </button>
-      </div>
-    ) : null,
-}));
 vi.mock('../components/ShareModal', () => ({
   default: ({
     isOpen,
@@ -286,7 +264,7 @@ describe('Event detail', () => {
     expect(screen.getByText('Events archive destination')).toBeInTheDocument();
   });
 
-  it('renders a future event, downloads its invitation, and controls dialogs', async () => {
+  it('renders a future event, downloads its invitation, controls sharing, and supplies its record images to the gallery', async () => {
     const click = vi
       .spyOn(HTMLAnchorElement.prototype, 'click')
       .mockImplementation(() => undefined);
@@ -328,36 +306,20 @@ describe('Event detail', () => {
     );
     await user.click(screen.getByRole('button', { name: 'Close share' }));
 
-    const firstImage = screen.getByRole('button', {
-      name: 'Open image 1: Volunteers',
-    });
-    expect(firstImage).toHaveAttribute('aria-haspopup', 'dialog');
-    firstImage.focus();
-    await user.keyboard('{Enter}');
+    const gallery = screen.getByRole('region', { name: 'Event gallery' });
     expect(
-      screen.getByRole('dialog', { name: 'Event lightbox' })
-    ).toHaveTextContent('Image 1');
+      within(gallery)
+        .getAllByRole('img')
+        .map(image => image.getAttribute('src'))
+    ).toEqual([
+      'https://images.test/gallery.jpg',
+      'https://images.test/gallery-two.jpg',
+    ]);
     expect(
-      within(screen.getByRole('dialog', { name: 'Event lightbox' })).getByRole(
-        'img',
-        { name: 'Volunteers' }
-      )
-    ).toHaveAttribute('src', 'https://images.test/gallery.jpg');
-    await user.click(screen.getByRole('button', { name: 'Close lightbox' }));
-
-    screen
-      .getByRole('button', {
-        name: 'Open image 2: Event service-day gallery image',
+      within(gallery).getByRole('img', {
+        name: 'Event service-day gallery image',
       })
-      .focus();
-    await user.keyboard(' ');
-    expect(
-      within(screen.getByRole('dialog', { name: 'Event lightbox' })).getByRole(
-        'img',
-        { name: 'Event service-day gallery image' }
-      )
-    ).toHaveAttribute('src', 'https://images.test/gallery-two.jpg');
-    await user.click(screen.getByRole('button', { name: 'Close lightbox' }));
+    ).toBeInTheDocument();
   });
 
   it('uses neutral past wording and preserves cached data during a refresh failure', async () => {

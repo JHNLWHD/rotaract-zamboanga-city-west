@@ -2,12 +2,8 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { fetchProjects } from '../../hooks/projects/fetchProjects';
-import { fetchAllAwards } from '../../hooks/landing-page/awardsSection';
-import { fetchOfficers } from '../../hooks/officers/fetchOfficers';
-import { fetchFoundationGiving } from '../../hooks/foundationGiving/fetchFoundationGiving';
+import { homepageEvidenceQuery } from '../../hooks/contentQueries';
 import { getCurrentTerm } from '../../data/officers';
-import { cacheConfig } from '../../config/cache';
 import { responsiveImage } from '../../utils/contentful';
 
 const formatDate = (value: string) =>
@@ -18,28 +14,12 @@ const formatDate = (value: string) =>
     day: 'numeric',
   });
 
-const fetchHomepageEvidence = async () => {
-  const [projects, recognition, officers, foundation] = await Promise.all([
-    fetchProjects(),
-    fetchAllAwards(),
-    fetchOfficers(getCurrentTerm()),
-    fetchFoundationGiving(),
-  ]);
-
-  return { projects, recognition, officers, foundation };
-};
-
 const Credentials = () => {
-  const { data, isLoading, isLoadingError, refetch } = useQuery({
-    queryKey: ['homepageEvidence', getCurrentTerm()],
-    queryFn: fetchHomepageEvidence,
-    ...cacheConfig.monthly,
-  });
-
-  const [featuredProject, ...secondaryProjects] = (data?.projects || []).slice(
-    0,
-    3
+  const { data, isLoading, isLoadingError, refetch } = useQuery(
+    homepageEvidenceQuery(getCurrentTerm())
   );
+
+  const [featuredProject, ...secondaryProjects] = data?.projects || [];
   const president =
     data?.officers?.find(
       officer => officer.position.trim().toLowerCase() === 'president'

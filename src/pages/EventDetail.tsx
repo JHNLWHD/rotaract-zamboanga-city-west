@@ -11,20 +11,18 @@ import {
   Loader2,
   Share2,
 } from 'lucide-react';
-import Lightbox from 'yet-another-react-lightbox';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import PageHeader from '../components/layout/PageHeader';
 import ShareModal from '../components/ShareModal';
 import EventNotFound from '../components/events/EventNotFound';
 import RecordUnavailable from '../components/RecordUnavailable';
+import RecordGallery from '../components/RecordGallery';
 import { useEventBySlug } from '../hooks/events/useEventBySlug';
 import { markdownToPlainText } from '../utils/richText';
 import { eventStartDate, isPastEvent } from '../utils/eventDate';
 import { useRenderTime } from '../hooks/useRenderTime';
 import { responsiveImage } from '../utils/contentful';
-
-import 'yet-another-react-lightbox/styles.css';
 
 const formatDate = (value: string) =>
   new Date(value).toLocaleDateString('en-US', {
@@ -45,7 +43,6 @@ const EventDetail = () => {
     isFetching,
   } = useEventBySlug(slug);
   const [showShareModal, setShowShareModal] = useState(false);
-  const [lightboxIndex, setLightboxIndex] = useState(-1);
 
   if (isLoading) {
     return (
@@ -93,10 +90,6 @@ const EventDetail = () => {
   const canonical = `https://rotaract.rotaryzcwest.org/events/${event.date.split('T')[0]}/${event.slug}`;
   const invitationImage = event.invitationImage;
   const featureImage = event.image || invitationImage || '';
-  const slides = event.gallery.map(image => ({
-    src: image.url,
-    alt: image.caption || `${event.title} gallery image`,
-  }));
 
   const downloadInvitation = (imageUrl: string) => {
     const link = document.createElement('a');
@@ -276,49 +269,11 @@ const EventDetail = () => {
                   </section>
                 )}
 
-                {event.gallery.length > 0 && (
-                  <section
-                    className="mt-12"
-                    aria-labelledby="event-gallery-heading"
-                  >
-                    <p className="editorial-kicker">Supporting images</p>
-                    <h2
-                      id="event-gallery-heading"
-                      className="mt-2 text-3xl font-semibold text-slate-950"
-                    >
-                      Event gallery
-                    </h2>
-                    <div className="mt-5 grid gap-5 sm:grid-cols-2">
-                      {event.gallery.map((image, index) => (
-                        <button
-                          key={image.id}
-                          type="button"
-                          aria-label={`Open image ${index + 1}: ${image.caption || `${event.title} gallery image`}`}
-                          aria-haspopup="dialog"
-                          onClick={() => setLightboxIndex(index)}
-                          className="text-left"
-                        >
-                          <img
-                            {...responsiveImage(
-                              image.url,
-                              '(min-width: 1024px) 440px, (min-width: 640px) 50vw, calc(100vw - 40px)'
-                            )}
-                            alt={
-                              image.caption || `${event.title} gallery image`
-                            }
-                            className="aspect-[4/3] w-full object-cover"
-                            loading="lazy"
-                          />
-                          {image.caption && (
-                            <span className="mt-2 block text-xs leading-5 text-slate-500">
-                              {image.caption}
-                            </span>
-                          )}
-                        </button>
-                      ))}
-                    </div>
-                  </section>
-                )}
+                <RecordGallery
+                  images={event.gallery}
+                  heading="Event gallery"
+                  fallbackAlt={`${event.title} gallery image`}
+                />
               </article>
 
               <aside
@@ -440,12 +395,6 @@ const EventDetail = () => {
           category: event.category,
         }}
         contentType="event"
-      />
-      <Lightbox
-        open={lightboxIndex >= 0}
-        close={() => setLightboxIndex(-1)}
-        index={lightboxIndex}
-        slides={slides}
       />
     </>
   );

@@ -114,26 +114,66 @@ describe('event Contentful fetchers', () => {
     );
   });
 
-  it('maps images and skips missing or broken gallery assets', async () => {
-    client.getEntries.mockResolvedValue({
-      items: [event('service-day', '2026-08-20')],
-    });
-    client.getAsset.mockImplementation(async (id: string) => {
-      if (id === 'featured') return asset(id, '//images.test/featured.jpg');
-      if (id === 'invitation')
-        return asset(id, 'https://images.test/invite.jpg');
-      if (id === 'gallery')
-        return asset(id, '//images.test/gallery.jpg', '', 'Gallery title');
-      if (id === 'gallery-empty') return asset(id);
-      throw new Error('broken gallery');
-    });
+  it.each(['list', 'detail'])(
+    'maps complete %s records and skips missing or broken gallery assets',
+    async fetchInterface => {
+      client.getEntries.mockResolvedValue({
+        items: [
+          {
+            ...event('service-day', '2026-08-20', {
+              status: 'registration_open',
+              gallery: [
+                link('gallery'),
+                link('gallery-described'),
+                link('gallery-broken'),
+                link('gallery-empty'),
+              ],
+            }),
+            sys: { id: 'service-day', updatedAt: '2026-08-18T12:00:00Z' },
+          },
+        ],
+      });
+      client.getAsset.mockImplementation(async (id: string) => {
+        if (id === 'featured')
+          return asset(id, '//images.ctfassets.net/space/featured.jpg?w=2000');
+        if (id === 'invitation')
+          return asset(id, 'https://images.test/invite.jpg');
+        if (id === 'gallery')
+          return asset(id, '//images.test/gallery.jpg', '', 'Gallery title');
+        if (id === 'gallery-described')
+          return asset(
+            id,
+            '//images.test/described.jpg',
+            'Volunteers',
+            'Title'
+          );
+        if (id === 'gallery-empty') return asset(id);
+        throw new Error('broken gallery');
+      });
 
-    const result = await fetchEvents();
+      const result =
+        fetchInterface === 'list'
+          ? (await fetchEvents())?.[0]
+          : await fetchEventBySlug('service-day');
 
-    expect(result?.[0]).toEqual(
-      expect.objectContaining({
-        image: 'https://images.test/featured.jpg',
+      expect(result).toEqual({
+        updatedAt: '2026-08-18T12:00:00Z',
+        id: 'service-day',
+        title: 'Event service-day',
+        slug: 'service-day',
+        description: 'Event details',
+        date: '2026-08-20',
+        time: '9:00 AM',
+        venue: 'Zamboanga City',
+        category: 'Service',
+        status: 'registration_open',
+        registrationUrl: 'https://forms.test/register',
+        shareableLink: 'https://example.com/event',
+        image: 'https://images.ctfassets.net/space/featured.jpg?w=2000',
         invitationImage: 'https://images.test/invite.jpg',
+        highlights: ['Highlight'],
+        agenda: ['Agenda'],
+        requirements: ['Requirement'],
         gallery: [
           {
             id: 'gallery',
@@ -141,40 +181,52 @@ describe('event Contentful fetchers', () => {
             caption: 'Gallery title',
             category: 'Service',
           },
+          {
+            id: 'gallery-described',
+            url: 'https://images.test/described.jpg',
+            caption: 'Volunteers',
+            category: 'Service',
+          },
         ],
-      })
-    );
-    expect(console.warn).toHaveBeenCalledTimes(1);
-  });
+      });
+      expect(console.warn).toHaveBeenCalledTimes(1);
+    }
+  );
 
-  it('publishes safe list records from incomplete CMS entries', async () => {
-    client.getEntries.mockResolvedValue({
-      items: [
-        event('incomplete', '', {
-          title: undefined,
-          slug: undefined,
-          description: undefined,
-          time: undefined,
-          venue: undefined,
-          category: undefined,
-          status: undefined,
-          registrationUrl: undefined,
-          shareableLink: undefined,
-          featuredImage: undefined,
-          invitationImage: undefined,
-          highlights: undefined,
-          agenda: undefined,
-          requirements: undefined,
-          gallery: [link('untitled')],
-        }),
-      ],
-    });
-    client.getAsset.mockResolvedValue(
-      asset('untitled', '//images.test/untitled.jpg')
-    );
+  it.each(['list', 'detail'])(
+    'maps safe %s records from incomplete CMS entries',
+    async fetchInterface => {
+      client.getEntries.mockResolvedValue({
+        items: [
+          event('incomplete', '', {
+            title: undefined,
+            slug: undefined,
+            description: undefined,
+            time: undefined,
+            venue: undefined,
+            category: undefined,
+            status: undefined,
+            registrationUrl: undefined,
+            shareableLink: undefined,
+            featuredImage: undefined,
+            invitationImage: undefined,
+            highlights: undefined,
+            agenda: undefined,
+            requirements: undefined,
+            gallery: [link('untitled')],
+          }),
+        ],
+      });
+      client.getAsset.mockResolvedValue(
+        asset('untitled', '//images.test/untitled.jpg')
+      );
 
-    await expect(fetchEvents()).resolves.toEqual([
-      {
+      const result =
+        fetchInterface === 'list'
+          ? (await fetchEvents())?.[0]
+          : await fetchEventBySlug('incomplete');
+
+      expect(result).toEqual({
         id: 'incomplete',
         title: '',
         slug: '',
@@ -199,33 +251,155 @@ describe('event Contentful fetchers', () => {
             category: 'General',
           },
         ],
-      },
-    ]);
-  });
+      });
+    }
+  );
 
-  it('keeps records usable when all media requests fail', async () => {
-    client.getEntries.mockResolvedValue({
-      items: [event('service-day', '2026-08-20')],
-    });
-    client.getAsset.mockRejectedValue(new Error('asset unavailable'));
+  it.each(['list', 'detail'])(
+    'keeps %s records usable when all media requests fail',
+    async fetchInterface => {
+      client.getEntries.mockResolvedValue({
+        items: [event('service-day', '2026-08-20')],
+      });
+      client.getAsset.mockRejectedValue(new Error('asset unavailable'));
 
-    const result = await fetchEvents();
+      const result =
+        fetchInterface === 'list'
+          ? (await fetchEvents())?.[0]
+          : await fetchEventBySlug('service-day');
 
-    expect(result?.[0]).toEqual(
-      expect.objectContaining({
-        image: '',
-        invitationImage: undefined,
-        gallery: [],
+      expect(result).toEqual(
+        expect.objectContaining({
+          image: '',
+          invitationImage: undefined,
+          gallery: [],
+        })
+      );
+      expect(console.warn).toHaveBeenCalledTimes(5);
+    }
+  );
+
+  it.each(['list', 'detail'])(
+    'awaits %s media in field order and continues after an asset failure',
+    async fetchInterface => {
+      client.getEntries.mockResolvedValue({
+        items: [
+          event('service-day', '2026-08-20', {
+            gallery: [link('gallery-first'), link('gallery-second')],
+          }),
+        ],
+      });
+      const error = new Error('invitation unavailable');
+      let finishAsset: () => void;
+      client.getAsset.mockImplementation(
+        (id: string) =>
+          new Promise((resolve, reject) => {
+            finishAsset = () =>
+              id === 'invitation'
+                ? reject(error)
+                : resolve(asset(id, `//images.test/${id}.jpg`));
+          })
+      );
+
+      const pending =
+        fetchInterface === 'list'
+          ? fetchEvents().then(records => records?.[0])
+          : fetchEventBySlug('service-day');
+
+      for (const [index, id] of [
+        'featured',
+        'invitation',
+        'gallery-first',
+        'gallery-second',
+      ].entries()) {
+        await vi.waitFor(() =>
+          expect(client.getAsset).toHaveBeenCalledTimes(index + 1)
+        );
+        expect(client.getAsset).toHaveBeenNthCalledWith(index + 1, id);
+        finishAsset();
+      }
+
+      const result = await pending;
+      expect(result?.invitationImage).toBeUndefined();
+      expect(result?.gallery.map(({ id }) => id)).toEqual([
+        'gallery-first',
+        'gallery-second',
+      ]);
+      expect(console.warn).toHaveBeenCalledWith(
+        'Could not fetch invitation image for event Event service-day:',
+        error
+      );
+    }
+  );
+
+  it('paginates event records and sorts by Manila local start time', async () => {
+    const withoutMedia = {
+      featuredImage: undefined,
+      invitationImage: undefined,
+      gallery: [],
+    };
+    client.getEntries
+      .mockResolvedValueOnce({
+        total: 4,
+        items: [
+          event('past-later', '2026-08-19', {
+            ...withoutMedia,
+            time: '7:00 AM',
+          }),
+          event('future-later', '2026-08-19', {
+            ...withoutMedia,
+            time: '11:00 AM',
+          }),
+        ],
       })
-    );
-    expect(console.warn).toHaveBeenCalledTimes(5);
+      .mockResolvedValueOnce({
+        items: [
+          event('past-earlier', '2026-08-19', {
+            ...withoutMedia,
+            time: '6:00 AM',
+          }),
+          event('future-sooner', '2026-08-19', {
+            ...withoutMedia,
+            time: '9:00 AM',
+          }),
+        ],
+      });
+
+    const result = await fetchEvents(undefined, 'upcoming');
+
+    expect(client.getEntries.mock.calls).toEqual([
+      [
+        {
+          content_type: 'event',
+          order: '-fields.date',
+          'fields.status': 'upcoming',
+        },
+      ],
+      [
+        {
+          content_type: 'event',
+          order: '-fields.date',
+          'fields.status': 'upcoming',
+          skip: 2,
+        },
+      ],
+    ]);
+    expect(result?.map(({ slug }) => slug)).toEqual([
+      'future-sooner',
+      'future-later',
+      'past-later',
+      'past-earlier',
+    ]);
+    expect(client.getAsset).not.toHaveBeenCalled();
   });
 
   it('rethrows list failures', async () => {
-    client.getEntries.mockRejectedValue(new Error('Contentful unavailable'));
+    const error = new Error('Contentful unavailable');
+    client.getEntries.mockRejectedValue(error);
 
-    await expect(fetchEvents()).rejects.toThrow('Contentful unavailable');
-    expect(console.error).toHaveBeenCalled();
+    await expect(fetchEvents()).rejects.toBe(error);
+    expect(console.error).toHaveBeenCalledWith('Error fetching events:', error);
+    expect(client.getAsset).not.toHaveBeenCalled();
   });
 
   it('keeps refreshed event links within the deployed routes', async () => {
@@ -257,10 +431,12 @@ describe('event Contentful fetchers', () => {
     }
   });
 
-  it('returns null for an unpublished event slug', async () => {
+  it('returns an empty list and null detail for missing published events', async () => {
     client.getEntries.mockResolvedValue({ items: [] });
 
+    await expect(fetchEvents()).resolves.toEqual([]);
     await expect(fetchEventBySlug('missing')).resolves.toBeNull();
+    expect(client.getAsset).not.toHaveBeenCalled();
   });
 
   it('maps a complete event detail record', async () => {
@@ -360,10 +536,35 @@ describe('event Contentful fetchers', () => {
   });
 
   it('rethrows detail failures', async () => {
-    client.getEntries.mockRejectedValue(new Error('query failed'));
+    const error = new Error('query failed');
+    client.getEntries.mockRejectedValue(error);
 
-    await expect(fetchEventBySlug('service-day')).rejects.toThrow(
-      'query failed'
+    await expect(fetchEventBySlug('service-day')).rejects.toBe(error);
+    expect(console.error).toHaveBeenCalledWith(
+      'Error fetching event by slug:',
+      error
+    );
+    expect(client.getAsset).not.toHaveBeenCalled();
+  });
+
+  it('logs and rethrows detail mapping failures', async () => {
+    client.getEntries.mockResolvedValue({
+      items: [
+        event('service-day', '2026-08-20', {
+          description: { content: {} },
+          featuredImage: undefined,
+          invitationImage: undefined,
+          gallery: [],
+        }),
+      ],
+    });
+
+    await expect(fetchEventBySlug('service-day')).rejects.toBeInstanceOf(
+      TypeError
+    );
+    expect(console.error).toHaveBeenCalledWith(
+      'Error fetching event by slug:',
+      expect.any(TypeError)
     );
   });
 

@@ -176,26 +176,31 @@ describe('homepage content', () => {
     ).toHaveAttribute('href', '/projects/second');
   });
 
-  it('renders honest placeholders when no evidence has been published', async () => {
-    fetchProjects.mockResolvedValue([]);
-    fetchAllAwards.mockResolvedValue(null);
-    fetchOfficers.mockResolvedValue([]);
-    fetchFoundationGiving.mockResolvedValue(null);
+  it.each([{ projects: [] }, { projects: null }])(
+    'renders honest placeholders when project records are $projects',
+    async ({ projects }) => {
+      fetchProjects.mockResolvedValue(projects);
+      fetchAllAwards.mockResolvedValue(null);
+      fetchOfficers.mockResolvedValue([]);
+      fetchFoundationGiving.mockResolvedValue(null);
 
-    renderRoute(<Credentials />);
+      renderRoute(<Credentials />);
 
-    expect(
-      await screen.findByText(/Project records will appear/)
-    ).toBeInTheDocument();
-    expect(screen.getByText(/current roster will appear/)).toBeInTheDocument();
-    expect(
-      screen.getByText(/Recognition records will appear/)
-    ).toBeInTheDocument();
-    expect(screen.getByText(/giving record will appear/)).toBeInTheDocument();
-    expect(
-      screen.getByText('No additional records published yet.')
-    ).toBeInTheDocument();
-  });
+      expect(
+        await screen.findByText(/Project records will appear/)
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(/current roster will appear/)
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(/Recognition records will appear/)
+      ).toBeInTheDocument();
+      expect(screen.getByText(/giving record will appear/)).toBeInTheDocument();
+      expect(
+        screen.getByText('No additional records published yet.')
+      ).toBeInTheDocument();
+    }
+  );
 
   it('shows a record error and retries all evidence sources', async () => {
     fetchProjects

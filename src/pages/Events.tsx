@@ -9,8 +9,8 @@ import ShareModal from '../components/ShareModal';
 import EventsGrid from '../components/events/EventsGrid';
 import LoadingState from '../components/events/LoadingState';
 import ErrorState from '../components/events/ErrorState';
-import { fetchEvents, type Event } from '../hooks/events/fetchEvents';
-import { cacheConfig } from '../config/cache';
+import { type Event } from '../hooks/events/fetchEvents';
+import { eventsQuery } from '../hooks/contentQueries';
 import { isPastEvent } from '../utils/eventDate';
 import { useRenderTime } from '../hooks/useRenderTime';
 
@@ -25,11 +25,7 @@ const Events = () => {
     error,
     refetch,
     isFetching,
-  } = useQuery({
-    queryKey: ['events'],
-    queryFn: () => fetchEvents(),
-    ...cacheConfig.monthly,
-  });
+  } = useQuery(eventsQuery);
 
   const now = useRenderTime();
   const upcomingEvents =

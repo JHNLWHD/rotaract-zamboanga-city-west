@@ -1,5 +1,5 @@
 import contentful from '../contentfulClient';
-import type { EntrySkeletonType, EntryFieldTypes } from 'contentful';
+import type { Entry, EntrySkeletonType, EntryFieldTypes } from 'contentful';
 import { processAsset } from '../../utils/contentful';
 import { richTextToMarkdown, type RichText } from '../../utils/richText';
 import { eventStartDate, isPastEvent } from '../../utils/eventDate';
@@ -54,6 +54,89 @@ export type Event = {
   }>;
 };
 
+async function mapEvent(
+  entry: Entry<EventSkeleton, undefined>
+): Promise<Event> {
+  const fields = entry.fields;
+
+  // Process featured image
+  let featuredImageUrl = '';
+  if (fields.featuredImage) {
+    try {
+      const asset = await contentful.client.getAsset(
+        fields.featuredImage.sys.id
+      );
+      featuredImageUrl = processAsset(asset);
+    } catch (error) {
+      console.warn(
+        `Could not fetch featured image for event ${fields.title}:`,
+        error
+      );
+    }
+  }
+
+  // Process invitation image
+  let invitationImageUrl = '';
+  if (fields.invitationImage) {
+    try {
+      const asset = await contentful.client.getAsset(
+        fields.invitationImage.sys.id
+      );
+      invitationImageUrl = processAsset(asset);
+    } catch (error) {
+      console.warn(
+        `Could not fetch invitation image for event ${fields.title}:`,
+        error
+      );
+    }
+  }
+
+  // Process gallery
+  const gallery: Event['gallery'] = [];
+  if (fields.gallery && fields.gallery.length > 0) {
+    for (const galleryLink of fields.gallery) {
+      try {
+        const asset = await contentful.client.getAsset(galleryLink.sys.id);
+        const url = processAsset(asset);
+        if (url) {
+          gallery.push({
+            id: asset.sys.id,
+            url,
+            caption: asset.fields.description || asset.fields.title || '',
+            category: fields.category || 'General',
+          });
+        }
+      } catch (error) {
+        console.warn(
+          `Could not fetch gallery image for event ${fields.title}:`,
+          error
+        );
+      }
+    }
+  }
+
+  return {
+    updatedAt: entry.sys.updatedAt,
+    id: entry.sys.id,
+    title: fields.title || '',
+    slug: fields.slug || '',
+    description: richTextToMarkdown(fields.description as unknown as RichText),
+    date: fields.date || '',
+    time: fields.time || '',
+    venue: fields.venue || '',
+    category: fields.category || '',
+    status: (fields.status as Event['status']) || 'upcoming',
+    registrationUrl: fields.registrationUrl,
+    shareableLink: fields.shareableLink || '',
+    image: featuredImageUrl,
+    invitationImage: invitationImageUrl || undefined,
+    highlights: fields.highlights || [],
+    agenda: fields.agenda || [],
+    requirements: fields.requirements || [],
+    gallery,
+  };
+}
+
 export async function fetchEvents(
   limit?: number,
   status?: 'upcoming' | 'registration_open' | 'past'
@@ -74,92 +157,7 @@ export async function fetchEvents(
 
     const entries = await getAllEntries<EventSkeleton>(query);
 
-    const events: Event[] = await Promise.all(
-      entries.items.map(async entry => {
-        const fields = entry.fields;
-
-        // Process featured image
-        let featuredImageUrl = '';
-        if (fields.featuredImage) {
-          try {
-            const asset = await contentful.client.getAsset(
-              fields.featuredImage.sys.id
-            );
-            featuredImageUrl = processAsset(asset);
-          } catch (error) {
-            console.warn(
-              `Could not fetch featured image for event ${fields.title}:`,
-              error
-            );
-          }
-        }
-
-        // Process invitation image
-        let invitationImageUrl = '';
-        if (fields.invitationImage) {
-          try {
-            const asset = await contentful.client.getAsset(
-              fields.invitationImage.sys.id
-            );
-            invitationImageUrl = processAsset(asset);
-          } catch (error) {
-            console.warn(
-              `Could not fetch invitation image for event ${fields.title}:`,
-              error
-            );
-          }
-        }
-
-        // Process gallery
-        const gallery: Event['gallery'] = [];
-        if (fields.gallery && fields.gallery.length > 0) {
-          for (const galleryLink of fields.gallery) {
-            try {
-              const asset = await contentful.client.getAsset(
-                galleryLink.sys.id
-              );
-              const url = processAsset(asset);
-              if (url) {
-                gallery.push({
-                  id: asset.sys.id,
-                  url,
-                  caption: asset.fields.description || asset.fields.title || '',
-                  category: fields.category || 'General',
-                });
-              }
-            } catch (error) {
-              console.warn(
-                `Could not fetch gallery image for event ${fields.title}:`,
-                error
-              );
-            }
-          }
-        }
-
-        return {
-          updatedAt: entry.sys.updatedAt,
-          id: entry.sys.id,
-          title: fields.title || '',
-          slug: fields.slug || '',
-          description: richTextToMarkdown(
-            fields.description as unknown as RichText
-          ),
-          date: fields.date || '',
-          time: fields.time || '',
-          venue: fields.venue || '',
-          category: fields.category || '',
-          status: (fields.status as Event['status']) || 'upcoming',
-          registrationUrl: fields.registrationUrl,
-          shareableLink: fields.shareableLink || '',
-          image: featuredImageUrl,
-          invitationImage: invitationImageUrl || undefined,
-          highlights: fields.highlights || [],
-          agenda: fields.agenda || [],
-          requirements: fields.requirements || [],
-          gallery,
-        };
-      })
-    );
+    const events: Event[] = await Promise.all(entries.items.map(mapEvent));
 
     // Sort events: upcoming first, then past events
     const sortedEvents = events.sort((a, b) => {
@@ -206,87 +204,7 @@ export async function fetchEventBySlug(slug: string): Promise<Event | null> {
       return null;
     }
 
-    const entry = entries.items[0];
-    const fields = entry.fields;
-
-    // Process featured image
-    let featuredImageUrl = '';
-    if (fields.featuredImage) {
-      try {
-        const asset = await contentful.client.getAsset(
-          fields.featuredImage.sys.id
-        );
-        featuredImageUrl = processAsset(asset);
-      } catch (error) {
-        console.warn(
-          `Could not fetch featured image for event ${fields.title}:`,
-          error
-        );
-      }
-    }
-
-    // Process invitation image
-    let invitationImageUrl = '';
-    if (fields.invitationImage) {
-      try {
-        const asset = await contentful.client.getAsset(
-          fields.invitationImage.sys.id
-        );
-        invitationImageUrl = processAsset(asset);
-      } catch (error) {
-        console.warn(
-          `Could not fetch invitation image for event ${fields.title}:`,
-          error
-        );
-      }
-    }
-
-    // Process gallery
-    const gallery: Event['gallery'] = [];
-    if (fields.gallery && fields.gallery.length > 0) {
-      for (const galleryLink of fields.gallery) {
-        try {
-          const asset = await contentful.client.getAsset(galleryLink.sys.id);
-          const url = processAsset(asset);
-          if (url) {
-            gallery.push({
-              id: asset.sys.id,
-              url,
-              caption: asset.fields.description || asset.fields.title || '',
-              category: fields.category || 'General',
-            });
-          }
-        } catch (error) {
-          console.warn(
-            `Could not fetch gallery image for event ${fields.title}:`,
-            error
-          );
-        }
-      }
-    }
-
-    return {
-      updatedAt: entry.sys.updatedAt,
-      id: entry.sys.id,
-      title: fields.title || '',
-      slug: fields.slug || '',
-      description: richTextToMarkdown(
-        fields.description as unknown as RichText
-      ),
-      date: fields.date || '',
-      time: fields.time || '',
-      venue: fields.venue || '',
-      category: fields.category || '',
-      status: (fields.status as Event['status']) || 'upcoming',
-      registrationUrl: fields.registrationUrl,
-      shareableLink: fields.shareableLink || '',
-      image: featuredImageUrl,
-      invitationImage: invitationImageUrl || undefined,
-      highlights: fields.highlights || [],
-      agenda: fields.agenda || [],
-      requirements: fields.requirements || [],
-      gallery,
-    };
+    return await mapEvent(entries.items[0]);
   } catch (error) {
     console.error('Error fetching event by slug:', error);
     throw error;

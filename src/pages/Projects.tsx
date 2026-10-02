@@ -10,8 +10,7 @@ import PageHeader from '../components/layout/PageHeader';
 import ProjectsGrid from '../components/projects/ProjectsGrid';
 import ProjectsLoadingState from '../components/projects/ProjectsLoadingState';
 import ProjectsErrorState from '../components/projects/ProjectsErrorState';
-import { fetchProjects } from '../hooks/projects/fetchProjects';
-import { cacheConfig } from '../config/cache';
+import { projectsQuery } from '../hooks/contentQueries';
 import { responsiveImage } from '../utils/contentful';
 
 const formatDate = (value: string) =>
@@ -30,11 +29,7 @@ const Projects = () => {
     error,
     refetch,
     isFetching,
-  } = useQuery({
-    queryKey: ['projects'],
-    queryFn: () => fetchProjects(),
-    ...cacheConfig.monthly,
-  });
+  } = useQuery(projectsQuery);
 
   const [featuredProject, ...archive] = projects || [];
   const description =

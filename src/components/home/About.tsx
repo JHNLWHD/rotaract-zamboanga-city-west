@@ -1,15 +1,10 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import ReactMarkdown from 'react-markdown';
-import { fetchAboutCommunity } from '../../hooks/landing-page/aboutCommunity';
-import { cacheConfig } from '../../config/cache';
+import { aboutContentQuery } from '../../hooks/contentQueries';
 
 const About = () => {
-  const { data, isLoading } = useQuery({
-    queryKey: ['aboutContent'],
-    queryFn: fetchAboutCommunity,
-    ...cacheConfig.yearly,
-  });
+  const { data, isLoading } = useQuery(aboutContentQuery);
 
   return (
     <section

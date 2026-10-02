@@ -2,7 +2,9 @@
 
 ## Status
 
-Accepted
+Superseded by [ADR 0002: Make proof of legitimacy the primary purpose](0002-legitimacy-as-primary-purpose.md).
+
+The decision and rationale below are historical. Use ADR 0002 for current guidance.
 
 ## Decision
 

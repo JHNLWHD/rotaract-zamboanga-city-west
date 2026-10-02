@@ -6,16 +6,12 @@ import { ExternalLink, Loader2 } from 'lucide-react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import PageHeader from '../components/layout/PageHeader';
-import { fetchAllAwards } from '../hooks/landing-page/awardsSection';
-import { cacheConfig } from '../config/cache';
+import { recognitionQuery } from '../hooks/contentQueries';
 import { responsiveImage } from '../utils/contentful';
 
 const Recognition = () => {
-  const { data, isLoading, isLoadingError, refetch } = useQuery({
-    queryKey: ['recognition'],
-    queryFn: fetchAllAwards,
-    ...cacheConfig.yearly,
-  });
+  const { data, isLoading, isLoadingError, refetch } =
+    useQuery(recognitionQuery);
   const awards = data?.awards || [];
   const description =
     'A chronological record of awards, certificates, and citations published by the Rotaract Club of Zamboanga City West.';

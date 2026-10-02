@@ -31,11 +31,9 @@ export default defineConfig({
         'src/vite-env.d.ts',
         'src/components/ui/**',
         // Legacy redesign leftovers are not imported by the production app.
-        'src/components/IconChanger.tsx',
-        'src/components/home/{Awards,Programs}.tsx',
         'src/components/officers/**',
-        'src/components/events/{BackToEventsButton,EventContent,EventDetailHeader,EventGallery,EventInvitation,EventRegistration,EventStatusBadge}.tsx',
-        'src/components/projects/{ProjectBreadcrumb,ProjectDetailHeader,ProjectGallery,ProjectGallerySection,ProjectMainContent,ProjectSidebar}.tsx',
+        'src/components/events/{BackToEventsButton,EventContent,EventDetailHeader,EventInvitation,EventRegistration,EventStatusBadge}.tsx',
+        'src/components/projects/{ProjectBreadcrumb,ProjectDetailHeader,ProjectSidebar}.tsx',
       ],
       thresholds: {
         statements: 99,

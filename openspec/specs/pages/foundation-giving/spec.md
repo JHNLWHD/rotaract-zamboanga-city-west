@@ -2,7 +2,9 @@
 
 ## Purpose
 
-Publish **The Rotary Foundation** club giving as a multi-year report (USD) with an **as-of** date and an FAQ explaining each fund column (Annual, PolioPlus, Other, Endowment).
+Present **The Rotary Foundation** club giving as a multi-year financial record
+with a currency label (default USD), an **as-of** date, and fund explanations.
+This page supports accountability; it does not collect donations.
 
 ## Route
 
@@ -12,20 +14,27 @@ Publish **The Rotary Foundation** club giving as a multi-year report (USD) with 
 ## Data
 
 - **Source:** Contentful types `foundationGivingReport` (singleton-style: first entry) and `foundationGivingRow` (referenced rows), via `fetchFoundationGiving()` / `useFoundationGiving()`.
-- **Cache:** React Query key `['foundation-giving']` with `cacheConfig.monthly`.
+- **Cache:** Query key `['foundation-giving']` with yearly cache settings.
+  Keep the browser query and build snapshot aligned.
 
 ## States
 
 - **Loading:** Centered spinner.
-- **Error:** Red-bordered message consistent with other CMS list-style pages.
+- **Initial error:** Message with retry. A failed refresh keeps a cached report visible.
 - **Empty:** Message when no report entry exists.
-- **Success:** Report (pink club banner, subtitle; **table on `md+`**, **per-year cards below `md`**) and “About these funds” FAQ as always-visible sections (heading + **Markdown-rendered** body per fund; not accordion).
+- **Success:** Report with neutral club banner and subtitle; **table on `md+`**,
+  **per-year cards below `md`**. “About these funds” explanations use visible
+  headings and Markdown bodies.
 
 ## Layout
 
 - Global chrome: `Navbar`, `Footer`.
-- **Page header:** Same inner-page pattern as **`Officers`** (reference implementation): gradient `main` (`from-cranberry-50 via-white to-pink-50`), `pt-32` top spacing, `max-w-7xl mx-auto px-6`, centered large title + subtitle (`text-4xl` / `md:text-5xl`, optional `text-gradient` accent); primary content column `max-w-5xl mx-auto` below the header.
-- **Report block:** **giving report** uses a **full table from the `md` breakpoint up**; **below `md`**, a **separate mobile layout** (e.g. one card per Rotary year with fund lines). The in-card pink club banner is report chrome, distinct from the site page header above.
+- **Page header:** Light editorial dossier using `PageHeader`, warm neutral
+  surfaces, serif headings, thin rules, and restrained cranberry accents.
+  The heading is “The Rotary Foundation giving”, with the report's as-of date.
+  The report and explanations use a narrower column below it.
+- **Report block:** A full table from `md` up; below `md`, one card per Rotary
+  Year with fund lines. The neutral club banner belongs to the report.
 
 ## Meta
 
@@ -36,7 +45,8 @@ Publish **The Rotary Foundation** club giving as a multi-year report (USD) with 
 
 The system SHALL expose an indexable route `/foundation-giving` with standard site chrome.
 
-The page SHALL present a **page header** (title + subtitle) consistent with other inner pages (gradient `main`, top padding, centered large heading).
+The page SHALL present a **page header** (title + description and as-of date when
+supplied) consistent with the light editorial dossier used by other record pages.
 
 The page SHALL display a titled report with columns: Rotary Year, Annual Fund, PolioPlus Fund, Other Fund, Endowment Fund, Total; amounts use the currency label from content (default USD).
 
@@ -48,9 +58,12 @@ Below the report, the page SHALL include an FAQ section with at least one explan
 
 Each FAQ field from Contentful SHALL be rendered as **GitHub-flavored Markdown** (inline formatting, lists, links), consistent with other CMS Markdown surfaces. Single newlines in a field SHALL produce line breaks on the page. FAQ rendering SHALL NOT execute raw HTML from editor content. Ordered and unordered lists inside FAQ copy SHALL display with visible markers even when the FAQ block sits inside other list layout on the page.
 
-Report figures, header text, as-of date, and FAQ copy SHALL load from Contentful; failed or missing data SHALL not show fabricated numbers.
+Report figures, report title and subtitle, as-of date, and FAQ copy SHALL load
+from Contentful; failed or missing data SHALL not show fabricated numbers.
 
 ## Non-goals
 
 - Live Rotary International API integration.
 - Multi-currency conversion beyond the displayed label.
+- CMS evidence, published figures, and release status need live verification;
+  the implemented report layout does not establish those facts.

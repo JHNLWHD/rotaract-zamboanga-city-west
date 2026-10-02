@@ -10,19 +10,20 @@ import {
 } from '@tanstack/react-query';
 import { AppContent } from './App';
 import {
-  fetchProjects,
-  fetchProjectBySlug,
-} from './hooks/projects/fetchProjects';
-import { fetchEvents } from './hooks/events/fetchEvents';
-import { fetchAllAwards } from './hooks/landing-page/awardsSection';
-import { fetchHeroContent } from './hooks/landing-page/heroSection';
-import { fetchAboutCommunity } from './hooks/landing-page/aboutCommunity';
-import {
-  fetchAllOfficers,
-  fetchPastPresidents,
-  type Officer,
-} from './hooks/officers/fetchOfficers';
-import { fetchFoundationGiving } from './hooks/foundationGiving/fetchFoundationGiving';
+  projectsQuery,
+  projectBySlugQuery,
+  eventsQuery,
+  eventBySlugQuery,
+  recognitionQuery,
+  heroContentQuery,
+  aboutContentQuery,
+  officersQuery,
+  pastPresidentsQuery,
+  foundationGivingQuery,
+  homepageEvidenceQuery,
+  assembleHomepageEvidence,
+} from './hooks/contentQueries';
+import { type Officer } from './hooks/officers/fetchOfficers';
 import { getCurrentTerm } from './data/officers';
 import { serializeJson } from './utils/seo';
 import { RenderTimeContext } from './hooks/useRenderTime';
@@ -54,6 +55,7 @@ const publicOfficer = ({
 
 export async function loadPages(): Promise<Page[]> {
   const term = getCurrentTerm();
+  const rosterQuery = officersQuery(term);
   const [
     projects,
     events,
@@ -64,14 +66,14 @@ export async function loadPages(): Promise<Page[]> {
     presidents,
     foundation,
   ] = await Promise.all([
-    fetchProjects(),
-    fetchEvents(),
-    fetchAllAwards(),
-    fetchHeroContent(),
-    fetchAboutCommunity(),
-    fetchAllOfficers(term),
-    fetchPastPresidents(),
-    fetchFoundationGiving(),
+    projectsQuery.queryFn(),
+    eventsQuery.queryFn(),
+    recognitionQuery.queryFn(),
+    heroContentQuery.queryFn(),
+    aboutContentQuery.queryFn(),
+    rosterQuery.queryFn(),
+    pastPresidentsQuery.queryFn(),
+    foundationGivingQuery.queryFn(),
   ]);
   if (!projects || !events || !recognition || !hero || !about || !foundation) {
     throw new Error(
@@ -87,12 +89,12 @@ export async function loadPages(): Promise<Page[]> {
     {
       path: '/',
       queries: [
-        [['heroContent'], hero],
-        [['aboutContent'], about],
+        [heroContentQuery.queryKey, hero],
+        [aboutContentQuery.queryKey, about],
         [
-          ['homepageEvidence', term],
-          {
-            projects: projects.slice(0, 3),
+          homepageEvidenceQuery(term).queryKey,
+          assembleHomepageEvidence({
+            projects,
             recognition,
             foundation,
             officers: [
@@ -100,41 +102,44 @@ export async function loadPages(): Promise<Page[]> {
               ...officers.directors,
               ...officers.advisors,
             ],
-          },
+          }),
         ],
       ],
     },
-    { path: '/projects', queries: [[['projects'], projects]] },
-    { path: '/events', queries: [[['events'], events]] },
-    { path: '/recognition', queries: [[['recognition'], recognition]] },
+    { path: '/projects', queries: [[projectsQuery.queryKey, projects]] },
+    { path: '/events', queries: [[eventsQuery.queryKey, events]] },
+    {
+      path: '/recognition',
+      queries: [[recognitionQuery.queryKey, recognition]],
+    },
     {
       path: '/officers',
       queries: [
-        [['officers', term], officers],
-        [['pastPresidents'], presidents],
+        [rosterQuery.queryKey, officers],
+        [pastPresidentsQuery.queryKey, presidents],
       ],
     },
     {
       path: '/foundation-giving',
-      queries: [[['foundation-giving'], foundation]],
+      queries: [[foundationGivingQuery.queryKey, foundation]],
     },
   ];
 
   for (const project of projects) {
-    const record = await fetchProjectBySlug(project.slug);
+    const record = await projectBySlugQuery(project.slug).queryFn();
     if (!record)
       throw new Error(`Project disappeared during build: ${project.slug}`);
     pages.push({
       path: `/projects/${record.slug}`,
       lastmod: record.updatedAt,
-      queries: [[['project', record.slug], record]],
+      queries: [[projectBySlugQuery(record.slug).queryKey, record]],
     });
   }
   for (const event of events) {
     pages.push({
       path: `/events/${event.date.slice(0, 10)}/${event.slug}`,
       lastmod: event.updatedAt,
-      queries: [[['event', event.slug], event]],
+      queries: [[eventBySlugQuery(event.slug).queryKey, event]],
     });
   }
   return pages;

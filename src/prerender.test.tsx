@@ -62,6 +62,7 @@ const project = {
   highlights: [],
   image: 'https://images.test/project.jpg',
 };
+const { description, gallery, highlights, ...projectListItem } = project;
 const event = {
   id: 'e1',
   slug: 'induction',
@@ -83,7 +84,7 @@ const event = {
 beforeEach(() => {
   Object.values(cms).forEach(mock => mock.mockReset());
   vi.spyOn(console, 'error').mockImplementation(() => undefined);
-  cms.fetchProjects.mockResolvedValue([project]);
+  cms.fetchProjects.mockResolvedValue([projectListItem]);
   cms.fetchProjectBySlug.mockResolvedValue(project);
   cms.fetchEvents.mockResolvedValue([event]);
   cms.fetchAllAwards.mockResolvedValue({ awards: [] });
@@ -106,6 +107,8 @@ beforeEach(() => {
         displayOrder: 1,
         email: 'private@example.test',
         phone: 'private-phone',
+        responsibilities: 'private-responsibilities',
+        socialMedia: { facebook: 'https://private-profile.test/' },
       },
     ],
     directors: [],
@@ -147,7 +150,9 @@ it('renders the actual public routes with content, metadata and safe query snaps
       doc.querySelector('link[rel="canonical"]')?.getAttribute('href')
     ).toBe(`https://rotaract.rotaryzcwest.org${page.path}`);
     expect(rendered.body).not.toMatch(/Loading .*records?/);
-    expect(rendered.state).not.toMatch(/private@example|private-phone/);
+    expect(rendered.state).not.toMatch(
+      /private@example|private-phone|private-responsibilities|private-profile/
+    );
     const state = JSON.parse(rendered.state);
     expect(state.routes).toEqual(routes);
     expect(state.queries.length).toBeGreaterThan(0);
@@ -165,6 +170,69 @@ it('renders the actual public routes with content, metadata and safe query snaps
   ).toEqual(routes);
 });
 
+it('assembles homepage proof from already loaded public build records', async () => {
+  const projects = ['first', 'second', 'third', 'fourth'].map(slug => ({
+    ...projectListItem,
+    id: slug,
+    slug,
+  }));
+  cms.fetchProjects.mockResolvedValue(projects);
+  cms.fetchProjectBySlug.mockImplementation(async slug => ({
+    ...project,
+    id: slug,
+    slug,
+  }));
+
+  const pages = await loadPages();
+  expect(pages[0].queries[2][1]).toEqual({
+    projects: projects.slice(0, 3),
+    recognition: { awards: [] },
+    officers: [
+      {
+        id: 'o1',
+        name: 'President Name',
+        position: 'President',
+        term: '2026-2027',
+        category: 'Executive',
+        displayOrder: 1,
+        profileImage: undefined,
+      },
+    ],
+    foundation: await cms.fetchFoundationGiving.mock.results[0].value,
+  });
+  expect(pages.find(page => page.path === '/projects')?.queries[0][1]).toBe(
+    projects
+  );
+  for (const [name, fetcher] of Object.entries(cms)) {
+    if (name === 'fetchProjectBySlug') expect(fetcher).toHaveBeenCalledTimes(4);
+    else if (name === 'fetchOfficers') expect(fetcher).not.toHaveBeenCalled();
+    else expect(fetcher).toHaveBeenCalledTimes(1);
+  }
+});
+
+it('renders successful empty archives and an empty roster in initial HTML', async () => {
+  cms.fetchProjects.mockResolvedValue([]);
+  cms.fetchEvents.mockResolvedValue([]);
+  cms.fetchAllOfficers.mockResolvedValue({
+    executive: [],
+    directors: [],
+    advisors: [],
+  });
+  const pages = await loadPages();
+  expect(pages).toHaveLength(6);
+  for (const [path, message] of [
+    ['/', 'Project records will appear here when published.'],
+    ['/projects', 'No project records have been published yet.'],
+    ['/events', 'No event records have been published yet.'],
+    ['/officers', 'No current officer records have been published yet.'],
+  ]) {
+    const rendered = renderPage(pages.find(page => page.path === path)!);
+    expect(rendered.body).toContain(message);
+    expect(rendered.body).not.toContain('temporarily unavailable');
+  }
+  expect(cms.fetchProjectBySlug).not.toHaveBeenCalled();
+});
+
 it.each([
   ['/', 'Service day'],
   ['/events', 'Induction'],
@@ -172,6 +240,8 @@ it.each([
   ['/recognition', 'No recognition records have been published yet.'],
   ['/officers', 'President Name'],
   ['/foundation-giving', 'Club giving'],
+  ['/projects/service-day', 'Service day'],
+  ['/events/2026-08-01/induction', 'Induction'],
 ])(
   'keeps the hydrated %s snapshot visible when its refresh fails',
   async (path, visibleRecord) => {
@@ -238,8 +308,15 @@ it('fails if a listed project disappears or a CMS request fails', async () => {
   await expect(loadPages()).rejects.toThrow('CMS offline');
 });
 
-it('refuses a page when a component query was not included in the snapshot', () => {
-  expect(() => renderPage({ path: '/recognition', queries: [] })).toThrow(
+it.each([
+  '/',
+  '/projects',
+  '/events',
+  '/recognition',
+  '/officers',
+  '/foundation-giving',
+])('refuses %s when its required query data is missing', path => {
+  expect(() => renderPage({ path, queries: [] })).toThrow(
     'Unresolved page data'
   );
 });

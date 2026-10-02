@@ -29,12 +29,16 @@ Define how the public site exposes metadata for search engines and social platfo
 
 ### Robots
 
-| Context | `robots` |
-|---------|----------|
-| All primary content routes (home, lists, details, officers, foundation giving) | `index, follow` with snippet/image/video preview directives where set |
-| NotFound (404) | `noindex, nofollow` |
+| Context                                                                                   | `robots`                                                                    |
+| ----------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| All public record routes (home, lists, details, officers, recognition, Foundation giving) | Indexable by default, with explicit robots and preview directives where set |
+| NotFound (404)                                                                            | `noindex, nofollow`                                                         |
 
-Develop and preview deployments also send `X-Robots-Tag: noindex, nofollow` and block crawling in `robots.txt`. Preserve these headers even though canonical URLs point at production. A client-side missing project or event adds `noindex, follow`. A temporary CMS failure is retryable and is not a missing record.
+Branch and deploy-preview build configuration selects `X-Robots-Tag: noindex,
+nofollow` and a crawling block in `robots.txt`. Preserve that protection even
+though canonical URLs point at production. Verify live headers per deployment.
+A client-side missing project or event adds `noindex, follow`. A temporary CMS
+failure is retryable and is not a missing record.
 
 ### Images
 
@@ -56,9 +60,11 @@ Develop and preview deployments also send `X-Robots-Tag: noindex, nofollow` and 
 
 ### Home (`/`)
 
-- Full SEO surface: title, meta title/description/keywords, author, robots, viewport, geo, OG, Twitter, theme, icons, canonical, font preconnects.
+- Page title and description, keywords, author, robots, geo, OG/Twitter, theme,
+  and canonical come from Helmet. The HTML shell supplies viewport, icons,
+  and font loading.
 - **JSON-LD:** `Organization` with club identity, affiliation, sponsor and public contact details. Do not invent an on-site search action.
-- **Third-party scripts** in head (e.g. chat): documented in home page spec; consider impact on CLS and crawl budget.
+- The shared HTML shell loads the chatbot; see the [home spec](../pages/home/spec.md#meta-and-scripts).
 
 ### List pages (`/projects`, `/events`)
 
@@ -77,6 +83,13 @@ Develop and preview deployments also send `X-Robots-Tag: noindex, nofollow` and 
 
 - **JSON-LD:** `Organization` with `employee` populated from displayed officer names and roles. Do not embed unused officer email, phone, or other private profile fields in the static query snapshot.
 
+### Recognition (`/recognition`)
+
+- Unique title and description, production canonical, and OG/Twitter tags.
+  Records show issuer, source, and evidence images only when supplied.
+- CMS evidence and publication status require a separate check; the route and
+  field support do not establish that every recognition has verified evidence.
+
 ### Foundation Giving (`/foundation-giving`)
 
 - **Canonical / `og:url`:** `https://rotaract.rotaryzcwest.org/foundation-giving`.
@@ -88,18 +101,21 @@ Develop and preview deployments also send `X-Robots-Tag: noindex, nofollow` and 
 
 - Title and description for error UX; **`noindex, nofollow`**; canonical `https://rotaract.rotaryzcwest.org/404`.
 - See [specs README](../README.md#catch-all-and-notfound).
-- Netlify serves the generated `404.html` with HTTP 404 for an unknown route. The SPA-wide HTTP 200 rewrite is removed. On hydration, retain the missing page for the requested path, while allowing later navigation to valid routes.
+- The configured Netlify output uses generated `404.html` with HTTP 404 for an
+  unknown route. Preserve the removal of the SPA-wide HTTP 200 rewrite. On
+  hydration, retain the missing page for the requested path, while allowing
+  later navigation to valid routes. Verify live status codes for each release.
 
 ## Structured data summary
 
-| Schema.org type | Where used |
-|-----------------|------------|
-| `Organization` | Home, officers (different shapes), project/event organizers |
-| `CollectionPage` | Projects list, events list |
-| `ItemList` | Inside collection pages |
-| `Article` | Project detail |
-| `Event` | Event detail; event items in list JSON-LD |
-| `BreadcrumbList` | Foundation giving |
+| Schema.org type  | Where used                                      |
+| ---------------- | ----------------------------------------------- |
+| `Organization`   | Home, officers, project author, event organizer |
+| `CollectionPage` | Projects list, events list                      |
+| `ItemList`       | Inside collection pages                         |
+| `Article`        | Project detail                                  |
+| `Event`          | Event detail                                    |
+| `BreadcrumbList` | Foundation giving                               |
 
 ## Requirements (maintenance)
 
@@ -112,11 +128,32 @@ Develop and preview deployments also send `X-Robots-Tag: noindex, nofollow` and 
 
 ## Content publication and rebuilds
 
-Static HTML reflects the published Contentful snapshot at build time. The browser refreshes public query data after hydration without replacing the snapshot with a loading screen. CMS drafts are never used by this pipeline.
+Static HTML reflects the published Contentful snapshot at build time. Browser
+queries and build snapshots must use the same query keys and record shapes.
+The browser refreshes public query data after hydration without replacing cached
+records with a loading or error screen. Request failures must reject rather than
+replace cached records with empty data. CMS drafts are never used by this pipeline.
+
+Officer entries in public query snapshots contain only displayed fields; omit
+unused officer contact and profile fields. Every snapshot includes the build route
+inventory. Project and event archives filter refreshed records against it. The
+homepage selects its three projects after that filter. Existing records can
+refresh. New detail URLs wait for a successful build and deployment. Server
+builds and local draft reviews have no deployed route restriction.
+
+Local draft review uses Contentful's read-only Preview API on `127.0.0.1`; see
+the [README](../../../README.md#local-contentful-draft-review). It is separate
+from Contentful publication, generated build output, and verified deployment.
+Missing preview credentials stop draft mode. Preserve that separation.
 
 Before releasing the static build, configure and verify a Contentful webhook to the appropriate Netlify build hook. It must rebuild after entry or asset publication, unpublication, and deletion. Content type publication may also require a rebuild. The CMS environment is shared with production; do not create hooks, publish content, or trigger a production build without the user's approval. Build-hook URLs are credentials and must not be committed.
 
 After a controlled publication, verify that the matching Netlify deployment succeeds, its initial HTML contains the changed content, removed paths return 404, and the sitemap matches the same published records. This external publication check is separate from local build verification.
+
+Current CMS evidence, duplicate decisions, draft/publication versions, active
+webhooks, approved OG assets, and the matching live release are unverified by
+source inspection. Historical handoffs are routing context, not current release
+evidence. Resolve and verify those facts in their separately approved scopes.
 
 ## Related documentation
 
