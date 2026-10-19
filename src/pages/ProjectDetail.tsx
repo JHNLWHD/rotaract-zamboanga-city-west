@@ -155,10 +155,10 @@ const ProjectDetail = () => {
                 <img
                   {...responsiveImage(
                     project.image,
-                    '(min-width: 1024px) 960px, calc(100vw - 40px)'
+                    '(min-width: 1280px) 1216px, (min-width: 1024px) calc(100vw - 64px), (min-width: 640px) calc(100vw - 48px), calc(100vw - 40px)'
                   )}
                   alt={`${project.title} project record`}
-                  className="max-h-[32rem] w-full object-contain"
+                  className="h-auto w-full object-contain"
                 />
               </figure>
             )}

@@ -20,6 +20,11 @@ export const AppContent = ({ notFoundPath }: { notFoundPath?: string }) => {
       <Toaster />
       <Sonner />
       <ScrollToTop />
+      {import.meta.env.MODE === 'draft-review' && (
+        <aside className="border-b border-cranberry-200 bg-cranberry-50 px-5 py-2 text-center text-sm text-cranberry-900">
+          Draft preview · For content review. These changes are not published.
+        </aside>
+      )}
       {pathname === notFoundPath ? (
         <NotFound />
       ) : (

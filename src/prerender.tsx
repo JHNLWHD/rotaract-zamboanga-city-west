@@ -145,12 +145,16 @@ export async function loadPages(): Promise<Page[]> {
   return pages;
 }
 
-export function renderPage(page: Page, routes?: string[]) {
+export function renderPage(
+  page: Page,
+  routes?: string[],
+  reviewQueries: Page['queries'] = []
+) {
   const client = new QueryClient({
     defaultOptions: { queries: { retry: false, gcTime: Infinity } },
   });
   // Keep the snapshot visible while the browser refreshes published CMS data.
-  for (const [key, data] of page.queries)
+  for (const [key, data] of [...reviewQueries, ...page.queries])
     client.setQueryData(key, data, { updatedAt: 0 });
   const renderedAt = Date.now();
   Helmet.canUseDOM = false;

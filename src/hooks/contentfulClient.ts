@@ -17,6 +17,20 @@ const client = createClient({
   environment: import.meta.env.VITE_CONTENTFUL_ENVIRONMENT || 'master',
 });
 
+let recordClient = client;
+if (import.meta.env.SSR && import.meta.env.MODE === 'draft-review') {
+  const previewToken = process.env.CONTENTFUL_PREVIEW_TOKEN;
+  if (!previewToken) {
+    throw new Error('Draft review builds require CONTENTFUL_PREVIEW_TOKEN.');
+  }
+  recordClient = createClient({
+    space: import.meta.env.VITE_CONTENTFUL_SPACE_ID,
+    environment: import.meta.env.VITE_CONTENTFUL_ENVIRONMENT || 'master',
+    host: 'preview.contentful.com',
+    accessToken: previewToken,
+  });
+}
+
 export const fetchEntries = async () => {
   try {
     const entries = await client.getEntries();
@@ -29,4 +43,5 @@ export const fetchEntries = async () => {
 
 export default {
   client,
+  recordClient,
 };

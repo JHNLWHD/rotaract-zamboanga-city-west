@@ -63,7 +63,7 @@ async function mapEvent(
   let featuredImageUrl = '';
   if (fields.featuredImage) {
     try {
-      const asset = await contentful.client.getAsset(
+      const asset = await contentful.recordClient.getAsset(
         fields.featuredImage.sys.id
       );
       featuredImageUrl = processAsset(asset);
@@ -79,7 +79,7 @@ async function mapEvent(
   let invitationImageUrl = '';
   if (fields.invitationImage) {
     try {
-      const asset = await contentful.client.getAsset(
+      const asset = await contentful.recordClient.getAsset(
         fields.invitationImage.sys.id
       );
       invitationImageUrl = processAsset(asset);
@@ -96,7 +96,9 @@ async function mapEvent(
   if (fields.gallery && fields.gallery.length > 0) {
     for (const galleryLink of fields.gallery) {
       try {
-        const asset = await contentful.client.getAsset(galleryLink.sys.id);
+        const asset = await contentful.recordClient.getAsset(
+          galleryLink.sys.id
+        );
         const url = processAsset(asset);
         if (url) {
           gallery.push({
@@ -155,7 +157,10 @@ export async function fetchEvents(
       query['fields.status'] = status;
     }
 
-    const entries = await getAllEntries<EventSkeleton>(query);
+    const entries = await getAllEntries<EventSkeleton>(
+      query,
+      contentful.recordClient
+    );
 
     const events: Event[] = await Promise.all(entries.items.map(mapEvent));
 
@@ -194,7 +199,7 @@ export async function fetchEvents(
 
 export async function fetchEventBySlug(slug: string): Promise<Event | null> {
   try {
-    const entries = await contentful.client.getEntries<EventSkeleton>({
+    const entries = await contentful.recordClient.getEntries<EventSkeleton>({
       content_type: 'event',
       'fields.slug': slug,
       limit: 1,

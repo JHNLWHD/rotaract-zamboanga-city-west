@@ -132,7 +132,7 @@ Static HTML reflects the published Contentful snapshot at build time. Browser
 queries and build snapshots must use the same query keys and record shapes.
 The browser refreshes public query data after hydration without replacing cached
 records with a loading or error screen. Request failures must reject rather than
-replace cached records with empty data. CMS drafts are never used by this pipeline.
+replace cached records with empty data. Production builds never use CMS drafts.
 
 Officer entries in public query snapshots contain only displayed fields; omit
 unused officer contact and profile fields. Every snapshot includes the build route
@@ -145,6 +145,18 @@ Local draft review uses Contentful's read-only Preview API on `127.0.0.1`; see
 the [README](../../../README.md#local-contentful-draft-review). It is separate
 from Contentful publication, generated build output, and verified deployment.
 Missing preview credentials stop draft mode. Preserve that separation.
+
+The `develop` branch also supports a hosted draft review snapshot. Its build
+reads project/event drafts through the Preview API using a server-side
+`CONTENTFUL_PREVIEW_TOKEN`; other sections remain published. The build can
+reuse the host's existing preview key, removing its `VITE_` variable before
+Vite runs. Browser record
+queries use the saved snapshot, and every page displays a draft-preview label.
+Later CMS edits require another develop build. Private preview credentials must
+never appear in browser output. The build rejects production context and other
+hosted branches. Keep `noindex, nofollow` on this review deployment; it is not
+access control. Production and other preview branches continue to use published
+records.
 
 Before releasing the static build, configure and verify a Contentful webhook to the appropriate Netlify build hook. It must rebuild after entry or asset publication, unpublication, and deletion. Content type publication may also require a rebuild. The CMS environment is shared with production; do not create hooks, publish content, or trigger a production build without the user's approval. Build-hook URLs are credentials and must not be committed.
 

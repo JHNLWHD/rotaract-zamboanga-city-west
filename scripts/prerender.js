@@ -106,11 +106,14 @@ export function validateHtml(html, route, status = 200) {
   }
 }
 
-async function buildPages() {
+export async function buildPages(
+  mode = process.argv.includes('--draft-review')
+    ? 'draft-review'
+    : process.argv.includes('--development')
+      ? 'development'
+      : 'production'
+) {
   const { createServer } = await import('vite');
-  const mode = process.argv.includes('--development')
-    ? 'development'
-    : 'production';
   const vite = await createServer({
     mode,
     server: { middlewareMode: true },
@@ -120,19 +123,27 @@ async function buildPages() {
     const { loadPages, renderPage } =
       await vite.ssrLoadModule('/src/prerender.tsx');
     const pages = await loadPages();
+    const reviewQueries =
+      mode === 'draft-review'
+        ? pages.flatMap(page =>
+            page.queries.filter(([key]) =>
+              ['project', 'projects', 'event', 'events'].includes(key[0])
+            )
+          )
+        : [];
     const xml = sitemap(pages);
     const routes = pages.map(page => page.path);
     const template = await readFile('dist/index.html', 'utf8');
     for (const page of pages) {
       const target = path.join('dist', outputFile(page.path));
-      const html = pageHtml(template, renderPage(page, routes));
+      const html = pageHtml(template, renderPage(page, routes, reviewQueries));
       validateHtml(html, page.path);
       await mkdir(path.dirname(target), { recursive: true });
       await writeFile(target, html);
     }
     const missing = pageHtml(
       template,
-      renderPage({ path: '/404', queries: [] }, routes),
+      renderPage({ path: '/404', queries: [] }, routes, reviewQueries),
       404
     );
     validateHtml(missing, '/404', 404);
@@ -141,12 +152,12 @@ async function buildPages() {
     const headers = await readFile('dist/_headers', 'utf8');
     assert(
       headers.includes(
-        `X-Robots-Tag: ${mode === 'development' ? 'noindex, nofollow' : 'index, follow'}`
+        `X-Robots-Tag: ${mode === 'production' ? 'index, follow' : 'noindex, nofollow'}`
       ),
       'Wrong indexing policy for build context'
     );
     console.log(
-      `Prerendered ${pages.length} public routes, sitemap.xml, and 404.html.`
+      `Prerendered ${pages.length} ${mode === 'draft-review' ? 'draft review' : 'public'} routes, sitemap.xml, and 404.html.`
     );
   } finally {
     await vite.close();

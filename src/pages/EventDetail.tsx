@@ -194,10 +194,10 @@ const EventDetail = () => {
               <img
                 {...responsiveImage(
                   featureImage,
-                  '(min-width: 1024px) 960px, calc(100vw - 40px)'
+                  '(min-width: 1280px) 1216px, (min-width: 1024px) calc(100vw - 64px), (min-width: 640px) calc(100vw - 48px), calc(100vw - 40px)'
                 )}
                 alt={`${event.title} event record`}
-                className="mt-7 max-h-[32rem] w-full bg-[#f4f1ec] object-contain"
+                className="mt-7 h-auto w-full bg-[#f4f1ec] object-contain"
               />
             )}
 

@@ -11,7 +11,7 @@ const EventsGrid: React.FC<EventsGridProps> = ({ events, onShareEvent }) => {
   if (!events?.length) return null;
 
   return (
-    <div role="list" aria-label="Club event records">
+    <div className="space-y-5" role="list" aria-label="Club event records">
       {events.map(event => (
         <EventCard key={event.id} event={event} onShare={onShareEvent} />
       ))}

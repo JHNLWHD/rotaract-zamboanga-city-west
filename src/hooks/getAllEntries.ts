@@ -2,14 +2,15 @@ import type { EntrySkeletonType } from 'contentful';
 import contentful from './contentfulClient';
 
 export async function getAllEntries<T extends EntrySkeletonType>(
-  query: Record<string, string | number>
+  query: Record<string, string | number>,
+  client = contentful.client
 ) {
-  const first = await contentful.client.getEntries<T>(query);
+  const first = await client.getEntries<T>(query);
   if (query.limit) return first;
 
   const items = [...first.items];
   while (items.length < first.total) {
-    const page = await contentful.client.getEntries<T>({
+    const page = await client.getEntries<T>({
       ...query,
       skip: items.length,
     });

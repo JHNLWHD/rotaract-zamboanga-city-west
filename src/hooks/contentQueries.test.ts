@@ -7,7 +7,9 @@ const { client, fetchAllAwards, fetchOfficers, fetchFoundationGiving } =
     fetchOfficers: vi.fn(),
     fetchFoundationGiving: vi.fn(),
   }));
-vi.mock('./contentfulClient', () => ({ default: { client } }));
+vi.mock('./contentfulClient', () => ({
+  default: { client, recordClient: client },
+}));
 vi.mock('./landing-page/awardsSection', () => ({ fetchAllAwards }));
 vi.mock('./officers/fetchOfficers', () => ({ fetchOfficers }));
 vi.mock('./foundationGiving/fetchFoundationGiving', () => ({

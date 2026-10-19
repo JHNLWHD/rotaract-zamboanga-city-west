@@ -5,7 +5,9 @@ const client = vi.hoisted(() => ({
   getAsset: vi.fn(),
 }));
 
-vi.mock('../contentfulClient', () => ({ default: { client } }));
+vi.mock('../contentfulClient', () => ({
+  default: { client, recordClient: client },
+}));
 
 import { fetchProjectBySlug, fetchProjects } from './fetchProjects';
 

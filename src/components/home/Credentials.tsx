@@ -85,7 +85,7 @@ const Credentials = () => {
                 </div>
 
                 {featuredProject ? (
-                  <article className="grid gap-6 sm:grid-cols-[0.9fr_1.1fr] sm:items-start">
+                  <article className="editorial-card grid gap-6 p-5 sm:grid-cols-[0.9fr_1.1fr] sm:items-start sm:p-6">
                     {featuredProject.image && (
                       <img
                         {...responsiveImage(
@@ -93,7 +93,7 @@ const Credentials = () => {
                           '(min-width: 1024px) 352px, (min-width: 640px) 45vw, calc(100vw - 40px)'
                         )}
                         alt={`${featuredProject.title} project record`}
-                        className="aspect-[4/3] w-full bg-[#f4f1ec] object-contain"
+                        className="aspect-[4/3] w-full rounded-lg border border-slate-100 bg-[#f4f1ec] object-contain"
                         loading="lazy"
                       />
                     )}
@@ -103,7 +103,7 @@ const Credentials = () => {
                         {featuredProject.category &&
                           ` · ${featuredProject.category}`}
                       </p>
-                      <h4 className="mt-3 text-3xl font-semibold leading-tight text-slate-950">
+                      <h4 className="mt-3 text-2xl font-semibold leading-tight text-slate-950 sm:text-3xl">
                         {featuredProject.title}
                       </h4>
                       {featuredProject.shortDescription &&

@@ -8,6 +8,7 @@
     "dev:drafts": "vite --mode drafts --host 127.0.0.1",
     "build": "cp public/robots.prod.txt public/robots.txt && cp public/_headers.prod public/_headers && npm run type-check && vite build && node scripts/prerender.js",
     "build:dev": "cp public/robots.dev.txt public/robots.txt && cp public/_headers.dev public/_headers && npm run type-check && vite build --mode development && node scripts/prerender.js --development",
+    "build:draft-review": "npm run type-check && node scripts/build-draft-review.js",
     "type-check": "tsc --noEmit -p tsconfig.app.json && tsc --noEmit -p tsconfig.node.json",
     "test": "vitest run",
     "test:watch": "vitest",

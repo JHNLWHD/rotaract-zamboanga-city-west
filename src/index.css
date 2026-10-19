@@ -127,6 +127,21 @@
     @apply border-t border-slate-200 py-10 md:py-16;
   }
 
+  .editorial-card {
+    @apply rounded-xl border border-slate-200 bg-white transition-[border-color,box-shadow] duration-200;
+    box-shadow:
+      0 2px 4px rgb(15 23 42 / 3%),
+      0 12px 28px -14px rgb(15 23 42 / 18%);
+  }
+
+  .editorial-card:hover,
+  .editorial-card:focus-within {
+    @apply border-cranberry-200;
+    box-shadow:
+      0 3px 6px rgb(15 23 42 / 4%),
+      0 18px 36px -14px rgb(15 23 42 / 23%);
+  }
+
   .editorial-kicker {
     @apply text-xs font-bold uppercase tracking-[0.16em] text-cranberry-700;
   }

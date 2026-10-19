@@ -98,4 +98,51 @@ describe('Contentful client wrapper', () => {
       'Draft preview requires VITE_CONTENTFUL_PREVIEW_TOKEN'
     );
   });
+
+  it.each(['', 'review-env'])(
+    'uses server-only preview access for records in environment %s while other sections stay published',
+    async environment => {
+      vi.stubEnv('MODE', 'draft-review');
+      vi.stubEnv('SSR', true);
+      vi.stubEnv('VITE_CONTENTFUL_ENVIRONMENT', environment);
+      vi.stubEnv('CONTENTFUL_PREVIEW_TOKEN', 'server-preview-token');
+      vi.stubEnv('VITE_CONTENTFUL_DELIVERY_TOKEN', 'delivery-test-token');
+      const { default: contentful } = await import('./contentfulClient');
+
+      expect(createClient).toHaveBeenCalledWith(
+        expect.objectContaining({
+          host: 'cdn.contentful.com',
+          accessToken: 'delivery-test-token',
+        })
+      );
+      expect(createClient).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          host: 'preview.contentful.com',
+          accessToken: 'server-preview-token',
+          environment: environment || 'master',
+        })
+      );
+      expect(contentful.recordClient).not.toBe(contentful.client);
+    }
+  );
+
+  it('never uses server preview access in the hosted review browser', async () => {
+    vi.stubEnv('MODE', 'draft-review');
+    vi.stubEnv('SSR', false);
+    vi.stubEnv('CONTENTFUL_PREVIEW_TOKEN', 'server-preview-token');
+    const { default: contentful } = await import('./contentfulClient');
+    expect(createClient).toHaveBeenLastCalledWith(
+      expect.objectContaining({ host: 'cdn.contentful.com' })
+    );
+    expect(contentful.recordClient).toBe(contentful.client);
+  });
+
+  it('stops a draft review build when server preview access is missing', async () => {
+    vi.stubEnv('MODE', 'draft-review');
+    vi.stubEnv('SSR', true);
+    vi.stubEnv('CONTENTFUL_PREVIEW_TOKEN', '');
+    await expect(import('./contentfulClient')).rejects.toThrow(
+      'Draft review builds require CONTENTFUL_PREVIEW_TOKEN'
+    );
+  });
 });

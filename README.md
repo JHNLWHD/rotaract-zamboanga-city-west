@@ -62,10 +62,32 @@ npm run dev:drafts
 This binds to `127.0.0.1` and reads the latest entries and asset captions through
 Contentful's read-only Preview API. Refresh the page after changing a draft.
 Nothing is published. Do not expose this local server or its token publicly.
-Regular development and both deployment builds continue to use published content.
+Regular development, `build`, and `build:dev` continue to use published content.
 Missing preview credentials stop draft mode instead of silently showing live copy.
 
 ## Publication and deployment
+
+### Develop draft review
+
+The `develop` branch uses `npm run build:draft-review`. It reads project and
+event drafts at build time and marks every page as a draft preview. Other
+sections still use published records. The browser reads a saved record snapshot;
+rebuild develop to review later Contentful edits.
+
+Use `CONTENTFUL_PREVIEW_TOKEN` as the server-side credential. When Netlify
+supports granular scopes, use **Builds** scope and a value only for `develop`.
+The current host already has `VITE_CONTENTFUL_PREVIEW_TOKEN`; the guarded build
+can reuse it and removes that variable before Vite runs. It is never used by
+the hosted review browser.
+The build fails when access is missing or when invoked in a production context.
+Production and other preview branches keep their existing published-content
+builds. Draft review output has `noindex, nofollow` protection; this controls
+indexing, not access to the review URL.
+
+For a local check, supply the server-side token to `npm run build:draft-review`
+and serve `dist` locally. The build does not publish entries or assets.
+
+### Release states
 
 Keep these states distinct:
 

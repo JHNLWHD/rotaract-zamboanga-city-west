@@ -16,6 +16,10 @@
 [context.branch-deploy]
   command = "npm run test:coverage && npm run lint:check && npm run build:dev"
 
+# Only develop renders project/event drafts. The token is build-only, without VITE_.
+[context.develop]
+  command = "npm run test:coverage && npm run lint:check && npm run build:draft-review"
+
 # Production context
 [context.production]
   command = "npm run test:coverage && npm run lint:check && npm run build"

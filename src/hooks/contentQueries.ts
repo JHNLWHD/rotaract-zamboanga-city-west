@@ -1,4 +1,5 @@
 import { cacheConfig } from '../config/cache';
+import { draftQuery } from '../utils/draftQuery';
 import {
   fetchProjects,
   fetchProjectBySlug,
@@ -36,13 +37,13 @@ export const aboutContentQuery = {
 
 export const projectsQuery = {
   queryKey: ['projects'],
-  queryFn: () => fetchProjects(),
+  queryFn: draftQuery(['projects'], () => fetchProjects()),
   ...cacheConfig.monthly,
 };
 
 export const eventsQuery = {
   queryKey: ['events'],
-  queryFn: () => fetchEvents(),
+  queryFn: draftQuery(['events'], () => fetchEvents()),
   ...cacheConfig.monthly,
 };
 
@@ -54,10 +55,10 @@ export const recognitionQuery = {
 
 export const projectBySlugQuery = (slug: string | undefined) => ({
   queryKey: ['project', slug],
-  queryFn: async () => {
+  queryFn: draftQuery(['project', slug], async () => {
     if (!slug) throw new Error('Slug is required');
     return fetchProjectBySlug(slug);
-  },
+  }),
   enabled: !!slug,
   staleTime: 5 * 60 * 1000,
   retry: 1,
@@ -65,10 +66,10 @@ export const projectBySlugQuery = (slug: string | undefined) => ({
 
 export const eventBySlugQuery = (slug: string | undefined) => ({
   queryKey: ['event', slug],
-  queryFn: async () => {
+  queryFn: draftQuery(['event', slug], async () => {
     if (!slug) throw new Error('Slug is required');
     return fetchEventBySlug(slug);
-  },
+  }),
   enabled: !!slug,
   staleTime: 5 * 60 * 1000,
   retry: 1,

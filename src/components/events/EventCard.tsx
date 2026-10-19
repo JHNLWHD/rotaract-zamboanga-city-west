@@ -24,10 +24,13 @@ const EventCard: React.FC<EventCardProps> = ({ event, onShare }) => {
 
   return (
     <article
-      className={`grid gap-5 border-t border-slate-300 py-6 md:grid-cols-[8rem_minmax(0,1fr)] lg:gap-8 ${event.image ? 'lg:grid-cols-[8rem_minmax(0,1fr)_15rem]' : ''}`}
+      className={`editorial-card grid gap-5 p-5 sm:p-6 md:grid-cols-[6rem_minmax(0,1fr)] lg:gap-8 lg:p-7 ${event.image ? 'lg:grid-cols-[6rem_minmax(0,1fr)_15rem]' : ''}`}
       role="listitem"
     >
-      <time dateTime={event.date} className="block">
+      <time
+        dateTime={event.date}
+        className="flex w-fit items-baseline gap-2 self-start rounded-lg border border-cranberry-100 bg-cranberry-50 px-4 py-3 md:block md:w-full md:text-center"
+      >
         <span className="block text-xs font-bold uppercase tracking-[0.14em] text-cranberry-700">
           {date.toLocaleDateString('en-US', {
             month: 'short',
@@ -53,7 +56,7 @@ const EventCard: React.FC<EventCardProps> = ({ event, onShare }) => {
           {event.category}
           {` · ${status}`}
         </p>
-        <h3 className="mt-2 text-3xl font-semibold leading-tight text-slate-950">
+        <h3 className="mt-2 text-2xl font-semibold leading-tight text-slate-950 sm:text-3xl">
           <Link to={detailPath} className="hover:text-cranberry-700">
             {event.title}
           </Link>
@@ -111,7 +114,7 @@ const EventCard: React.FC<EventCardProps> = ({ event, onShare }) => {
               '(min-width: 1024px) 240px, (min-width: 768px) calc(100vw - 224px), calc(100vw - 40px)'
             )}
             alt={`${event.title} event record`}
-            className="aspect-[4/3] w-full bg-[#f4f1ec] object-contain"
+            className="aspect-[4/3] w-full rounded-lg border border-slate-100 bg-[#f4f1ec] object-contain"
             loading="lazy"
           />
         </Link>

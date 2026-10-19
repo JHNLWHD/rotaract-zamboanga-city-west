@@ -114,7 +114,7 @@ const Projects = () => {
               <>
                 <section aria-labelledby="featured-project-heading">
                   <p className="editorial-kicker">Featured record</p>
-                  <article className="mt-4 grid gap-7 border-y border-slate-300 py-7 lg:grid-cols-[1.15fr_0.85fr] lg:items-start lg:gap-12">
+                  <article className="editorial-card mt-4 grid gap-7 p-5 sm:p-7 lg:grid-cols-[1.15fr_0.85fr] lg:items-start lg:gap-10">
                     {featuredProject.image && (
                       <img
                         {...responsiveImage(
@@ -122,7 +122,7 @@ const Projects = () => {
                           '(min-width: 1024px) 672px, calc(100vw - 40px)'
                         )}
                         alt={`${featuredProject.title} project record`}
-                        className="aspect-[16/10] w-full bg-[#f4f1ec] object-contain"
+                        className="aspect-[4/3] w-full rounded-lg border border-slate-100 bg-[#f4f1ec] object-contain"
                       />
                     )}
                     <div>
@@ -133,7 +133,7 @@ const Projects = () => {
                       </p>
                       <h2
                         id="featured-project-heading"
-                        className="mt-3 text-4xl font-semibold leading-tight text-slate-950"
+                        className="mt-3 text-3xl font-semibold leading-tight text-slate-950 sm:text-4xl"
                       >
                         {featuredProject.title}
                       </h2>
