@@ -16,9 +16,9 @@
 [context.branch-deploy]
   command = "npm run test:coverage && npm run lint:check && npm run build:dev"
 
-# Only develop renders project/event drafts. The token is build-only, without VITE_.
+# Branch settings also apply to PR previews, which must keep published content.
 [context.develop]
-  command = "npm run test:coverage && npm run lint:check && npm run build:draft-review"
+command = 'npm run test:coverage && npm run lint:check && if [ "$CONTEXT" = "branch-deploy" ]; then npm run build:draft-review; else npm run build:dev; fi'
 
 # Production context
 [context.production]

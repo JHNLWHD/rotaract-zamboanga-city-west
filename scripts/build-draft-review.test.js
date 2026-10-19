@@ -1,5 +1,26 @@
 import { expect, it } from 'vitest';
+import { readFileSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
 import { prepareDraftReviewEnvironment } from './build-draft-review';
+
+it.each([
+  ['branch-deploy', 'build:draft-review'],
+  ['deploy-preview', 'build:dev'],
+])('routes Netlify %s to %s', (context, build) => {
+  const config = readFileSync('netlify.toml', 'utf8');
+  const command = config.match(/\[context.develop\]\ncommand = '(.+)'/)?.[1];
+  expect(command).toBeDefined();
+  const output = execFileSync(
+    'sh',
+    ['-c', `npm() { printf '%s\\n' "$*"; }\n${command}`],
+    { env: { ...process.env, CONTEXT: context }, encoding: 'utf8' }
+  );
+  expect(output.trim().split('\n')).toEqual([
+    'run test:coverage',
+    'run lint:check',
+    `run ${build}`,
+  ]);
+});
 
 it('allows local checks and develop branch builds with server-side credentials', () => {
   expect(() =>
