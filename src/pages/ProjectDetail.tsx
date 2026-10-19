@@ -108,7 +108,6 @@ const ProjectDetail = () => {
             '@type': 'Article',
             headline: project.title,
             description: summary,
-            datePublished: project.date,
             image: [
               project.image,
               ...project.gallery.map(image => image.url),

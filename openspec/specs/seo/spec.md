@@ -76,6 +76,8 @@ failure is retryable and is not a missing record.
 - **OG `type`:** `article` for both detail templates.
 - **Canonical:** Project uses `/projects/{slug}`. Event uses `/events/{calendar-date}/{slug}` under the production origin, not an arbitrary share URL from the CMS.
 - **JSON-LD:** `Article` for project detail and `Event` for event detail. Serialize embedded data with `serializeJson` to prevent CMS strings from closing a script element.
+- **Article publication date:** The project date describes the activity, not publication of the web page. Omit `datePublished` until a verified page publication date is available. Keep the activity date visible in the record and use modification timestamps only for sitemap `lastmod`.
+- **Event facts:** Keep a nonempty venue as `location` text; omit it when empty. The current model does not supply a typed physical or virtual location, address, attendance mode, or organizer. Do not infer these from the club's identity or parse them from prose. Text is a valid [Schema.org location](https://schema.org/location), but it does not establish eligibility for Google's Event rich results, which require a verified physical `Place` and address.
 - **Event time:** Use the known local start time with the Philippine UTC offset. If the time is unknown, use the calendar date only. Do not emit a fabricated midnight or the invalid `EventCompleted` enumeration. A past date alone does not prove that the event took place; use neutral past wording.
 - Dates display in the club's timezone. Time-dependent labels hydrate with the build timestamp and update after hydration, so an older snapshot does not cause a mismatch at the next visit.
 
@@ -110,7 +112,7 @@ failure is retryable and is not a missing record.
 
 | Schema.org type  | Where used                                      |
 | ---------------- | ----------------------------------------------- |
-| `Organization`   | Home, officers, project author, event organizer |
+| `Organization`   | Home, officers, project author                 |
 | `CollectionPage` | Projects list, events list                      |
 | `ItemList`       | Inside collection pages                         |
 | `Article`        | Project detail                                  |

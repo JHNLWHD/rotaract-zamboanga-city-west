@@ -170,6 +170,59 @@ it('renders the actual public routes with content, metadata and safe query snaps
   ).toEqual(routes);
 });
 
+it.each([
+  ['online', 'Google Meet (online)'],
+  ['outside the club city', 'Venue 88, General Santos City'],
+  ['unknown', '   '],
+])(
+  'preserves the supplied %s event venue without inventing event facts',
+  async (_, venue) => {
+    cms.fetchEvents.mockResolvedValue([
+      {
+        ...event,
+        venue,
+        description: 'The club attended a partner-hosted activity.',
+      },
+    ]);
+    const pages = await loadPages();
+    const page = pages.find(
+      page => page.path === '/events/2026-08-01/induction'
+    )!;
+    const rendered = renderPage(page);
+    const doc = new DOMParser().parseFromString(rendered.head, 'text/html');
+    const schema = JSON.parse(
+      doc.querySelector('script[type="application/ld+json"]')!.textContent!
+    );
+
+    expect(schema['@type']).toBe('Event');
+    expect(schema).not.toHaveProperty('eventAttendanceMode');
+    expect(schema).not.toHaveProperty('organizer');
+    if (venue.trim()) {
+      expect(schema.location).toBe(venue);
+    } else {
+      expect(schema).not.toHaveProperty('location');
+    }
+  }
+);
+
+it('keeps the project activity date visible without claiming an article publication date', async () => {
+  const pages = await loadPages();
+  const page = pages.find(page => page.path === '/projects/service-day')!;
+  const rendered = renderPage(page);
+  const doc = new DOMParser().parseFromString(
+    `<html><head>${rendered.head}</head><body>${rendered.body}</body></html>`,
+    'text/html'
+  );
+  const schema = JSON.parse(
+    doc.querySelector('script[type="application/ld+json"]')!.textContent!
+  );
+
+  expect(schema['@type']).toBe('Article');
+  expect(schema).not.toHaveProperty('datePublished');
+  expect(doc.querySelector('main')?.textContent).toContain('July 10, 2026');
+  expect(page.lastmod).toBe(project.updatedAt);
+});
+
 it('assembles homepage proof from already loaded public build records', async () => {
   const projects = ['first', 'second', 'third', 'fourth'].map(slug => ({
     ...projectListItem,

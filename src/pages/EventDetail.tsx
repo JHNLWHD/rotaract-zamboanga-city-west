@@ -132,26 +132,12 @@ const EventDetail = () => {
             name: event.title,
             description: descriptionPlain,
             startDate: eventStartDate(event),
-            eventAttendanceMode:
-              'https://schema.org/OfflineEventAttendanceMode',
-            location: {
-              '@type': 'Place',
-              name: event.venue,
-              address: {
-                '@type': 'PostalAddress',
-                addressLocality: 'Zamboanga City',
-                addressCountry: 'PH',
-              },
-            },
+            // The venue can be physical or online; no typed location is supplied.
+            location: event.venue.trim() || undefined,
             image: [
               featureImage,
               ...event.gallery.map(image => image.url),
             ].filter(Boolean),
-            organizer: {
-              '@type': 'Organization',
-              name: 'Rotaract Club of Zamboanga City West',
-              url: 'https://rotaract.rotaryzcwest.org',
-            },
             offers:
               !isPast && event.registrationUrl
                 ? {
