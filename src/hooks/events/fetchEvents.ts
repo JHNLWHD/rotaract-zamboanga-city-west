@@ -209,7 +209,16 @@ export async function fetchEventBySlug(slug: string): Promise<Event | null> {
       return null;
     }
 
-    return await mapEvent(entries.items[0]);
+    const event = await mapEvent(entries.items[0]);
+    const routes = getDeployedRoutes();
+    if (
+      routes &&
+      !routes.has(`/events/${event.date.slice(0, 10)}/${event.slug}`)
+    ) {
+      // Reject the refresh so React Query keeps the deployed record and URL.
+      throw new Error('Event route is not deployed yet');
+    }
+    return event;
   } catch (error) {
     console.error('Error fetching event by slug:', error);
     throw error;

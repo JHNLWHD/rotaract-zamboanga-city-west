@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { QueryClient } from '@tanstack/react-query';
 
 const client = vi.hoisted(() => ({
   getEntries: vi.fn(),
@@ -15,6 +16,7 @@ import {
   fetchPastEvents,
   fetchUpcomingEvents,
 } from './fetchEvents';
+import { eventBySlugQuery } from '../contentQueries';
 
 const link = (id: string) => ({ sys: { id } });
 const asset = (id: string, url?: string, description = '', title = '') => ({
@@ -439,6 +441,52 @@ describe('event Contentful fetchers', () => {
     await expect(fetchEvents()).resolves.toEqual([]);
     await expect(fetchEventBySlug('missing')).resolves.toBeNull();
     expect(client.getAsset).not.toHaveBeenCalled();
+  });
+
+  it('retains the cached event until its changed date has a deployed route', async () => {
+    const queryClient = new QueryClient();
+    const query = { ...eventBySlugQuery('service-day'), retry: false };
+    const state = document.createElement('script');
+    state.id = 'page-state';
+    state.type = 'application/json';
+    state.textContent = JSON.stringify({
+      routes: ['/events/2026-08-20/service-day'],
+    });
+    document.body.appendChild(state);
+    client.getAsset.mockResolvedValue({ fields: {} });
+
+    try {
+      client.getEntries.mockResolvedValue({
+        items: [event('service-day', '2026-08-20')],
+      });
+      const saved = await queryClient.fetchQuery(query);
+      await queryClient.invalidateQueries({ queryKey: query.queryKey });
+      client.getEntries.mockResolvedValue({
+        items: [
+          event('service-day', '2026-08-21', { title: 'Rescheduled event' }),
+        ],
+      });
+
+      await expect(queryClient.fetchQuery(query)).rejects.toThrow(
+        'Event route is not deployed yet'
+      );
+      expect(queryClient.getQueryData(query.queryKey)).toEqual(saved);
+      expect(queryClient.getQueryData(query.queryKey)).toMatchObject({
+        date: '2026-08-20',
+        title: 'Event service-day',
+      });
+
+      state.textContent = JSON.stringify({
+        routes: ['/events/2026-08-21/service-day'],
+      });
+      await expect(queryClient.fetchQuery(query)).resolves.toMatchObject({
+        date: '2026-08-21',
+        title: 'Rescheduled event',
+      });
+    } finally {
+      queryClient.clear();
+      state.remove();
+    }
   });
 
   it('maps a complete event detail record', async () => {

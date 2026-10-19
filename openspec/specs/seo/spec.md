@@ -142,6 +142,9 @@ inventory. Project and event archives filter refreshed records against it. The
 homepage selects its three projects after that filter. Existing records can
 refresh. New detail URLs wait for a successful build and deployment. Server
 builds and local draft reviews have no deployed route restriction.
+If an event date changes its URL, the detail query rejects the refresh until
+that URL is in the deployed inventory. React Query keeps the cached event and
+its canonical URL visible during that interval.
 
 Local draft review uses Contentful's read-only Preview API on `127.0.0.1`; see
 the [README](../../../README.md#local-contentful-draft-review). It is separate
