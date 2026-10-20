@@ -10,6 +10,11 @@ export default defineConfig({
     },
   },
   test: {
+    // Tests mock CMS requests; client construction must not need real credentials.
+    env: {
+      VITE_CONTENTFUL_SPACE_ID: 'test-space',
+      VITE_CONTENTFUL_DELIVERY_TOKEN: 'test-token',
+    },
     environment: 'jsdom',
     css: false,
     environmentOptions: {

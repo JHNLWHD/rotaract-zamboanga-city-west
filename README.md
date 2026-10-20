@@ -50,6 +50,14 @@ Follow these steps to set up and run the project locally:
    ```
    The app will be available at [http://localhost:8080](http://localhost:8080) by default.
 
+## Pull request tests
+
+Every pull request runs the **Tests and coverage** GitHub Actions check on
+Node.js 22. It installs the locked dependencies with `npm ci` and runs
+`npm run test:coverage`. A failed test or coverage threshold fails the check.
+No Contentful credentials are needed. Netlify also keeps its existing test,
+lint, and build checks.
+
 ## Local Contentful draft review
 
 Set `VITE_CONTENTFUL_PREVIEW_TOKEN` in your ignored `.env.local`, using the
