@@ -42,9 +42,10 @@ failure is retryable and is not a missing record.
 
 ### Images
 
-- **Default OG/Twitter image** for many routes: `https://rotaract.rotaryzcwest.org/og-image.png`.
-- **Project detail:** `og:image` / `twitter:image` use the project’s primary image URL from CMS, with the site image as fallback.
-- **Event detail:** Uses the event or invitation image, with the site image as fallback.
+- **Editorial OG/Twitter images:** The six main pages use their matching versioned PNG in `public/og/`. Both tags use the same image. Use the existing image dimensions; these assets are approximately 1733 × 908 pixels, not 1200 × 630.
+- **Image origin:** Netlify branch and PR previews use `DEPLOY_PRIME_URL`, injected into both browser and prerender builds as `VITE_OG_IMAGE_ORIGIN`. Production and local builds use the canonical production origin. Canonical page URLs remain on production in every context.
+- **Project detail:** `og:image` / `twitter:image` use the project’s primary image URL from CMS, with the editorial Projects image as fallback.
+- **Event detail:** Uses the event or invitation image, with the editorial Events image as fallback.
 - **Browser images:** `responsiveImage` supplies responsive WebP copies of supported public Contentful JPEG, PNG, and WebP assets. Local, external, vector, and animated assets remain unchanged. Original CMS URLs stay available to downloads, lightboxes, and metadata. See the [Contentful Images API](https://www.contentful.com/developers/docs/references/images-api/images/retrieve-an-image/).
 - **Record artwork:** Feature images, archive thumbnails, and certificates use contain sizing so poster text is not cropped. Documentary gallery thumbnails can still crop; their lightbox opens the original image.
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Helmet } from 'react-helmet';
-import { serializeJson } from '../utils/seo';
+import { editorialImage, serializeJson } from '../utils/seo';
 import { useQuery } from '@tanstack/react-query';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
@@ -49,10 +49,8 @@ const Events = () => {
           content="Events | Rotaract Club of Zamboanga City West"
         />
         <meta property="og:description" content={description} />
-        <meta
-          property="og:image"
-          content="https://rotaract.rotaryzcwest.org/og-image.png"
-        />
+        <meta property="og:image" content={editorialImage('events')} />
+        <meta name="twitter:image" content={editorialImage('events')} />
         <meta name="twitter:card" content="summary_large_image" />
         <meta
           name="twitter:title"

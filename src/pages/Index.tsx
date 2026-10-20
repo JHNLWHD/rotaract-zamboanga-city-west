@@ -1,6 +1,6 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
-import { serializeJson } from '../utils/seo';
+import { editorialImage, serializeJson } from '../utils/seo';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import Hero from '../components/home/Hero';
@@ -37,10 +37,7 @@ const Index = () => (
         content="Rotaract Club of Zamboanga City West | Official Club Record"
       />
       <meta property="og:description" content={description} />
-      <meta
-        property="og:image"
-        content="https://rotaract.rotaryzcwest.org/og-image.png"
-      />
+      <meta property="og:image" content={editorialImage('home')} />
       <meta
         property="og:image:alt"
         content="Rotaract Club of Zamboanga City West"
@@ -57,10 +54,7 @@ const Index = () => (
         content="Rotaract Club of Zamboanga City West | Official Club Record"
       />
       <meta name="twitter:description" content={description} />
-      <meta
-        name="twitter:image"
-        content="https://rotaract.rotaryzcwest.org/og-image.png"
-      />
+      <meta name="twitter:image" content={editorialImage('home')} />
 
       <meta name="theme-color" content="#faf9f7" />
       <link rel="canonical" href="https://rotaract.rotaryzcwest.org/" />

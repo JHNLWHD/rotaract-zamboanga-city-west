@@ -1,5 +1,6 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
+import { editorialImage } from '../utils/seo';
 import { useQuery } from '@tanstack/react-query';
 import ReactMarkdown from 'react-markdown';
 import { ExternalLink, Loader2 } from 'lucide-react';
@@ -31,10 +32,8 @@ const Recognition = () => {
           content="https://rotaract.rotaryzcwest.org/recognition"
         />
         <meta property="og:type" content="website" />
-        <meta
-          property="og:image"
-          content="https://rotaract.rotaryzcwest.org/og-image.png"
-        />
+        <meta property="og:image" content={editorialImage('recognition')} />
+        <meta name="twitter:image" content={editorialImage('recognition')} />
         <meta name="twitter:card" content="summary_large_image" />
         <link
           rel="canonical"

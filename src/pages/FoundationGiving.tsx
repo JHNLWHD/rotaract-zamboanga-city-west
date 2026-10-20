@@ -1,6 +1,6 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
-import { serializeJson } from '../utils/seo';
+import { editorialImage, serializeJson } from '../utils/seo';
 import { format, parseISO } from 'date-fns';
 import { Loader2 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
@@ -218,7 +218,7 @@ const FoundationGiving = () => {
         />
         <meta
           property="og:image"
-          content="https://rotaract.rotaryzcwest.org/og-image.png"
+          content={editorialImage('foundation-giving')}
         />
         <meta
           property="og:site_name"
@@ -237,8 +237,8 @@ const FoundationGiving = () => {
           content="Five-year Rotary Foundation club giving in USD for the Rotaract Club of Zamboanga City West."
         />
         <meta
-          property="twitter:image"
-          content="https://rotaract.rotaryzcwest.org/og-image.png"
+          name="twitter:image"
+          content={editorialImage('foundation-giving')}
         />
 
         <link

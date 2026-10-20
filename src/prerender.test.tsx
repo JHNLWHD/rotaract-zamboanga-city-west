@@ -171,6 +171,67 @@ it('renders the actual public routes with content, metadata and safe query snaps
 });
 
 it.each([
+  undefined,
+  'https://develop--rotaract-zambo-city-west.netlify.app',
+  'https://deploy-preview-16--rotaract-zambo-city-west.netlify.app',
+])('renders the editorial social images on image origin %s', async origin => {
+  vi.stubEnv('VITE_OG_IMAGE_ORIGIN', origin);
+  const imageOrigin = origin || 'https://rotaract.rotaryzcwest.org';
+  const images = new Map([
+    ['/', `${imageOrigin}/og/home-editorial-v1.png`],
+    ['/projects', `${imageOrigin}/og/projects-editorial-v1.png`],
+    ['/events', `${imageOrigin}/og/events-editorial-v1.png`],
+    ['/officers', `${imageOrigin}/og/officers-editorial-v1.png`],
+    ['/recognition', `${imageOrigin}/og/recognition-editorial-v1.png`],
+    [
+      '/foundation-giving',
+      `${imageOrigin}/og/foundation-giving-editorial-v1.png`,
+    ],
+    ['/projects/service-day', project.image],
+    ['/events/2026-08-01/induction', event.image],
+  ]);
+  for (const page of await loadPages()) {
+    const doc = new DOMParser().parseFromString(
+      renderPage(page).head,
+      'text/html'
+    );
+    expect(
+      doc.querySelector('meta[property="og:image"]')?.getAttribute('content')
+    ).toBe(images.get(page.path));
+    expect(
+      doc.querySelector('meta[name="twitter:image"]')?.getAttribute('content')
+    ).toBe(images.get(page.path));
+    expect(
+      doc.querySelector('link[rel="canonical"]')?.getAttribute('href')
+    ).toBe(`https://rotaract.rotaryzcwest.org${page.path}`);
+  }
+});
+
+it('uses the editorial archive images when a record has no photo', async () => {
+  cms.fetchProjectBySlug.mockResolvedValue({ ...project, image: '' });
+  cms.fetchEvents.mockResolvedValue([{ ...event, image: '' }]);
+  for (const page of (await loadPages()).filter(
+    page =>
+      page.path === '/projects/service-day' ||
+      page.path === '/events/2026-08-01/induction'
+  )) {
+    const archive = page.path.split('/')[1];
+    const doc = new DOMParser().parseFromString(
+      renderPage(page).head,
+      'text/html'
+    );
+    for (const selector of [
+      'meta[property="og:image"]',
+      'meta[name="twitter:image"]',
+    ]) {
+      expect(doc.querySelector(selector)?.getAttribute('content')).toBe(
+        `https://rotaract.rotaryzcwest.org/og/${archive}-editorial-v1.png`
+      );
+    }
+  }
+});
+
+it.each([
   ['online', 'Google Meet (online)'],
   ['outside the club city', 'Venue 88, General Santos City'],
   ['unknown', '   '],

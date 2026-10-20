@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-import { serializeJson } from '../utils/seo';
+import { editorialImage, serializeJson } from '../utils/seo';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import {
@@ -111,18 +111,14 @@ const EventDetail = () => {
         <meta property="og:description" content={summary} />
         <meta
           property="og:image"
-          content={
-            featureImage || 'https://rotaract.rotaryzcwest.org/og-image.png'
-          }
+          content={featureImage || editorialImage('events')}
         />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={event.title} />
         <meta name="twitter:description" content={summary} />
         <meta
           name="twitter:image"
-          content={
-            featureImage || 'https://rotaract.rotaryzcwest.org/og-image.png'
-          }
+          content={featureImage || editorialImage('events')}
         />
         <link rel="canonical" href={canonical} />
         <script type="application/ld+json">

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
-import { serializeJson } from '../utils/seo';
+import { editorialImage, serializeJson } from '../utils/seo';
 import { useQuery } from '@tanstack/react-query';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -50,10 +50,8 @@ const Projects = () => {
           content="Projects | Rotaract Club of Zamboanga City West"
         />
         <meta property="og:description" content={description} />
-        <meta
-          property="og:image"
-          content="https://rotaract.rotaryzcwest.org/og-image.png"
-        />
+        <meta property="og:image" content={editorialImage('projects')} />
+        <meta name="twitter:image" content={editorialImage('projects')} />
         <meta name="twitter:card" content="summary_large_image" />
         <meta
           name="twitter:title"

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-import { serializeJson } from '../utils/seo';
+import { editorialImage, serializeJson } from '../utils/seo';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { ArrowLeft, ExternalLink, Loader2, Share2 } from 'lucide-react';
@@ -88,18 +88,14 @@ const ProjectDetail = () => {
         <meta property="og:description" content={summary} />
         <meta
           property="og:image"
-          content={
-            project.image || 'https://rotaract.rotaryzcwest.org/og-image.png'
-          }
+          content={project.image || editorialImage('projects')}
         />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={project.title} />
         <meta name="twitter:description" content={summary} />
         <meta
           name="twitter:image"
-          content={
-            project.image || 'https://rotaract.rotaryzcwest.org/og-image.png'
-          }
+          content={project.image || editorialImage('projects')}
         />
         <link rel="canonical" href={canonical} />
         <script type="application/ld+json">

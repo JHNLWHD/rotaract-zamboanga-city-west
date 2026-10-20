@@ -1,6 +1,6 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
-import { serializeJson } from '../utils/seo';
+import { editorialImage, serializeJson } from '../utils/seo';
 import { Loader2 } from 'lucide-react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
@@ -112,10 +112,8 @@ const Officers = () => {
           content="Officers | Rotaract Club of Zamboanga City West"
         />
         <meta property="og:description" content={description} />
-        <meta
-          property="og:image"
-          content="https://rotaract.rotaryzcwest.org/og-image.png"
-        />
+        <meta property="og:image" content={editorialImage('officers')} />
+        <meta name="twitter:image" content={editorialImage('officers')} />
         <meta name="twitter:card" content="summary_large_image" />
         <link
           rel="canonical"
