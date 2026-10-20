@@ -34,3 +34,5 @@ scripts/asset-mapping.json
 # Build-time generated files (copied from .prod/.dev variants)
 public/robots.txt
 public/_headers
+# Local Netlify folder
+.netlify

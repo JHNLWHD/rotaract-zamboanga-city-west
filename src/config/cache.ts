@@ -15,7 +15,8 @@ export const cacheConfig = {
 
   // Officers and Homepage content (updated yearly)
   yearly: {
-    staleTime: 30 * DAY,
-    gcTime: 90 * DAY,
+    // Browser timers cannot safely schedule beyond roughly 24.8 days.
+    staleTime: 24 * DAY,
+    gcTime: Infinity,
   },
 } as const;

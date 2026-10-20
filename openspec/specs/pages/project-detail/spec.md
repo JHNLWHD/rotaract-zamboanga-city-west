@@ -2,7 +2,8 @@
 
 ## Purpose
 
-Full story for a single project: narrative, media gallery (lightbox), partners, share, sidebar metadata.
+Present one project record: narrative, reported outcome, published highlights,
+supporting images, partners, and record details.
 
 ## Route
 
@@ -17,18 +18,29 @@ Full story for a single project: narrative, media gallery (lightbox), partners, 
 
 ## States
 
-- **Loading:** Centered spinner + “Loading project details…”, with `Navbar` / `Footer`.
-- **Error or missing project:** `ProjectNotFound` (full replacement UI, not global 404 route).
+- **Loading:** Spinner and “Loading project record…”, with `Navbar` / `Footer`.
+- **Request failure without cached data:** `RecordUnavailable` with retry.
+- **Missing record:** A successful fetch returning `null` renders `ProjectNotFound`
+  with `noindex, follow`. A failed refresh keeps a cached project visible.
 
 ## Layout (success)
 
-- `ProjectBreadcrumb`, two-column grid: `ProjectMainContent` (primary + share trigger), `ProjectSidebar`.
-- **Share:** `ShareModal` with `contentType="project"`; opens from main content callback.
-- **Lightbox:** Styles imported from `yet-another-react-lightbox` (+ captions, thumbnails) — used within `ProjectMainContent` for gallery behavior.
+- Light editorial dossier rendered by `ProjectDetail.tsx`: `PageHeader`, archive
+  link, share button, contain-sized feature artwork, then narrative and supporting
+  images beside a record-details column on wide screens.
+- **Narrative:** Markdown with published highlights and reported outcome when supplied.
+- **Partners:** Published partner links, or partner names when links are absent.
+- **Share:** `ShareModal` with `contentType="project"`.
+- **Gallery:** Captioned thumbnail buttons open original image URLs in a lightbox.
+  Preserve descriptive button names, `aria-haspopup="dialog"`, Enter/Space
+  activation, caption or fallback alt text, and close behavior. An empty gallery
+  adds no gallery section.
 
 ## Meta
 
-- Per-project title, description, OG/Twitter, `article` type, canonical `/projects/{slug}`, JSON-LD `Project` + `BreadcrumbList`.
+- Per-project title, summary, OG/Twitter `article` type, canonical
+  `/projects/{slug}`, and `Article` JSON-LD. See the
+  [missing-page and deployment rules](../../seo/spec.md).
 
 ## Non-goals
 
@@ -38,7 +50,11 @@ Full story for a single project: narrative, media gallery (lightbox), partners, 
 
 ### Requirement: `useProjectBySlug` is the sole source of full project detail data
 
-`useProjectBySlug(slug)` (backed by `fetchProjectBySlug` in `src/hooks/projects/fetchProjects.ts`) SHALL load and return all fields the `/projects/:slug` page consumes — including `description` (rich text rendered as Markdown), `gallery` (with each asset's `id`, `url`, `caption`, `category`), `bulletPoints`, `highlights`, `hashtags`, `partnerLinks`, `shareableLink`, `facebookLink`, plus the list-shared fields (`id`, `title`, `slug`, `shortDescription`, `date`, `venue`, `impact`, `partners`, `category`, `image`).
+`useProjectBySlug(slug)` SHALL return the full `Project` record from
+`fetchProjectBySlug`, including `description` (rich text rendered as Markdown),
+`gallery` (with each asset's `id`, `url`, `caption`, `category`), `bulletPoints`,
+`highlights`, `hashtags`, `partnerLinks`, `shareableLink`, `facebookLink`, and the
+list-shared fields. The page need not display every returned field.
 
 `fetchProjectBySlug` SHALL fetch this data directly from Contentful for the matching entry (including hydrating its featured image and gallery assets) and SHALL NOT depend on the list fetcher (`fetchProjects`) for these fields.
 
