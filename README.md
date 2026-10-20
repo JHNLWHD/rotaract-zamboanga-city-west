@@ -50,13 +50,16 @@ Follow these steps to set up and run the project locally:
    ```
    The app will be available at [http://localhost:8080](http://localhost:8080) by default.
 
-## Pull request tests
+## Continuous integration
 
-Every pull request runs the **Tests and coverage** GitHub Actions check on
-Node.js 22. It installs the locked dependencies with `npm ci` and runs
-`npm run test:coverage`. A failed test or coverage threshold fails the check.
-No Contentful credentials are needed. Netlify also keeps its existing test,
-lint, and build checks.
+`.github/workflows/ci.yml` runs the **Tests and build** check on every pull
+request and push to `main` or `develop`. It uses Node.js 22 and `npm ci`, then
+runs `npm run check-all`, `npm run test:coverage`, and `npx vite build`.
+Type, lint, test, coverage, or bundle errors fail the check.
+
+GitHub builds the browser bundle without Contentful credentials. Netlify keeps
+its coverage, lint, and full build checks, including CMS-backed prerendering
+and generated page validation.
 
 ## Local Contentful draft review
 

@@ -1,17 +1,20 @@
-name: PR tests
+name: Check website
 
-on: pull_request
+on:
+  pull_request:
+  push:
+    branches: [main, develop]
 
 permissions:
   contents: read
 
 concurrency:
-  group: pr-tests-${{ github.event.pull_request.number }}
+  group: ci-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
-  tests:
-    name: Tests and coverage
+  check:
+    name: Tests and build
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -26,5 +29,8 @@ jobs:
           cache: npm
       - name: Install dependencies
         run: npm ci
-      - name: Run tests with coverage
-        run: npm run test:coverage
+      - name: Run type checks, lint, and regression tests
+        run: npm run check-all && npm run test:coverage
+      - name: Build browser bundle
+        # Netlify validates the full prerendered site with its CMS credentials.
+        run: npx vite build
