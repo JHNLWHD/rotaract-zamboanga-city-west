@@ -31,7 +31,7 @@ This page supports accountability; it does not collect donations.
 - Global chrome: `Navbar`, `Footer`.
 - **Page header:** Light editorial dossier using `PageHeader`, warm neutral
   surfaces, serif headings, thin rules, and restrained cranberry accents.
-  The heading is “The Rotary Foundation giving”, with the report's as-of date.
+  The heading is “The Rotary Foundation Giving”, with the report's as-of date.
   The report and explanations use a narrower column below it.
 - **Report block:** A full table from `md` up; below `md`, one card per Rotary
   Year with fund lines. The neutral club banner belongs to the report.

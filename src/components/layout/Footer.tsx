@@ -6,8 +6,8 @@ const recordLinks = [
   ['Projects', '/projects'],
   ['Events', '/events'],
   ['Officers', '/officers'],
-  ['Recognition', '/recognition'],
-  ['Foundation giving', '/foundation-giving'],
+  ['Recognitions', '/recognition'],
+  ['Foundation Giving', '/foundation-giving'],
 ];
 
 const Footer = () => (
@@ -72,7 +72,7 @@ const Footer = () => (
           rel="noopener noreferrer"
           className="w-fit underline-offset-4 hover:text-rotary-magenta hover:underline"
         >
-          Sponsoring Rotary club
+          Sponsoring Rotary Club
         </a>
       </div>
     </div>

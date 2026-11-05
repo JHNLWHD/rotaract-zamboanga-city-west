@@ -53,10 +53,10 @@ describe('shared page layout', () => {
       screen.getByText(new RegExp(`© ${new Date().getFullYear()}`))
     ).toBeInTheDocument();
     expect(
-      screen.getByRole('link', { name: 'Foundation giving' })
+      screen.getByRole('link', { name: 'Foundation Giving' })
     ).toHaveAttribute('href', '/foundation-giving');
     expect(
-      screen.getByRole('link', { name: 'Sponsoring Rotary club' })
+      screen.getByRole('link', { name: 'Sponsoring Rotary Club' })
     ).toHaveAttribute('href', 'https://rotaryzcwest.org/');
   });
 

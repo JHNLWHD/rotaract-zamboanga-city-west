@@ -254,7 +254,7 @@ const FoundationGiving = () => {
         <main id="main-content">
           <PageHeader
             eyebrow="Financial record"
-            title="The Rotary Foundation giving"
+            title="The Rotary Foundation Giving"
             description="The club’s published giving record by Rotary Year and fund, presented without estimates or aggregate claims beyond the report."
             asOf={
               data?.asOfDate
