@@ -136,6 +136,29 @@ describe('homepage Contentful fetchers', () => {
     });
   });
 
+  it('preserves an absolute URL and metadata for the selected about image', async () => {
+    client.getEntries.mockResolvedValue({
+      items: [{ fields: { image: link('selected') } }],
+    });
+    client.getAsset.mockResolvedValue({
+      fields: {
+        file: { url: 'https://images.test/selected.jpg' },
+        title: 'Selected club image',
+        description: 'Club volunteers serving together',
+      },
+    });
+
+    await expect(fetchAboutCommunity()).resolves.toEqual({
+      stats: [],
+      ourStory: '',
+      image: {
+        url: 'https://images.test/selected.jpg',
+        title: 'Selected club image',
+        description: 'Club volunteers serving together',
+      },
+    });
+  });
+
   it('handles an image without a file URL and unavailable about entries', async () => {
     client.getEntries.mockResolvedValueOnce({
       items: [{ fields: { stats: [], image: link('empty') } }],

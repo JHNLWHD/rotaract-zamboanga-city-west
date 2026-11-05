@@ -10,11 +10,11 @@ import { responsiveImage } from '../../utils/contentful';
 
 const Hero = () => {
   const { data: hero } = useQuery(heroContentQuery);
-  const { data: about } = useQuery(aboutContentQuery);
+  const { data: about, isLoading: isImageLoading } =
+    useQuery(aboutContentQuery);
 
-  const image =
-    about?.image?.url ||
-    '/lovable-uploads/77e591d9-27b0-4497-b290-8fa95806ace4.png';
+  const image = about?.image;
+  const imageCaption = image?.description || image?.title;
 
   return (
     <section className="bg-[#faf9f7]" aria-labelledby="home-heading">
@@ -58,23 +58,29 @@ const Hero = () => {
             </div>
           </div>
 
-          <figure>
-            <img
-              {...responsiveImage(
-                image,
-                '(min-width: 1024px) 640px, calc(100vw - 40px)'
+          {image?.url ? (
+            <figure>
+              <img
+                {...responsiveImage(
+                  image.url,
+                  '(min-width: 1024px) 640px, calc(100vw - 40px)'
+                )}
+                alt={imageCaption || 'Rotaract Club of Zamboanga City West'}
+                className="aspect-video w-full object-cover sm:aspect-[16/10]"
+              />
+              {imageCaption && (
+                <figcaption className="mt-2 text-xs leading-5 text-slate-500">
+                  {imageCaption}
+                </figcaption>
               )}
-              alt={
-                about?.image?.description ||
-                'Members and partners of the Rotaract Club of Zamboanga City West'
-              }
-              className="aspect-video w-full object-cover sm:aspect-[16/10]"
-            />
-            <figcaption className="mt-2 text-xs leading-5 text-slate-500">
-              {about?.image?.description ||
-                'Great West members and partners during a club activity in Zamboanga City.'}
-            </figcaption>
-          </figure>
+            </figure>
+          ) : (
+            <div className="flex aspect-video w-full items-center justify-center border border-slate-200 bg-[#f4f1ec] p-6 text-center text-sm text-slate-500 sm:aspect-[16/10]">
+              {isImageLoading
+                ? 'Loading the club image…'
+                : 'Club image is not available.'}
+            </div>
+          )}
         </div>
 
         <dl className="mt-6 grid grid-cols-2 border-y border-slate-300 md:mt-10 lg:grid-cols-4">

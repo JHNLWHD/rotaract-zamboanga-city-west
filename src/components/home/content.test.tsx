@@ -85,23 +85,122 @@ describe('homepage content', () => {
       })
     ).toHaveAttribute('src', 'https://images.test/club.jpg');
     expect(
+      screen.getByText('Great West members at a service project')
+    ).toHaveProperty('tagName', 'FIGCAPTION');
+    expect(
       screen.getByRole('link', { name: /Get to Know Great West/ })
     ).toHaveAttribute('href', '#club-profile');
+    expect(
+      screen.getByRole('link', { name: /View our projects/ })
+    ).toHaveAttribute('href', '/projects');
   });
 
-  it('uses durable hero fallback copy and imagery', async () => {
+  it.each([
+    ['no about entry', null],
+    ['no image link', { stats: [], ourStory: 'Story' }],
+    [
+      'no asset file URL',
+      {
+        stats: [],
+        ourStory: 'Story',
+        image: { url: '', title: 'Draft image' },
+      },
+    ],
+  ])(
+    'keeps hero fallback copy without substituting a local club image: %s',
+    async (_state, about) => {
+      fetchHeroContent.mockResolvedValue(null);
+      fetchAboutCommunity.mockResolvedValue(about);
+
+      renderRoute(<Hero />);
+
+      expect(
+        await screen.findByText('Club image is not available.')
+      ).toBeInTheDocument();
+      expect(screen.getByText('Official club record')).toBeInTheDocument();
+      expect(
+        screen.getByText(/public record of the Great West/)
+      ).toBeInTheDocument();
+      expect(screen.queryByRole('img')).not.toBeInTheDocument();
+      expect(
+        screen.queryByText(/members and partners during a club activity/i)
+      ).not.toBeInTheDocument();
+    }
+  );
+
+  it('uses the selected asset title when its description is missing', async () => {
     fetchHeroContent.mockResolvedValue(null);
-    fetchAboutCommunity.mockResolvedValue(null);
+    fetchAboutCommunity.mockResolvedValue({
+      stats: [],
+      ourStory: 'Story',
+      image: {
+        url: 'https://images.test/selected.jpg',
+        title: 'Coastal cleanup volunteers',
+      },
+    });
 
     renderRoute(<Hero />);
 
-    expect(await screen.findByText('Official club record')).toBeInTheDocument();
     expect(
-      screen.getByText(/public record of the Great West/)
-    ).toBeInTheDocument();
+      await screen.findByRole('img', { name: 'Coastal cleanup volunteers' })
+    ).toHaveAttribute('src', 'https://images.test/selected.jpg');
+    expect(screen.getByText('Coastal cleanup volunteers')).toHaveProperty(
+      'tagName',
+      'FIGCAPTION'
+    );
+  });
+
+  it('does not invent a caption when the selected asset has no metadata', async () => {
+    fetchHeroContent.mockResolvedValue(null);
+    fetchAboutCommunity.mockResolvedValue({
+      stats: [],
+      ourStory: 'Story',
+      image: { url: 'https://images.test/uncaptioned.jpg' },
+    });
+
+    renderRoute(<Hero />);
+
     expect(
-      screen.getByRole('img', { name: /Members and partners/ })
-    ).toHaveAttribute('src', expect.stringContaining('/lovable-uploads/'));
+      await screen.findByRole('img', {
+        name: 'Rotaract Club of Zamboanga City West',
+      })
+    ).toHaveAttribute('src', 'https://images.test/uncaptioned.jpg');
+    expect(
+      screen.queryByText(/members and partners during a club activity/i)
+    ).not.toBeInTheDocument();
+  });
+
+  it('shows image loading until the selected Contentful asset arrives', async () => {
+    fetchHeroContent.mockResolvedValue(null);
+    let resolveAbout: (value: unknown) => void = () => undefined;
+    fetchAboutCommunity.mockReturnValue(
+      new Promise(resolve => {
+        resolveAbout = resolve;
+      })
+    );
+
+    renderRoute(<Hero />);
+
+    expect(screen.getByText('Loading the club image…')).toBeInTheDocument();
+    expect(screen.queryByRole('img')).not.toBeInTheDocument();
+    expect(
+      screen.queryByText('Club image is not available.')
+    ).not.toBeInTheDocument();
+
+    resolveAbout({
+      stats: [],
+      ourStory: 'Story',
+      image: {
+        url: 'https://images.test/arrived.jpg',
+        description: 'Club service',
+      },
+    });
+    expect(
+      await screen.findByRole('img', { name: 'Club service' })
+    ).toHaveAttribute('src', 'https://images.test/arrived.jpg');
+    expect(
+      screen.queryByText('Loading the club image…')
+    ).not.toBeInTheDocument();
   });
 
   it('renders the loading, published, and unpublished club profile states', async () => {

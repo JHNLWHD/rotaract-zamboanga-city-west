@@ -34,13 +34,19 @@ contact information first. Participation is a supported secondary action.
 - Contentful supplies hero copy, the club profile and image, projects, current
   officers, recognition, and Foundation giving. Query keys include
   `['heroContent']`, `['aboutContent']`, and `['homepageEvidence', term]`.
+- The hero image comes from the existing `homepageAboutSection.image` Asset
+  link. Its description, or its title when the description is absent, supplies
+  the image text and caption. Without either, the image uses the club name as
+  alternative text and has no caption. No local photo substitutes for this asset.
 - Hero and profile queries use yearly cache settings. The combined club records
   query uses monthly cache settings. Keep browser data and build snapshots aligned.
 - Project records are filtered against the deployed route inventory before the
   homepage selects three. Server builds and local previews have no such filter.
 - `Credentials` has loading and initial-request-error states with retry. `About`
-  has a loading state and a missing-copy message; `Hero` uses its existing copy
-  and image fallbacks. A failed refresh keeps cached query data. See the
+  has a loading state and a missing-copy message; `Hero` keeps its existing copy
+  fallback. Its image area shows a loading message during the initial request
+  and an unavailable message when there is no usable image URL. A failed refresh
+  keeps cached query data. See the
   [snapshot rules](../../seo/spec.md).
 
 ## Seasonal intake
