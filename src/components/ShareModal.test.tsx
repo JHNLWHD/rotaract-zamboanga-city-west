@@ -1,11 +1,14 @@
 import type { ReactNode } from 'react';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import ShareModal from './ShareModal';
 
 const toastSuccess = vi.hoisted(() => vi.fn());
-vi.mock('sonner', () => ({ toast: { success: toastSuccess } }));
+const toastError = vi.hoisted(() => vi.fn());
+vi.mock('sonner', () => ({
+  toast: { success: toastSuccess, error: toastError },
+}));
 vi.mock('react-share', () => {
   const button =
     (name: string) =>
@@ -57,6 +60,7 @@ const event = {
 describe('ShareModal', () => {
   beforeEach(() => {
     toastSuccess.mockReset();
+    toastError.mockReset();
     Object.defineProperty(navigator, 'clipboard', {
       configurable: true,
       value: { writeText: vi.fn() },
@@ -117,10 +121,10 @@ describe('ShareModal', () => {
     expect(onClose).toHaveBeenCalled();
   });
 
-  it('builds project messages and only closes from the backdrop', () => {
+  it('builds project messages and only closes from the Close button', async () => {
     const onClose = vi.fn();
     const project = { ...event, time: undefined };
-    const { container } = render(
+    render(
       <ShareModal
         isOpen
         onClose={onClose}
@@ -144,10 +148,10 @@ describe('ShareModal', () => {
       expect.stringContaining('this project')
     );
 
-    const panel = screen.getByText('Share Project').closest('.bg-white')!;
+    const panel = screen.getByRole('dialog', { name: 'Share Project' });
     fireEvent.click(panel);
     expect(onClose).not.toHaveBeenCalled();
-    fireEvent.click(container.firstElementChild!);
+    await userEvent.click(screen.getByRole('button', { name: 'Close' }));
     expect(onClose).toHaveBeenCalledOnce();
   });
 
@@ -168,5 +172,60 @@ describe('ShareModal', () => {
       'Project link copied to clipboard!'
     );
     expect(onClose).toHaveBeenCalledOnce();
+  });
+
+  it('keeps the link available after a copy failure and allows a successful retry', async () => {
+    let rejectCopy!: (error: Error) => void;
+    vi.mocked(navigator.clipboard.writeText).mockReturnValueOnce(
+      new Promise<void>((_, reject) => {
+        rejectCopy = reject;
+      })
+    );
+    const onClose = vi.fn();
+    render(
+      <ShareModal
+        isOpen
+        onClose={onClose}
+        content={event}
+        contentType="event"
+      />
+    );
+    await userEvent.click(screen.getByRole('button', { name: /Copy/ }));
+    expect(toastSuccess).not.toHaveBeenCalled();
+    expect(onClose).not.toHaveBeenCalled();
+
+    await act(async () => rejectCopy(new Error('Clipboard access denied')));
+    expect(toastError).toHaveBeenCalledWith(
+      'Could not copy the link. Please copy it manually.'
+    );
+    expect(screen.getByDisplayValue(event.shareableLink)).toBeInTheDocument();
+    expect(onClose).not.toHaveBeenCalled();
+
+    vi.mocked(navigator.clipboard.writeText).mockResolvedValueOnce(undefined);
+    await userEvent.click(screen.getByRole('button', { name: /Copy/ }));
+    expect(toastSuccess).toHaveBeenCalledWith(
+      'Event link copied to clipboard!'
+    );
+    expect(onClose).toHaveBeenCalledOnce();
+  });
+
+  it('keeps the link available when the clipboard API is unavailable', async () => {
+    Object.defineProperty(navigator, 'clipboard', { value: undefined });
+    const onClose = vi.fn();
+    render(
+      <ShareModal
+        isOpen
+        onClose={onClose}
+        content={event}
+        contentType="event"
+      />
+    );
+    await userEvent.click(screen.getByRole('button', { name: /Copy/ }));
+    expect(toastError).toHaveBeenCalledWith(
+      'Could not copy the link. Please copy it manually.'
+    );
+    expect(screen.getByDisplayValue(event.shareableLink)).toBeInTheDocument();
+    expect(toastSuccess).not.toHaveBeenCalled();
+    expect(onClose).not.toHaveBeenCalled();
   });
 });

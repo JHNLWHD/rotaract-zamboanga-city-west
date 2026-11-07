@@ -1,6 +1,12 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { X, Copy } from 'lucide-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { Copy } from 'lucide-react';
 import { toast } from 'sonner';
 import {
   FacebookShareButton,
@@ -38,14 +44,23 @@ const ShareModal: React.FC<ShareModalProps> = ({
   content,
   contentType,
 }) => {
+  const returnFocus = React.useRef<HTMLElement | null>(null);
+  const dialogContent = React.useRef<HTMLDivElement | null>(null);
   if (!isOpen || !content) return null;
 
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(content.shareableLink);
-    toast.success(
-      `${contentType === 'event' ? 'Event' : 'Project'} link copied to clipboard!`
-    );
-    onClose();
+  const copyToClipboard = async () => {
+    const panel = dialogContent.current!;
+    try {
+      await navigator.clipboard.writeText(content.shareableLink);
+      if (!panel.isConnected) return;
+      toast.success(
+        `${contentType === 'event' ? 'Event' : 'Project'} link copied to clipboard!`
+      );
+      onClose();
+    } catch {
+      if (!panel.isConnected) return;
+      toast.error('Could not copy the link. Please copy it manually.');
+    }
   };
 
   const formatDate = (date: string) => {
@@ -76,26 +91,30 @@ const ShareModal: React.FC<ShareModalProps> = ({
   };
 
   return (
-    <div
-      className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
-      onClick={onClose}
-    >
-      <div
-        className="bg-white rounded-lg p-6 max-w-md w-full"
-        onClick={e => e.stopPropagation()}
+    <Dialog open onOpenChange={onClose}>
+      <DialogContent
+        ref={dialogContent}
+        aria-modal="true"
+        className="max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] max-w-md grid-cols-1 gap-0 overflow-y-auto rounded-lg bg-white"
+        onOpenAutoFocus={() => {
+          returnFocus.current = document.activeElement as HTMLElement;
+        }}
+        onCloseAutoFocus={event => {
+          // Page-owned Share buttons are outside DialogTrigger.
+          event.preventDefault();
+          returnFocus.current!.focus();
+        }}
       >
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold">{getShareTitle()}</h3>
-          <Button variant="ghost" size="sm" onClick={onClose} className="p-1">
-            <X className="w-4 h-4" />
-          </Button>
-        </div>
+        <DialogTitle className="mb-4">{getShareTitle()}</DialogTitle>
 
         <div className="space-y-4">
           <div>
-            <p className="text-sm text-gray-600 mb-3">Share on social media:</p>
-            <div className="grid grid-cols-5 gap-3">
+            <DialogDescription className="mb-3 text-sm text-gray-600">
+              Share on social media:
+            </DialogDescription>
+            <div className="grid grid-cols-5 gap-2">
               <FacebookShareButton
+                aria-label="Share on Facebook"
                 url={content.shareableLink}
                 hashtag="#RotaractZamboangaCityWest"
               >
@@ -103,6 +122,7 @@ const ShareModal: React.FC<ShareModalProps> = ({
               </FacebookShareButton>
 
               <TwitterShareButton
+                aria-label="Share on X"
                 url={content.shareableLink}
                 title={`${content.title} - ${content.description}`}
                 hashtags={[
@@ -115,6 +135,7 @@ const ShareModal: React.FC<ShareModalProps> = ({
               </TwitterShareButton>
 
               <WhatsappShareButton
+                aria-label="Share on WhatsApp"
                 url={content.shareableLink}
                 title={getWhatsappMessage()}
               >
@@ -122,6 +143,7 @@ const ShareModal: React.FC<ShareModalProps> = ({
               </WhatsappShareButton>
 
               <TelegramShareButton
+                aria-label="Share on Telegram"
                 url={content.shareableLink}
                 title={`${content.title} - ${content.description}`}
               >
@@ -129,6 +151,7 @@ const ShareModal: React.FC<ShareModalProps> = ({
               </TelegramShareButton>
 
               <EmailShareButton
+                aria-label="Share on Email"
                 url={content.shareableLink}
                 subject={getEmailSubject()}
                 body={getEmailBody()}
@@ -143,9 +166,10 @@ const ShareModal: React.FC<ShareModalProps> = ({
             <div className="flex items-center gap-2">
               <input
                 type="text"
+                aria-label="Link to share"
                 value={content.shareableLink}
                 readOnly
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm bg-gray-50"
+                className="min-w-0 flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm bg-gray-50"
               />
               <Button
                 variant="outline"
@@ -159,8 +183,8 @@ const ShareModal: React.FC<ShareModalProps> = ({
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 };
 
