@@ -10,6 +10,17 @@ import PageHeader from '../components/layout/PageHeader';
 import { recognitionQuery } from '../hooks/contentQueries';
 import { responsiveImage } from '../utils/contentful';
 
+const publishedSourceUrl = (value: string): string | null => {
+  try {
+    const url = new URL(value);
+    return url.protocol === 'https:' || url.protocol === 'http:'
+      ? url.href
+      : null;
+  } catch {
+    return null;
+  }
+};
+
 const Recognition = () => {
   const { data, isLoading, isLoadingError, refetch } =
     useQuery(recognitionQuery);
@@ -35,6 +46,8 @@ const Recognition = () => {
         <meta property="og:image" content={editorialImage('recognition')} />
         <meta name="twitter:image" content={editorialImage('recognition')} />
         <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@RotaractZCWest" />
+        <meta name="twitter:creator" content="@RotaractZCWest" />
         <link
           rel="canonical"
           href="https://rotaract.rotaryzcwest.org/recognition"
@@ -85,6 +98,7 @@ const Recognition = () => {
             {!isLoading && !isLoadingError && awards.length > 0 && (
               <ol aria-label="Recognition records">
                 {awards.map(award => {
+                  const sourceUrl = publishedSourceUrl(award.sourceUrl);
                   const imageUrl = award.image.url.startsWith('//')
                     ? `https:${award.image.url}`
                     : award.image.url;
@@ -119,9 +133,9 @@ const Recognition = () => {
                             <ReactMarkdown>{award.description}</ReactMarkdown>
                           </div>
                         )}
-                        {award.sourceUrl && (
+                        {sourceUrl && (
                           <a
-                            href={award.sourceUrl}
+                            href={sourceUrl}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="editorial-link mt-5"

@@ -84,6 +84,29 @@ describe('ShareModal', () => {
     expect(first.container).toBeEmptyDOMElement();
   });
 
+  it.each([
+    ['2026-08-20', 'August 20, 2026'],
+    ['2026-08-19T16:30:00Z', 'August 20, 2026'],
+    ['2026-08-20T16:30:00Z', 'August 21, 2026'],
+  ])('shares the Manila calendar date for %s', (date, expectedDate) => {
+    render(
+      <ShareModal
+        isOpen
+        onClose={vi.fn()}
+        content={{ ...event, date }}
+        contentType="event"
+      />
+    );
+
+    expect(
+      screen.getByRole('button', { name: 'WhatsApp share' })
+    ).toHaveAttribute('data-title', expect.stringContaining(expectedDate));
+    expect(screen.getByRole('button', { name: 'Email share' })).toHaveAttribute(
+      'data-body',
+      expect.stringContaining(expectedDate)
+    );
+  });
+
   it('builds event share messages and copies the canonical link', async () => {
     const onClose = vi.fn();
     render(

@@ -115,6 +115,8 @@ const Officers = () => {
         <meta property="og:image" content={editorialImage('officers')} />
         <meta name="twitter:image" content={editorialImage('officers')} />
         <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@RotaractZCWest" />
+        <meta name="twitter:creator" content="@RotaractZCWest" />
         <link
           rel="canonical"
           href="https://rotaract.rotaryzcwest.org/officers"

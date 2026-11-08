@@ -170,6 +170,23 @@ it('renders the actual public routes with content, metadata and safe query snaps
   ).toEqual(routes);
 });
 
+it('attributes Twitter cards to the club on every page template, including 404', async () => {
+  const pages = [...(await loadPages()), { path: '/404', queries: [] }];
+  for (const page of pages) {
+    const doc = new DOMParser().parseFromString(
+      renderPage(page).head,
+      'text/html'
+    );
+    for (const name of ['twitter:site', 'twitter:creator']) {
+      const tags = doc.querySelectorAll(
+        `meta[name="${name}"], meta[property="${name}"]`
+      );
+      expect(tags, `${page.path}: ${name}`).toHaveLength(1);
+      expect(tags[0].getAttribute('content')).toBe('@RotaractZCWest');
+    }
+  }
+});
+
 it.each([
   undefined,
   'https://develop--rotaract-zambo-city-west.netlify.app',

@@ -41,6 +41,48 @@ describe('Recognition', () => {
     ).toBeInTheDocument();
   });
 
+  it.each([
+    ['https://example.com/source', 'https://example.com/source'],
+    ['http://example.com/source', 'http://example.com/source'],
+    ['  HTTPS://EXAMPLE.COM/source  ', 'https://example.com/source'],
+    ['javascript:void(0)', null],
+    ['java\nscript:void(0)', null],
+    ['data:text/html,test', null],
+    ['mailto:club@example.com', null],
+    ['ftp://example.com/source', null],
+    ['//example.com/source', null],
+    ['/source', null],
+    ['https://', null],
+    ['', null],
+    [undefined, null],
+  ])('keeps the record and checks citation URL %s', async (sourceUrl, href) => {
+    fetchAllAwards.mockResolvedValue({
+      awards: [
+        {
+          name: 'District Citation',
+          yearReceived: '2026',
+          sourceUrl,
+          image: { url: '' },
+        },
+      ],
+    });
+    renderRoute(<Recognition />, '/recognition');
+
+    expect(
+      await screen.findByRole('heading', { name: 'District Citation' })
+    ).toBeInTheDocument();
+    const sourceLink = screen.queryByRole('link', {
+      name: /View published source/,
+    });
+    if (href) {
+      expect(sourceLink).toHaveAttribute('href', href);
+      expect(sourceLink).toHaveAttribute('target', '_blank');
+      expect(sourceLink).toHaveAttribute('rel', 'noopener noreferrer');
+    } else {
+      expect(sourceLink).not.toBeInTheDocument();
+    }
+  });
+
   it('renders published evidence, descriptions, and source links', async () => {
     fetchAllAwards.mockResolvedValue({
       awards: [

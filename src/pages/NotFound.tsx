@@ -52,6 +52,8 @@ const NotFound = () => {
         />
 
         <meta property="twitter:card" content="summary" />
+        <meta property="twitter:site" content="@RotaractZCWest" />
+        <meta property="twitter:creator" content="@RotaractZCWest" />
         <meta
           property="twitter:title"
           content="Page Not Found (404) - Rotaract Club of Zamboanga City West"

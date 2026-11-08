@@ -29,6 +29,8 @@ recognition is not independently verified merely because it is published.
 - **Success:** Year, name, description, and supplied evidence. Prefer the short
   description; otherwise render the description as Markdown. Images use contain
   sizing and descriptive alt text. Source links open the published source.
+  Render only absolute HTTP(S) source URLs. Omit invalid URLs and other schemes
+  while keeping the recognition record and its other evidence visible.
 
 ## Meta and release status
 

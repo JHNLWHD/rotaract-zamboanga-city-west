@@ -91,6 +91,8 @@ const ProjectDetail = () => {
           content={project.image || editorialImage('projects')}
         />
         <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@RotaractZCWest" />
+        <meta name="twitter:creator" content="@RotaractZCWest" />
         <meta name="twitter:title" content={project.title} />
         <meta name="twitter:description" content={summary} />
         <meta

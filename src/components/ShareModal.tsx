@@ -68,6 +68,7 @@ const ShareModal: React.FC<ShareModalProps> = ({
       year: 'numeric',
       month: 'long',
       day: 'numeric',
+      timeZone: 'Asia/Manila',
     });
   };
 

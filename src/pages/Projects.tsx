@@ -53,6 +53,8 @@ const Projects = () => {
         <meta property="og:image" content={editorialImage('projects')} />
         <meta name="twitter:image" content={editorialImage('projects')} />
         <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@RotaractZCWest" />
+        <meta name="twitter:creator" content="@RotaractZCWest" />
         <meta
           name="twitter:title"
           content="Projects | Rotaract Club of Zamboanga City West"

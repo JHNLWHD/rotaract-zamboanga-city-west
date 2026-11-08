@@ -49,6 +49,8 @@ const Index = () => (
       <meta property="og:locale" content="en_PH" />
 
       <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:site" content="@RotaractZCWest" />
+      <meta name="twitter:creator" content="@RotaractZCWest" />
       <meta
         name="twitter:title"
         content="Rotaract Club of Zamboanga City West | Official Club Record"
