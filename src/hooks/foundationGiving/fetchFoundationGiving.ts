@@ -1,5 +1,10 @@
 import contentful from '../contentfulClient';
-import type { Entry, EntrySkeletonType, EntryFieldTypes, UnresolvedLink } from 'contentful';
+import type {
+  Entry,
+  EntrySkeletonType,
+  EntryFieldTypes,
+  UnresolvedLink,
+} from 'contentful';
 
 type RowSkeleton = EntrySkeletonType & {
   contentTypeId: 'foundationGivingRow';
@@ -66,8 +71,10 @@ export async function fetchFoundationGiving(): Promise<FoundationGivingData | nu
   const f = report.fields;
 
   const rows = f.rows;
-  const formattedRows = rows.map((row) => {
-    return { ...(row as Entry<RowSkeleton>).fields as unknown as FoundationGivingRow };
+  const formattedRows = rows.map(row => {
+    return {
+      ...((row as Entry<RowSkeleton>).fields as unknown as FoundationGivingRow),
+    };
   });
 
   return {

@@ -1,4 +1,5 @@
 import contentful from '../contentfulClient';
+import { processAsset } from '../../utils/contentful';
 import type { EntrySkeletonType, EntryFieldTypes } from 'contentful';
 
 type StatItemSkeleton = EntrySkeletonType & {
@@ -71,9 +72,7 @@ export async function fetchAboutCommunity(): Promise<HomepageAboutSection | null
     if (f.image) {
       const imageAsset = await contentful.client.getAsset(f.image.sys.id);
       image = {
-        url: imageAsset.fields.file?.url
-          ? `https:${imageAsset.fields.file.url}`
-          : '',
+        url: processAsset(imageAsset),
         title: imageAsset.fields.title || '',
         description: imageAsset.fields.description || '',
       };
@@ -88,6 +87,6 @@ export async function fetchAboutCommunity(): Promise<HomepageAboutSection | null
     return result;
   } catch (error) {
     console.error('Error fetching About Community section:', error);
-    return null;
+    throw error;
   }
 }

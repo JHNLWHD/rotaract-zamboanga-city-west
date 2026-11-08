@@ -52,6 +52,8 @@ const NotFound = () => {
         />
 
         <meta property="twitter:card" content="summary" />
+        <meta property="twitter:site" content="@RotaractZCWest" />
+        <meta property="twitter:creator" content="@RotaractZCWest" />
         <meta
           property="twitter:title"
           content="Page Not Found (404) - Rotaract Club of Zamboanga City West"
@@ -66,7 +68,10 @@ const NotFound = () => {
 
       <div className="min-h-screen flex flex-col">
         <Navbar />
-        <main className="flex-1 flex items-center justify-center bg-gradient-to-br from-cranberry-50 via-white to-pink-50 px-6">
+        <main
+          id="main-content"
+          className="flex-1 flex items-center justify-center bg-gradient-to-br from-cranberry-50 via-white to-pink-50 px-6"
+        >
           <div className="text-center max-w-md">
             <div className="mb-8">
               <h1 className="text-6xl md:text-8xl font-bold text-cranberry-600 mb-4">

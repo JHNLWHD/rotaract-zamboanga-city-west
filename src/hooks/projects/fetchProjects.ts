@@ -2,6 +2,8 @@ import contentful from '../contentfulClient';
 import type { EntrySkeletonType, EntryFieldTypes } from 'contentful';
 import { processAsset } from '../../utils/contentful';
 import { richTextToMarkdown, type RichText } from '../../utils/richText';
+import { getAllEntries } from '../getAllEntries';
+import { getDeployedRoutes } from '../../utils/deployedRoutes';
 
 type ProjectSkeleton = EntrySkeletonType & {
   contentTypeId: 'project';
@@ -32,6 +34,7 @@ export type ProjectPartnerLinks = Array<{
 }>;
 
 export type ProjectListItem = {
+  updatedAt?: string;
   id: string;
   title: string;
   slug: string;
@@ -78,7 +81,10 @@ export async function fetchProjects(
       query['fields.category'] = category;
     }
 
-    const entries = await contentful.client.getEntries<ProjectSkeleton>(query);
+    const entries = await getAllEntries<ProjectSkeleton>(
+      query,
+      contentful.recordClient
+    );
 
     const projects: ProjectListItem[] = await Promise.all(
       entries.items.map(async entry => {
@@ -87,7 +93,7 @@ export async function fetchProjects(
         let featuredImageUrl = '';
         if (fields.featuredImage) {
           try {
-            const asset = await contentful.client.getAsset(
+            const asset = await contentful.recordClient.getAsset(
               fields.featuredImage.sys.id
             );
             featuredImageUrl = processAsset(asset);
@@ -100,6 +106,7 @@ export async function fetchProjects(
         }
 
         return {
+          updatedAt: entry.sys.updatedAt,
           id: entry.sys.id,
           title: fields.title || '',
           slug: fields.slug || '',
@@ -114,10 +121,13 @@ export async function fetchProjects(
       })
     );
 
-    return projects;
+    const routes = getDeployedRoutes();
+    return projects.filter(
+      project => !routes || routes.has(`/projects/${project.slug}`)
+    );
   } catch (error) {
     console.error('Error fetching projects:', error);
-    return null;
+    throw error;
   }
 }
 
@@ -125,7 +135,7 @@ export async function fetchProjectBySlug(
   slug: string
 ): Promise<Project | null> {
   try {
-    const entries = await contentful.client.getEntries<ProjectSkeleton>({
+    const entries = await contentful.recordClient.getEntries<ProjectSkeleton>({
       content_type: 'project',
       'fields.slug': slug,
       limit: 1,
@@ -141,7 +151,7 @@ export async function fetchProjectBySlug(
     let featuredImageUrl = '';
     if (fields.featuredImage) {
       try {
-        const asset = await contentful.client.getAsset(
+        const asset = await contentful.recordClient.getAsset(
           fields.featuredImage.sys.id
         );
         featuredImageUrl = processAsset(asset);
@@ -157,7 +167,9 @@ export async function fetchProjectBySlug(
     if (fields.gallery && fields.gallery.length > 0) {
       for (const galleryLink of fields.gallery) {
         try {
-          const asset = await contentful.client.getAsset(galleryLink.sys.id);
+          const asset = await contentful.recordClient.getAsset(
+            galleryLink.sys.id
+          );
           const url = processAsset(asset);
           if (url) {
             gallery.push({
@@ -188,6 +200,7 @@ export async function fetchProjectBySlug(
     }
 
     return {
+      updatedAt: entry.sys.updatedAt,
       id: entry.sys.id,
       title: fields.title || '',
       slug: fields.slug || '',
@@ -211,6 +224,6 @@ export async function fetchProjectBySlug(
     };
   } catch (error) {
     console.error('Error fetching project by slug:', error);
-    return null;
+    throw error;
   }
 }

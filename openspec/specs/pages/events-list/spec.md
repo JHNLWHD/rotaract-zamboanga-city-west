@@ -2,7 +2,9 @@
 
 ## Purpose
 
-Promote club events (“Great West in Action”): hero, scroll to full list, optional share per event card.
+Present dated Contentful event records. Show upcoming events first, followed by
+a clearly labeled past-activity archive. A past date alone does not prove that
+an event took place.
 
 ## Route
 
@@ -11,26 +13,40 @@ Promote club events (“Great West in Action”): hero, scroll to full list, opt
 
 ## Data
 
-- **Source:** `fetchEvents()` (`src/hooks/events/fetchEvents.ts`), React Query key `['events']`, `cacheConfig.monthly`.
+- **Source:** Contentful via `fetchEvents()`, query key `['events']`, monthly
+  cache settings. Keep the browser query and build snapshot aligned.
+- Records include the published event fields and available media. Request
+  failures reject; a missing optional image does not discard the record.
+- Browser refreshes filter detail URLs against the deployed route inventory,
+  including the calendar-date segment. Server builds and local previews can
+  read all matching records.
 
 ## States
 
 - **Loading:** `LoadingState`.
-- **Error:** `ErrorState` with `error`.
-- **Success:** `EventsGrid` with `onShareEvent` opening `ShareModal` (`contentType="event"`).
+- **Initial error:** `ErrorState` with retry. A failed refresh keeps cached
+  records visible.
+- **Empty:** “No event records have been published yet.”
+- **Success:** Separate `EventsGrid` groups for upcoming events and past activities.
+  Each card can open `ShareModal` (`contentType="event"`).
 
 ## Behavior
 
-- Hero CTA “View All Events” smooth-scrolls to `#all-events`.
+- `isPastEvent` separates upcoming and past records using the club's timezone.
+  Time labels hydrate with the build time, then update to the visit time.
+- If only past records exist, show the no-upcoming-event notice above the archive.
 - **Share:** Modal receives title, description, date, venue, shareable link, time, category from the selected event.
 
 ## Layout
 
-- Cranberry gradient banner, then “Club Highlights” section with grid.
+- Light editorial dossier with `Navbar`, `Footer`, and `PageHeader`. Heading
+  “Events and club activities”, published record count, ruled “Upcoming events”
+  and “Past activities” groups, and contain-sized record artwork.
 
 ## Meta
 
-- `CollectionPage` JSON-LD with `ItemList` of events (when loaded); breadcrumbs Home → Great West in Action; canonical `/events`.
+- `CollectionPage` JSON-LD with list-item names and URLs from fetched events;
+  canonical `/events`.
 
 ## Non-goals
 

@@ -1,8 +1,7 @@
 import { Toaster } from '@/components/ui/toaster';
 import { Toaster as Sonner } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import ScrollToTop from './components/ScrollToTop';
 import Index from './pages/Index';
 import Projects from './pages/Projects';
@@ -11,17 +10,24 @@ import Officers from './pages/Officers';
 import Events from './pages/Events';
 import EventDetail from './pages/EventDetail';
 import FoundationGiving from './pages/FoundationGiving';
+import Recognition from './pages/Recognition';
 import NotFound from './pages/NotFound';
 
-const queryClient = new QueryClient();
-
-const App = () => (
-  <QueryClientProvider client={queryClient}>
+export const AppContent = ({ notFoundPath }: { notFoundPath?: string }) => {
+  const { pathname } = useLocation();
+  return (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
-        <ScrollToTop />
+      <ScrollToTop />
+      {import.meta.env.MODE === 'draft-review' && (
+        <aside className="border-b border-cranberry-200 bg-cranberry-50 px-5 py-2 text-center text-sm text-cranberry-900">
+          Draft preview · For content review. These changes are not published.
+        </aside>
+      )}
+      {pathname === notFoundPath ? (
+        <NotFound />
+      ) : (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/projects" element={<Projects />} />
@@ -30,11 +36,18 @@ const App = () => (
           <Route path="/events" element={<Events />} />
           <Route path="/events/:date/:slug" element={<EventDetail />} />
           <Route path="/foundation-giving" element={<FoundationGiving />} />
+          <Route path="/recognition" element={<Recognition />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
-      </BrowserRouter>
+      )}
     </TooltipProvider>
-  </QueryClientProvider>
+  );
+};
+
+const App = ({ notFoundPath }: { notFoundPath?: string }) => (
+  <BrowserRouter>
+    <AppContent notFoundPath={notFoundPath} />
+  </BrowserRouter>
 );
 
 export default App;

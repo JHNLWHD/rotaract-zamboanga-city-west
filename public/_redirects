@@ -1,1 +1,2 @@
-/* /index.html 200
+# Known routes are generated as static HTML. Netlify serves 404.html with
+# HTTP 404 for missing paths. Do not restore the SPA-wide HTTP 200 rewrite.

@@ -75,7 +75,7 @@ const renderListItem = (node: RichTextNode): string => {
       child.nodeType === 'unordered-list' ||
       child.nodeType === 'ordered-list'
     ) {
-      lines.push(renderList(child, true));
+      lines.push(renderList(child));
     } else {
       lines.push(renderInline(child.content));
     }
@@ -83,7 +83,7 @@ const renderListItem = (node: RichTextNode): string => {
   return lines.filter(Boolean).join('\n');
 };
 
-const renderList = (node: RichTextNode, nested = false): string => {
+const renderList = (node: RichTextNode): string => {
   const ordered = node.nodeType === 'ordered-list';
   const items = (node.content ?? []).filter(
     child => child.nodeType === 'list-item'
@@ -93,15 +93,17 @@ const renderList = (node: RichTextNode, nested = false): string => {
     .map((item, index) => {
       const marker = ordered ? `${index + 1}.` : '-';
       const body = renderListItem(item);
+      if (!body) return '';
       const [first, ...rest] = body.split('\n');
-      const indented = rest
-        .map(line => (line ? `  ${line}` : line))
-        .join('\n');
-      return rest.length > 0 ? `${marker} ${first}\n${indented}` : `${marker} ${first}`;
+      const indented = rest.map(line => (line ? `  ${line}` : line)).join('\n');
+      return rest.length > 0
+        ? `${marker} ${first}\n${indented}`
+        : `${marker} ${first}`;
     })
+    .filter(Boolean)
     .join('\n');
 
-  return nested ? rendered : rendered;
+  return rendered;
 };
 
 /**
@@ -112,7 +114,9 @@ const renderList = (node: RichTextNode, nested = false): string => {
  * lists), basic marks (bold, italic, code), and hyperlinks. Unsupported
  * nodes fall back to their inline text content.
  */
-export function richTextToMarkdown(richText: RichText | undefined | null): string {
+export function richTextToMarkdown(
+  richText: RichText | undefined | null
+): string {
   if (!richText || !richText.content) return '';
 
   const blocks: string[] = [];
@@ -175,7 +179,9 @@ export function richTextToMarkdown(richText: RichText | undefined | null): strin
  * {@link richTextToMarkdown} needs to be embedded in places that expect plain
  * text (SEO `<meta>` tags, JSON-LD, share previews, etc.).
  */
-export function markdownToPlainText(markdown: string | undefined | null): string {
+export function markdownToPlainText(
+  markdown: string | undefined | null
+): string {
   if (!markdown) return '';
 
   return markdown
